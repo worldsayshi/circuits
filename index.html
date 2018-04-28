@@ -98,7 +98,7 @@
           return d.name;
         });
 
-      d3cola.on("tick", function() {
+      function tick() {
         path.each(function(d) {
           if (isIE()) this.parentNode.insertBefore(this, this);
         });
@@ -109,15 +109,15 @@
           let groupCenterX = (varGroup.bounds.X - varGroup.bounds.x) / 2 + varGroup.bounds.x;
           let groupCenterY = (varGroup.bounds.Y - varGroup.bounds.y) / 2 + varGroup.bounds.y;
 
-          console.log(varGroup);
+          // console.log(varGroup);
           let deltaX = d.target.x - d.source.x,
             deltaY = d.target.y - d.source.y,
             dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
             normX = deltaX / dist,
             normY = deltaY / dist,
             sourcePadding = 0; // nodeRadius,
-            targetPadding = 0; //nodeRadius + 2,
-            sourceX = d.source.x + (sourcePadding * normX),
+          targetPadding = 0; //nodeRadius + 2,
+          sourceX = d.source.x + (sourcePadding * normX),
             sourceY = d.source.y + (sourcePadding * normY),
             targetX = d.target.x - (targetPadding * normX),
             targetY = d.target.y - (targetPadding * normY);
@@ -145,19 +145,22 @@
               return d.bounds.height();
             });
         }
-      });
+      }
 
-      window.toggleGuides = function () {
+      d3cola.on("tick", tick);
+
+      window.toggleGuides = function() {
         showGuides = !showGuides;
-        if(showGuides) {
+        if (showGuides) {
           renderGroups();
         } else {
           removeGroups();
         }
+        tick();
       }
 
       function renderGroups() {
-        console.log('renderGroups');
+        // console.log('renderGroups');
         group = svg.selectAll(".group")
           .data(graph.groups)
           .enter().insert("rect", ".link")
@@ -169,7 +172,7 @@
           .call(d3cola.drag);
       }
 
-      function removeGroups () {
+      function removeGroups() {
         svg.selectAll(".group").remove();
       }
     });
