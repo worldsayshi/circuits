@@ -37,6 +37,10 @@
     },
     {
       "type": "Var",
+      "name": "B - Left 3"
+    },
+    {
+      "type": "Var",
       "name": "B - Right 1"
     }
   ],
@@ -77,6 +81,11 @@
       "target": 5,
       "source": 8,
       "value": 1
+    },
+    {
+      "target": 5,
+      "source": 9,
+      "value": 1
     }
   ],
   "groups": [
@@ -97,10 +106,10 @@
     },
 
     {
-      "leaves": [6, 7]
+      "leaves": [6, 7, 8]
     },
     {
-      "leaves": [8]
+      "leaves": [9]
     }
   ]
 }
