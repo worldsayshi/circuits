@@ -72,6 +72,15 @@
   ],
   "groups": [
     {
+      "groups": [2, 3],
+      "leaves": [0]
+    },
+    {
+      "groups": [4, 5],
+      "leaves": [5]
+    },
+
+    {
       "leaves": [1, 2]
     },
     {
@@ -83,15 +92,6 @@
     },
     {
       "leaves": [8]
-    },
-
-    {
-      "groups": [0, 1],
-      "leaves": [0]
-    },
-    {
-      "groups": [2, 3],
-      "leaves": [5]
     }
   ]
 }
