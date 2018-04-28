@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "name": "Toprato"
+    },
+    {
+      "name": "Fella"
+    },
+    {
+      "name": "Tirti"
+    },
+    {
+      "name": "LA Piu' Bella"
+    }
+  ],
+  "links": [
+    {
+      "target": 1,
+      "source": 0,
+      "value": 1
+    }
+  ],
+  "constraints": [
+    {
+      "axis": "y",
+      "left": 0,
+      "right": 1,
+      "gap": 25
+    }
+  ]
+}
