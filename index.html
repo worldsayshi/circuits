@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Downward Edges</title>
+  <title>Circuits</title>
   <style>
     @import url(./style.css);
 
@@ -24,12 +24,18 @@
 </head>
 
 <body>
-  <h1>Directed Graph with downward-pointing edges</h1>
+  <h1>Circuits</h1>
+  <div>
+    <button onclick="toggleShowGuides()">toggle guides</button>
+  </div>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="http://marvl.infotech.monash.edu/webcola/cola.js"></script>
   <script>
     var width = 960,
       height = 500;
+
+    var groups;
+    let showGuides = true;
 
     var color = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -68,18 +74,9 @@
         .attr('d', 'M0,-5L10,0L0,5')
         .attr('fill', '#000');
 
-      var group = svg.selectAll(".group")
-        .data(graph.groups)
-        .enter().append("rect")
-        .attr("rx", 8).attr("ry", 8)
-        .attr("class", "group")
-        .style("fill", function(d, i) {
-          return color(i);
-        })
-        .call(d3cola.drag);
-
-
-
+      if (showGuides) {
+        renderGroups();
+      }
 
       var path = svg.selectAll(".link")
         .data(graph.links)
@@ -128,18 +125,20 @@
             return d.y;
           });
 
-        group.attr("x", function(d) {
-            return d.bounds.x;
-          })
-          .attr("y", function(d) {
-            return d.bounds.y;
-          })
-          .attr("width", function(d) {
-            return d.bounds.width();
-          })
-          .attr("height", function(d) {
-            return d.bounds.height();
-          });
+        if (showGuides) {
+          group.attr("x", function(d) {
+              return d.bounds.x;
+            })
+            .attr("y", function(d) {
+              return d.bounds.y;
+            })
+            .attr("width", function(d) {
+              return d.bounds.width();
+            })
+            .attr("height", function(d) {
+              return d.bounds.height();
+            });
+        }
 
       });
       // turn on overlap avoidance after first convergence
@@ -152,6 +151,32 @@
       //        cola.start();
       //    }
       //});
+
+      window.toggleShowGuides = function () {
+        showGuides = !showGuides;
+        if(showGuides) {
+          renderGroups();
+        } else {
+          removeGroups();
+        }
+      }
+
+      function renderGroups() {
+        console.log('renderGroups');
+        group = svg.selectAll(".group")
+          .data(graph.groups)
+          .enter().insert("rect", ".link")
+          .attr("rx", 8).attr("ry", 8)
+          .attr("class", "group")
+          .style("fill", function(d, i) {
+            return color(i);
+          })
+          .call(d3cola.drag);
+      }
+
+      function removeGroups () {
+        svg.selectAll(".group").remove();
+      }
     });
 
     function isIE() {
