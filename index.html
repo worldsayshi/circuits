@@ -26,7 +26,7 @@
 <body>
   <h1>Circuits</h1>
   <div>
-    <button onclick="toggleShowGuides()">toggle guides</button>
+    <button onclick="toggleGuides()">toggle guides</button>
   </div>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="http://marvl.infotech.monash.edu/webcola/cola.js"></script>
@@ -152,7 +152,7 @@
       //    }
       //});
 
-      window.toggleShowGuides = function () {
+      window.toggleGuides = function () {
         showGuides = !showGuides;
         if(showGuides) {
           renderGroups();
