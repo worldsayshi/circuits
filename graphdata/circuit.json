@@ -1,33 +1,42 @@
 {
   "nodes": [
     {
+      "type": "Component",
       "name": "Center"
     },
     {
+      "type": "Var",
       "name": "Left 1"
     },
     {
+      "type": "Var",
       "name": "Left 2"
     },
     {
+      "type": "Var",
       "name": "Right 1"
     },
     {
+      "type": "Var",
       "name": "Right 2"
     },
 
 
 
     {
+      "type": "Component",
       "name": "B - Center"
     },
     {
+      "type": "Var",
       "name": "B - Left 1"
     },
     {
+      "type": "Var",
       "name": "B - Left 2"
     },
     {
+      "type": "Var",
       "name": "B - Right 1"
     }
   ],
