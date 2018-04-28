@@ -1,31 +1,97 @@
 {
   "nodes": [
     {
-      "name": "Toprato"
+      "name": "Center"
     },
     {
-      "name": "Fella"
+      "name": "Left 1"
     },
     {
-      "name": "Tirti"
+      "name": "Left 2"
     },
     {
-      "name": "LA Piu' Bella"
+      "name": "Right 1"
+    },
+    {
+      "name": "Right 2"
+    },
+
+
+
+    {
+      "name": "B - Center"
+    },
+    {
+      "name": "B - Left 1"
+    },
+    {
+      "name": "B - Left 2"
+    },
+    {
+      "name": "B - Right 1"
     }
   ],
   "links": [
     {
-      "target": 1,
-      "source": 0,
+      "target": 0,
+      "source": 1,
+      "value": 1
+    },
+    {
+      "target": 0,
+      "source": 2,
+      "value": 1
+    },
+    {
+      "target": 0,
+      "source": 3,
+      "value": 1
+    },
+    {
+      "target": 0,
+      "source": 4,
+      "value": 1
+    },
+
+
+    {
+      "target": 5,
+      "source": 6,
+      "value": 1
+    },
+    {
+      "target": 5,
+      "source": 7,
+      "value": 1
+    },
+    {
+      "target": 5,
+      "source": 8,
       "value": 1
     }
   ],
-  "constraints": [
+  "groups": [
     {
-      "axis": "y",
-      "left": 0,
-      "right": 1,
-      "gap": 25
+      "leaves": [1, 2]
+    },
+    {
+      "leaves": [3, 4]
+    },
+
+    {
+      "leaves": [6, 7]
+    },
+    {
+      "leaves": [8]
+    },
+
+    {
+      "groups": [0, 1],
+      "leaves": [0]
+    },
+    {
+      "groups": [2, 3],
+      "leaves": [5]
     }
   ]
 }

@@ -42,7 +42,7 @@
       .attr("height", height);
 
     d3.json("graphdata/circuit.json", function(error, graph) {
-      var nodeRadius = 5;
+      var nodeRadius = 30;
 
       graph.nodes.forEach(function(v) {
         v.height = v.width = 2 * nodeRadius;
@@ -51,21 +51,35 @@
       d3cola
         .nodes(graph.nodes)
         .links(graph.links)
-        .flowLayout("y", 30)
-        .symmetricDiffLinkLengths(6)
+        .groups(graph.groups)
+        // .flowLayout("y", -30)
+        .symmetricDiffLinkLengths(40)
         .start(10, 20, 20);
 
       // define arrow markers for graph links
-      // svg.append('svg:defs').append('svg:marker')
-      //   .attr('id', 'end-arrow')
-      //   .attr('viewBox', '0 -5 10 10')
-      //   .attr('refX', 6)
-      //   .attr('markerWidth', 3)
-      //   .attr('markerHeight', 3)
-      //   .attr('orient', 'auto')
-      //   .append('svg:path')
-      //   .attr('d', 'M0,-5L10,0L0,5')
-      //   .attr('fill', '#000');
+      svg.append('svg:defs').append('svg:marker')
+        .attr('id', 'end-arrow')
+        .attr('viewBox', '0 -5 10 10')
+        .attr('refX', 6)
+        .attr('markerWidth', 15)
+        .attr('markerHeight', 15)
+        .attr('orient', 'auto')
+        .append('svg:path')
+        .attr('d', 'M0,-5L10,0L0,5')
+        .attr('fill', '#000');
+
+      var group = svg.selectAll(".group")
+        .data(graph.groups)
+        .enter().append("rect")
+        .attr("rx", 8).attr("ry", 8)
+        .attr("class", "group")
+        .style("fill", function(d, i) {
+          return color(i);
+        })
+        .call(d3cola.drag);
+
+
+
 
       var path = svg.selectAll(".link")
         .data(graph.links)
@@ -113,6 +127,20 @@
           .attr("cy", function(d) {
             return d.y;
           });
+
+        group.attr("x", function(d) {
+            return d.bounds.x;
+          })
+          .attr("y", function(d) {
+            return d.bounds.y;
+          })
+          .attr("width", function(d) {
+            return d.bounds.width();
+          })
+          .attr("height", function(d) {
+            return d.bounds.height();
+          });
+
       });
       // turn on overlap avoidance after first convergence
       //cola.on("end", function () {
