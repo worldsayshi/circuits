@@ -1,6 +1,7 @@
 {
   "nodes": [
     {
+      "img": "thing.svg",
       "type": "Component",
       "name": "Center"
     },
@@ -24,6 +25,7 @@
 
 
     {
+      "img": "thing.svg",
       "type": "Component",
       "name": "B - Center"
     },
