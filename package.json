@@ -17,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/worldsayshi/circuits/issues"
   },
-  "homepage": "https://github.com/worldsayshi/circuits#readme"
+  "homepage": "https://github.com/worldsayshi/circuits#readme",
+  "devDependencies": {
+    "http-server": "^0.11.1",
+    "webpack": "^4.7.0",
+    "webpack-cli": "^2.1.3"
+  }
 }
