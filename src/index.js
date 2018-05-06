@@ -1,24 +1,24 @@
 import * as cola from 'webcola';
 import * as d3 from "d3";
 
-var width = 960,
+let width = 960,
   height = 900;
 
-var groups;
+let groups;
 let showGuides = false;
 
-var color = d3.scaleOrdinal(d3.schemeCategory20);
+let color = d3.scaleOrdinal(d3.schemeCategory20);
 
-var d3cola = cola.d3adaptor(d3)
+let d3cola = cola.d3adaptor(d3)
   .avoidOverlaps(true)
   .size([width, height]);
 
-var svg = d3.select("body").append("svg")
+let svg = d3.select("body").append("svg")
   .attr("width", width)
   .attr("height", height);
 
 d3.json("graphdata/circuit.json", function(error, graph) {
-  var nodeRadius = 30;
+  let nodeRadius = 30;
 
   graph.nodes.forEach(function(v) {
     v.height = v.width = 2 * nodeRadius;
@@ -48,12 +48,12 @@ d3.json("graphdata/circuit.json", function(error, graph) {
     renderGroups();
   }
 
-  var path = svg.selectAll(".link")
+  let path = svg.selectAll(".link")
     .data(graph.links)
     .enter().append('svg:path')
     .attr('class', 'link');
 
-  var node = svg.selectAll(".node")
+  let node = svg.selectAll(".node")
     .data(graph.nodes)
     .enter().append("g")
     .call(d3cola.drag);
@@ -68,7 +68,7 @@ d3.json("graphdata/circuit.json", function(error, graph) {
     });
 
   // Append images
-  var images = node
+  let images = node
     .filter(function (d) { return !!d.img;})
     .append("svg:image")
     .attr("xlink:href",  function(d) { return d.img;})
