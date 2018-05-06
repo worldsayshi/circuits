@@ -1,3 +1,5 @@
+import * as cola from 'webcola';
+
 var width = 960,
   height = 900;
 
@@ -101,9 +103,9 @@ d3.json("graphdata/circuit.json", function(error, graph) {
         dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
         normX = deltaX / dist,
         normY = deltaY / dist,
-        sourcePadding = 0; // nodeRadius,
-      targetPadding = 0; //nodeRadius + 2,
-      sourceX = d.source.x + (sourcePadding * normX),
+        sourcePadding = 0, // nodeRadius,
+        targetPadding = 0, //nodeRadius + 2,
+        sourceX = d.source.x + (sourcePadding * normX),
         sourceY = d.source.y + (sourcePadding * normY),
         targetX = d.target.x - (targetPadding * normX),
         targetY = d.target.y - (targetPadding * normY);
