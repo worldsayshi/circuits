@@ -1,0 +1,21 @@
+{
+  "name": "circuits",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Warning: no test specified\" && exit 0",
+    "start": "cp src/main.js dist/main.js; http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/worldsayshi/circuits.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/worldsayshi/circuits/issues"
+  },
+  "homepage": "https://github.com/worldsayshi/circuits#readme"
+}

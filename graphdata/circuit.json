@@ -1,7 +1,7 @@
 {
   "nodes": [
     {
-      "img": "thing.svg",
+      "img": "img/thing.svg",
       "type": "Component",
       "name": "Center"
     },
@@ -25,7 +25,7 @@
 
 
     {
-      "img": "thing.svg",
+      "img": "img/thing.svg",
       "type": "Component",
       "name": "B - Center"
     },
@@ -87,6 +87,12 @@
     {
       "target": 5,
       "source": 9,
+      "value": 1
+    },
+
+    {
+      "target": 1,
+      "source": 6,
       "value": 1
     }
   ],
