@@ -1,4 +1,5 @@
 import * as cola from 'webcola';
+import * as d3 from "d3";
 
 var width = 960,
   height = 900;
