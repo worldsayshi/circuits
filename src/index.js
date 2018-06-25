@@ -5,6 +5,7 @@ let width = 960,
   height = 900;
 
 let groups;
+let group;
 let showGuides = false;
 
 let color = d3.scaleOrdinal(d3.schemeCategory20);
