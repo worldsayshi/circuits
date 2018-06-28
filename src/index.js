@@ -1,5 +1,35 @@
 import * as cola from 'webcola';
 import * as d3 from "d3";
+import njs from './numericjs/numeric-1.2.6';
+import graph2 from '../graphdata/circuit.json';
+import pullGraph from './pullGraph';
+// import { assertDeepEquals } from './adhocAssertions';
+
+
+// console.log(graph2);
+
+// assertDeepEquals(pullGraph(graph2, 9), {});
+
+
+// console.dir(njs);
+
+let someRes = njs['+']([7,8,9], [10,1,2]);
+console.log(someRes);
+
+let sqr = function(x) { return x*x; };
+
+// console.log(njs.uncmin(function(x) { return sqr(10*(x[1]-x[0]*x[0])) + sqr(1-x[0]); },[-1.2,1]).solution);
+
+
+// This is what the current graph would produce
+// Right now, it's all nonsense since the graph doesn't have enough constraints to optimize on.
+// But with a better example it should work????
+console.log(njs.uncmin(function(x) { return x[0]*x[1]*(x[2]*x[3]/x[4]); },[1,1,1,1,1]).solution);
+
+
+console.log(njs.uncmin(function(x) { return x[0]*x[1]*(x[2]*x[3]/x[4]); },[1,1,1,1,1]).solution);
+
+// import * as circuit from './circuit';
 
 let width = 960,
   height = 900;
@@ -48,6 +78,15 @@ d3.json("graphdata/circuit.json", function(error, graph) {
   if (showGuides) {
     renderGroups();
   }
+
+  // This looks like the right way to do reusable d3 components
+  //  https://medium.freecodecamp.org/a-gentle-introduction-to-d3-how-to-build-a-reusable-bubble-chart-9106dc4f6c46
+
+  // Nope this is better, from botock himself:
+  // https://bost.ocks.org/mike/chart/
+  // let path = svg.selectAll(".link")
+  //   .data(graph.links)
+  //   .call(circuit.links);
 
   let path = svg.selectAll(".link")
     .data(graph.links)
