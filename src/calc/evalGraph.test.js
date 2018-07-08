@@ -8,9 +8,9 @@ describe('sum ops', () => {
     expect(testGraph.verbs.sum([11], [6,5])).toBe(0);
     expect(testGraph.verbs.sum([11, 69], [80])).toBe(0);
     expect(testGraph.verbs.sum([-20], [-30,10])).toBe(0);
-    expect(evalGraph(testGraph, [4]).nodes[2].value).toBe(-1);
-    expect(evalGraph(testGraph, [3]).nodes[2].value).toBe(0);
-    expect(evalGraph(testGraph, [2]).nodes[2].value).toBe(1);
-    expect(evalGraph(testGraph, [1]).nodes[2].value).toBe(2);
+    expect(evalGraph(testGraph, [4])).toBe(-1);
+    expect(evalGraph(testGraph, [3])).toBe(0);
+    expect(evalGraph(testGraph, [2])).toBe(1);
+    expect(evalGraph(testGraph, [1])).toBe(2);
   });
 });
