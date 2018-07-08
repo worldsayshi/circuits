@@ -4,8 +4,8 @@
 export default {
   graph: {
     nodes: [
-      { noun: 'default', value: 1 },
-      { noun: 'default', value: 2 },
+      { noun: 'default', constant: true, value: 1 },
+      { noun: 'default', constant: true, value: 2 },
       { noun: 'default' },
     ],
     components: [
