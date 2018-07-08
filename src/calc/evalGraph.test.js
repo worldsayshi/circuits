@@ -1,9 +1,9 @@
 
 import evalGraph from './evalGraph';
-import testGraph from './testGraph';
+import testGraph from '../testGraph';
 
 describe('graph optimization and evaluation', () => {
-  test.only('evalGraph', () => {
+  test('evalGraph', () => {
     expect(evalGraph(testGraph)[0]).toBeCloseTo(3, 2);
   });
 });

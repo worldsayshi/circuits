@@ -1,9 +1,8 @@
 
 import fmin from 'fmin';
-import njs from './numericjs/numeric-1.2.6';
+import njs from '../numericjs/numeric-1.2.6';
 
 // Testing out various optimization methods
-
 
 // njs.uncmin
 // fmin.nelderMead

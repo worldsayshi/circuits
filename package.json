@@ -23,6 +23,7 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-jest": "^23.2.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "http-server": "^0.11.1",
     "jest": "^23.2.0",
@@ -32,6 +33,8 @@
   },
   "dependencies": {
     "d3": "^4.13.0",
+    "fmin": "0.0.2",
+    "redux": "^4.0.0",
     "webcola": "^3.3.8"
   }
 }
