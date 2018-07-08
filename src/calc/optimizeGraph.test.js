@@ -4,6 +4,6 @@ import testGraph from '../testGraph';
 
 describe('graph optimization and evaluation', () => {
   test('optimizeGraph', () => {
-    expect(optimizeGraph(testGraph)[0]).toBeCloseTo(3, 2);
+    expect(optimizeGraph(testGraph).nodes[2].value).toBeCloseTo(3, 2);
   });
 });
