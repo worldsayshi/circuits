@@ -21,7 +21,7 @@ export default {
     }
   },
   verbs: {
-    sum: (left, right) =>
+    sum: (left, right) => console.log('verb sum', left, right) ||
       left.reduce((a, b) => a + b, 0) - right.reduce((a, b) => a + b, 0),
   },
 };
