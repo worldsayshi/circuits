@@ -25,7 +25,7 @@ describe('createCore', () => {
 
   it('should optimize the graph', (done) => {
     const graph = { nodes: [
-      { noun: 'default', value: 1 },
+      { noun: 'default', constant: true, value: 1 },
       { noun: 'default' }
     ],
     components: [

@@ -5,9 +5,9 @@ export default {
     if (value === undefined && constant) {
       throw new Error(`A constant must not be undefined, see node ${index}`);
     }
-    if (value === undefined || constant) {
-      return x[index];
+    if (x[index] === 'undefined' || constant) {
+      return value;
     }
-    return value;
+    return x[index];
   }
 }

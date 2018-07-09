@@ -6,7 +6,7 @@ import {getNounResolvers} from "../nouns";
 
 describe('nounify', () => {
   it('should return constants', () => {
-    const values = nounify([0], [{ noun: 'default', value: 4 }], getNounResolvers(), []);
+    const values = nounify([0], [{ noun: 'default', value: 4, constant: true }], getNounResolvers(), []);
 
     expect(values).toEqual([4]);
   });
