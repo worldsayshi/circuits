@@ -5,7 +5,7 @@ import { getNounResolvers } from '../nouns';
 import optimizeGraph from "./optimizeGraph";
 
 
-// Example of how to adapt to data changes: https://bl.ocks.org/mbostock/1095795
+
 
 function createReducer({ nouns, verbs }) {
   return (graph = { nodes: [], components: [] }, action) => {
