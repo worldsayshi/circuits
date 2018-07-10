@@ -1,6 +1,217 @@
 
 import createCore from '../calc/createCore';
+import * as d3 from "d3";
+import * as cola from "webcola/dist/index";
+import toD3 from "../adaptors/toD3";
 
-export default function () {
+function isIE() {
+  return ((navigator.appName == 'Microsoft Internet Explorer') || ((navigator.appName == 'Netscape') && (new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != null)));
+}
 
+let width = 960,
+  height = 900;
+
+let group;
+let showGuides = false;
+
+let color = d3.scaleOrdinal(d3.schemeCategory20);
+
+let d3cola = cola.d3adaptor(d3)
+  .avoidOverlaps(true)
+  .size([width, height]);
+
+let svg = d3.select("body").append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+function initCore() {
+  const graph = { nodes: [
+      { noun: 'default', constant: true, value: 1 },
+      { noun: 'default' }
+    ],
+    components: [
+      { left: [0], right: [1], verb: 'sum' },
+    ] };
+  return createCore({ graph });
+}
+
+// function initView() {
+//   import * as cola from 'webcola';
+//   import * as d3 from "d3";
+//
+//   let width = 960,
+//     height = 900;
+//
+//   let group;
+//   let showGuides = false;
+//
+//   let color = d3.scaleOrdinal(d3.schemeCategory20);
+//
+//   let d3cola = cola.d3adaptor(d3)
+//   .avoidOverlaps(true)
+//   .size([width, height]);
+//
+//   let svg = d3.select("body").append("svg")
+//   .attr("width", width)
+//   .attr("height", height);
+//
+//   return { svg, color, showGuides };
+// }
+
+function render(graph) {
+  console.log('render');
+  let nodeRadius = 30;
+
+  graph.nodes.forEach(function(v) {
+    v.height = v.width = 2 * nodeRadius;
+  });
+
+  d3cola
+    .nodes(graph.nodes)
+    .links(graph.links)
+    .groups(graph.groups)
+    .symmetricDiffLinkLengths(40)
+    .start(10, 20, 20);
+
+  if (showGuides) {
+    renderGroups();
+  }
+
+  let path = svg.selectAll(".link")
+    .data(graph.links)
+    .enter().append('svg:path')
+    .attr('class', 'link');
+
+  let node = svg.selectAll(".node")
+    .data(graph.nodes)
+    .enter().append("g")
+    .call(d3cola.drag);
+
+  node
+    .filter(function (d) { return d.type === 'Var';})
+    .append('circle')
+    .attr("class", "node")
+    .attr("r", nodeRadius)
+    .style("fill", function(d) {
+      return color(d.group);
+    });
+
+  // Append images
+  node
+    .filter(function (d) { return !!d.img;})
+    .append("svg:image")
+    .attr("xlink:href",  function(d) { return d.img;})
+    .attr("x", function(d) { return -nodeRadius;})
+    .attr("y", function(d) { return -nodeRadius;})
+    .attr("height", 2*nodeRadius)
+    .attr("width", 2*nodeRadius);
+
+  node.append("title")
+    .text(function(d) {
+      return d.name;
+    });
+
+  function groupCenter (bounds) {
+    return {
+      x: (bounds.X - bounds.x) / 2 + bounds.x,
+      y: (bounds.Y - bounds.y) / 2 + bounds.y
+    };
+  }
+
+  function tick() {
+    path.each(function(d) {
+      if (isIE()) this.parentNode.insertBefore(this, this);
+    });
+    // draw directed edges with proper padding from node centers
+    path.attr('d', function(d) {
+      let varNode = d.source.type === 'Var' ? d.source : d.target;
+      let varGroup = varNode.parent;
+      let gCenter = groupCenter(varGroup.bounds);
+
+      let deltaX = d.target.x - d.source.x,
+        deltaY = d.target.y - d.source.y,
+        dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
+        normX = deltaX / dist,
+        normY = deltaY / dist,
+        sourcePadding = 0, // nodeRadius,
+        targetPadding = 0, //nodeRadius + 2,
+        sourceX = d.source.x + (sourcePadding * normX),
+        sourceY = d.source.y + (sourcePadding * normY),
+        targetX = d.target.x - (targetPadding * normX),
+        targetY = d.target.y - (targetPadding * normY);
+
+      if (d.target.type === 'Var' && d.source.type === 'Var') {
+        return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
+      }
+
+      return 'M' + sourceX + ',' + sourceY + 'S' + gCenter.x + ',' + gCenter.y + ' ' + targetX + ',' + targetY;
+    });
+
+    node
+    .attr('transform', function (d) {
+      let transform = 'translate(' + d.x + ','+ d.y +')';
+      if(d.type == 'Component') {
+        let gc1 = groupCenter(d.parent.groups[0].bounds);
+        let gc2 = groupCenter(d.parent.groups[1].bounds);
+
+        let angle = Math.atan2(gc2.y - gc1.y, gc2.x - gc1.x) * 180 / Math.PI;
+        return transform + ' rotate('+angle+')'
+      }
+      return transform;
+    })
+
+
+    if (showGuides) {
+      group.attr("x", function(d) {
+        return d.bounds.x;
+      })
+      .attr("y", function(d) {
+        return d.bounds.y;
+      })
+      .attr("width", function(d) {
+        return d.bounds.width();
+      })
+      .attr("height", function(d) {
+        return d.bounds.height();
+      });
+    }
+  }
+
+  d3cola.on("tick", tick);
+
+  window.toggleGuides = function() {
+    showGuides = !showGuides;
+    if (showGuides) {
+      renderGroups();
+    } else {
+      removeGroups();
+    }
+    tick();
+  }
+
+  function renderGroups() {
+    group = svg.selectAll(".group")
+    .data(graph.groups)
+    .enter().insert("rect", ".link")
+    .attr("rx", 8).attr("ry", 8)
+    .attr("class", "group")
+    .style("fill", function(d, i) {
+      return color(i);
+    })
+    .call(d3cola.drag);
+  }
+
+  function removeGroups() {
+    svg.selectAll(".group").remove();
+  }
+}
+
+export default function app () {
+  const core = initCore();
+  core.subscribe(() => {
+    const graph = core.getState();
+    render(graph);
+  });
+  const graph = core.getState();
+  render(toD3.d3(graph));
 };
