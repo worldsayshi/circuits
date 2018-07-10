@@ -3,22 +3,6 @@ import * as d3 from "d3";
 import njs from './numericjs/numeric-1.2.6';
 import graph2 from '../graphdata/circuit.json';
 
-let someRes = njs['+']([7,8,9], [10,1,2]);
-console.log(someRes);
-
-let sqr = function(x) { return x*x; };
-
-
-// This is what the current graph would produce
-// Right now, it's all nonsense since the graph doesn't have enough constraints to optimize on.
-// But with a better example it should work????
-console.log(njs.uncmin(function(x) { return x[0]*x[1]*(x[2]*x[3]/x[4]); },[1,1,1,1,1]).solution);
-
-
-console.log(njs.uncmin(function(x) { return x[0]*x[1]*(x[2]*x[3]/x[4]); },[1,1,1,1,1]).solution);
-
-// import * as circuit from './circuit';
-
 let width = 960,
   height = 900;
 
