@@ -122,6 +122,11 @@ d3.json("graphdata/circuit.json", function(error, graph) {
         sourceY = d.source.y + (sourcePadding * normY),
         targetX = d.target.x - (targetPadding * normX),
         targetY = d.target.y - (targetPadding * normY);
+
+      if (d.target.type === 'Var' && d.source.type === 'Var') {
+        return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
+      }
+
       return 'M' + sourceX + ',' + sourceY + 'S' + gCenter.x + ',' + gCenter.y + ' ' + targetX + ',' + targetY;
     });
 
