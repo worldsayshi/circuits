@@ -5,57 +5,47 @@ import * as cola from "webcola/dist/index";
 import toD3 from "../adaptors/toD3";
 import update from './render/update';
 
-let width = 960,
-  height = 900;
-
-let group;
-let showGuides = false;
-
-let color = d3.scaleOrdinal(d3.schemeCategory20);
-
-let d3cola = cola.d3adaptor(d3)
-  .avoidOverlaps(true)
-  .size([width, height]);
-
-let svg = d3.select("body").append("svg")
-  .attr("width", width)
-  .attr("height", height);
-
 function initCore() {
   const graph = { nodes: [
       { noun: 'default', constant: true, value: 1 },
-      { noun: 'default' }
+      { noun: 'default', constant: true, value: 1 },
+      { noun: 'default', constant: true, value: 1 },
+      { noun: 'default', constant: true, value: 1 },
+
+      { noun: 'default', constant: true, value: 1 },
+      { noun: 'default', constant: true, value: 1 },
+      { noun: 'default', constant: true, value: 1 },
+      { noun: 'default', constant: true, value: 1 },
+      { noun: 'default', constant: true, value: 1 },
     ],
     components: [
-      { left: [0], right: [1], verb: 'sum' },
+      { left: [0, 1], right: [2, 3], verb: 'sum' },
+      { left: [4, 5, 6, 8], right: [7], verb: 'sum' },
     ] };
   return createCore({ graph });
 }
 
-// function initView() {
-//   import * as cola from 'webcola';
-//   import * as d3 from "d3";
-//
-//   let width = 960,
-//     height = 900;
-//
-//   let group;
-//   let showGuides = false;
-//
-//   let color = d3.scaleOrdinal(d3.schemeCategory20);
-//
-//   let d3cola = cola.d3adaptor(d3)
-//   .avoidOverlaps(true)
-//   .size([width, height]);
-//
-//   let svg = d3.select("body").append("svg")
-//   .attr("width", width)
-//   .attr("height", height);
-//
-//   return { svg, color, showGuides };
-// }
+function initView() {
+  let width = 960,
+    height = 900;
 
-function render(graph) {
+  let group;
+  let showGuides = false;
+
+  let color = d3.scaleOrdinal(d3.schemeCategory20);
+
+  let d3cola = cola.d3adaptor(d3)
+    .avoidOverlaps(true)
+    .size([width, height]);
+
+  let svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+  return { d3cola, svg, group, color, showGuides };
+}
+
+function render(graph, { d3cola, svg, group, color, showGuides }) {
   let nodeRadius = 30;
 
   graph.nodes.forEach(function(v) {
@@ -108,7 +98,7 @@ function render(graph) {
     });
 
 
-  d3cola.on("tick", () => update({ node, path, showGuides }));
+  d3cola.on("tick", () => update({ node, path, showGuides, group }));
 
   window.toggleGuides = function() {
     showGuides = !showGuides;
@@ -117,19 +107,19 @@ function render(graph) {
     } else {
       removeGroups();
     }
-    update({ node, path, showGuides });
-  }
+    update({ node, path, showGuides, group });
+  };
 
   function renderGroups() {
     group = svg.selectAll(".group")
-    .data(graph.groups)
-    .enter().insert("rect", ".link")
-    .attr("rx", 8).attr("ry", 8)
-    .attr("class", "group")
-    .style("fill", function(d, i) {
-      return color(i);
-    })
-    .call(d3cola.drag);
+      .data(graph.groups)
+      .enter().insert("rect", ".link")
+      .attr("rx", 8).attr("ry", 8)
+      .attr("class", "group")
+      .style("fill", function(d, i) {
+        return color(i);
+      })
+      .call(d3cola.drag);
   }
 
   function removeGroups() {
@@ -139,10 +129,15 @@ function render(graph) {
 
 export default function app () {
   const core = initCore();
+  const viewComponents = initView();
   core.subscribe(() => {
     const graph = core.getState();
-    render(graph);
+    render(toD3.d3(graph), viewComponents);
   });
   const graph = core.getState();
-  render(toD3.d3(graph));
+  console.log('toD3.d3(graph)');
+  console.log(JSON.stringify(toD3.d3(graph), null, 2));
+  render(toD3.d3(graph), viewComponents);
+
+  window.optimize = () => core.dispatch({ type: 'OPTIMIZE' });
 };

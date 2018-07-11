@@ -9,7 +9,7 @@ function groupCenter (bounds) {
   };
 }
 
-export default function update({ node, path, showGuides }) {
+export default function update({ node, path, showGuides, group }) {
   path.each(function(d) {
     if (isIE()) this.parentNode.insertBefore(this, this);
   });
