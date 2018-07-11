@@ -32,7 +32,7 @@ function attachDefaultData({ nodes, components }, defaultVerbData) {
 
 
 // Stateful core
-export default function createCore ({ graph, nouns, verbs }) {
+export default function createCore ({ graph, nouns = {}, verbs = {} }) {
   return createStore(createReducer({
     nouns: { ...getNounResolvers(), ...nouns },
     verbs: { ...getVerbResolvers(), ...verbs },

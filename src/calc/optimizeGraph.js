@@ -5,10 +5,14 @@ import { nelderMead } from 'fmin';
 // Turn nodes into values
 export function nounify(nodeIds, nodes, nouns, x) {
   return nodeIds.map((nodeId, index) => {
+    if (typeof nodeId === 'object') {
+      throw new Error('nodeId should not be an object');
+    }
     if (!nodes[nodeId]) {
       throw new Error(`Missing node: ${nodeId}`);
     }
-    return nouns[nodes[nodeId].noun](nodes[nodeId], index, x);
+    const node = nodes[nodeId];
+    return nouns[node.noun](node, index, x);
   });
 
 }

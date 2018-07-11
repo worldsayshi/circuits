@@ -135,8 +135,6 @@ export default function app () {
     render(toD3.d3(graph), viewComponents);
   });
   const graph = core.getState();
-  console.log('toD3.d3(graph)');
-  console.log(JSON.stringify(toD3.d3(graph), null, 2));
   render(toD3.d3(graph), viewComponents);
 
   window.optimize = () => core.dispatch({ type: 'OPTIMIZE' });
