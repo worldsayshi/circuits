@@ -1,8 +1,8 @@
 
 import createCore from '../calc/createCore';
 
-import toD3 from "../adaptors/toD3";
-import update from './render/update';
+// import toD3 from "../adaptors/toD3";
+// import update from './render/update';
 import View from "./View";
 
 function initCore() {

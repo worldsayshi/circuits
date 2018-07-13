@@ -21,17 +21,15 @@ function createD3Groups(components, numberOfVars) {
   return groups;
 }
 
-export default {
-  'd3': ({ nodes, components }) => {
-    const d3Nodes = [
-      ...nodes.map((node, index) => ({...node, type: 'Var', nodeId: index })),
-      ...components.map(component => ({...component, type: 'Component' })),
-    ];
-    
-    const d3Links = createD3Links(components, nodes.length);
+export default function toD3 ({ nodes, components }) {
+  const d3Nodes = [
+    ...nodes.map((node, index) => ({...node, type: 'Var', nodeId: index })),
+    ...components.map(component => ({...component, type: 'Component' })),
+  ];
 
-    const d3Groups = createD3Groups(components, nodes.length);
+  const d3Links = createD3Links(components, nodes.length);
 
-    return { nodes: d3Nodes, links: d3Links, groups: d3Groups };
-  },
-};
+  const d3Groups = createD3Groups(components, nodes.length);
+
+  return { nodes: d3Nodes, links: d3Links, groups: d3Groups };
+}

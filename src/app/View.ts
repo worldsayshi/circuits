@@ -1,7 +1,15 @@
-import update from "./render/update";
+// import update from "./render/update";
 import * as d3 from "d3";
 import * as cola from "webcola/dist/index";
 import toD3 from "../adaptors/toD3";
+import { BaseType, ScaleOrdinal, Selection } from "d3";
+
+declare global {
+  interface Window {
+    optimize: any;
+    toggleGuides: any;
+  }
+}
 
 function isIE() {
   return ((navigator.appName == 'Microsoft Internet Explorer') || ((navigator.appName == 'Netscape') && (new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != null)));
@@ -15,13 +23,22 @@ function groupCenter (bounds) {
 }
 
 export default class View {
+
+  private simulation: any;
+  private svg: Selection<BaseType, any, HTMLElement, any>;
+  private group: any;
+  private color: ScaleOrdinal<string, string>;
+  private showGuides: boolean;
+  private node: any;
+  private path: any;
+
   constructor(core) {
     let width = 960,
       height = 900;
 
     let showGuides = false;
 
-    let d3cola = cola.d3adaptor(d3)
+    let simulation = cola.d3adaptor(d3)
       .avoidOverlaps(true)
       .size([width, height]);
 
@@ -29,7 +46,7 @@ export default class View {
       .attr("width", width)
       .attr("height", height);
 
-    this.d3cola = d3cola;
+    this.simulation = simulation;
     this.svg = svg;
     this.group = null;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -37,17 +54,16 @@ export default class View {
     this.showGuides = showGuides;
 
     core.subscribe(() => {
+      debugger;
       let graph = core.getState();
       graph = this.transferPositionalData(graph);
-      // console.log('graph', graph);
       this.svg.selectAll("*").remove();
-      const d3Graph = toD3.d3(JSON.parse(JSON.stringify(graph)));
-      // console.log('d3Graph', JSON.parse(JSON.stringify(d3Graph)));
+      const d3Graph = toD3(JSON.parse(JSON.stringify(graph)));
       this.render(d3Graph);
     });
 
     const graph = core.getState();
-    this.render(toD3.d3(JSON.parse(JSON.stringify(graph))));
+    this.render(toD3(JSON.parse(JSON.stringify(graph))));
   }
 
   transferPositionalData({ nodes, components }) {
@@ -81,7 +97,7 @@ export default class View {
     // console.log('nodes before d3');
     // console.log(JSON.stringify(graph.nodes, null, 2));
 
-    this.d3cola
+    this.simulation
       .nodes(graph.nodes)
       .links(graph.links)
       .groups(graph.groups)
@@ -98,9 +114,9 @@ export default class View {
       .attr('class', 'link');
 
     let node = this.svg.selectAll(".node")
-      .data(graph.nodes, (d) => d.nodeId)
+      .data(graph.nodes, (d : any) => d.nodeId)
       .enter().append("g")
-      .call(this.d3cola.drag);
+      .call(this.simulation.drag);
 
     node
       .filter(function (d) { return d.type === 'Var';})
@@ -127,7 +143,7 @@ export default class View {
       });
 
     const self = this;
-    this.d3cola.on("tick", () => self.update({ node, path }));
+    this.simulation.on("tick", () => self.update({ node, path }));
 
     window.toggleGuides = () => {
       this.showGuides = !this.showGuides;
@@ -149,9 +165,9 @@ export default class View {
       .attr("rx", 8).attr("ry", 8)
       .attr("class", "group")
       .style("fill", (d, i) => {
-        return this.color(i);
+        return this.color(`${i}`);
       })
-      .call(this.d3cola.drag);
+      .call(this.simulation.drag);
   }
 
   removeGroups() {

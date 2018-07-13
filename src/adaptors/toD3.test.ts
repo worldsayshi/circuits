@@ -22,7 +22,7 @@ const d3TestGraph = {
 
 describe('toD3', () => {
   it('should convert to d3 representation', () => {
-    const d3Graph = toD3.d3(testGraph.graph);
+    const d3Graph = toD3(testGraph.graph);
     expect(d3Graph.nodes).toEqual(d3TestGraph.nodes);
     expect(d3Graph.links).toEqual(d3TestGraph.links);
     expect(d3Graph.groups).toEqual(d3TestGraph.groups);

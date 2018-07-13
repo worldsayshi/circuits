@@ -1,6 +1,8 @@
 
-import fmin from 'fmin';
-import njs from '../numericjs/numeric-1.2.6';
+const fmin = require('fmin');
+// import * as  from 'fmin';
+const njs = require('../numericjs/numeric-1.2.6');
+// import * as njs from ;
 
 // Testing out various optimization methods
 
