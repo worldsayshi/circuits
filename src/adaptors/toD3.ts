@@ -1,7 +1,11 @@
 
+function entries (l) {
+  return l.map((e, ix) => [ix, e]);
+}
+
 function createD3Links(components, numberOfVars) {
   let links = [];
-  for(const [index, component] of components.entries()) {
+  for(const [index, component] of entries(components)) {
     for(const nodeId of [...component.left, ...component.right]) {
       links.push({source: nodeId, target: numberOfVars+index});
     }
@@ -12,7 +16,7 @@ function createD3Links(components, numberOfVars) {
 function createD3Groups(components, numberOfVars) {
   let groups = [];
   let groupCount = 0;
-  for(const [index, component] of components.entries()) {
+  for(const [index, component] of entries(components)) {
     groups.push({ leaves: component.left });
     groups.push({ leaves: component.right });
     groups.push({ groups: [groupCount, groupCount+1], leaves: [numberOfVars+index] });

@@ -38,15 +38,13 @@ export default class View {
 
     let showGuides = false;
 
-    let simulation = cola.d3adaptor(d3)
-      .avoidOverlaps(true)
-      .size([width, height]);
-
     let svg = d3.select("body").append("svg")
       .attr("width", width)
       .attr("height", height);
 
-    this.simulation = simulation;
+    this.simulation = cola.d3adaptor(d3)
+      .avoidOverlaps(true)
+      .size([width, height]);
     this.svg = svg;
     this.group = null;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -54,7 +52,6 @@ export default class View {
     this.showGuides = showGuides;
 
     core.subscribe(() => {
-      debugger;
       let graph = core.getState();
       graph = this.transferPositionalData(graph);
       this.svg.selectAll("*").remove();
@@ -206,7 +203,7 @@ export default class View {
     });
 
     node
-      .attr('transform', (d) => {
+      .attr('transform', (d: any) => {
         let transform = 'translate(' + d.x + ','+ d.y +')';
         if (d.type == 'Component') {
           let gc1 = groupCenter(d.parent.groups[0].bounds);

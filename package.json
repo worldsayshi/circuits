@@ -44,7 +44,13 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true
+      }
+    },
+    "testPathIgnorePatterns" : ["<rootDir>/node_modules/", "<rootDir>/dist/" ]
   },
   "dependencies": {
     "@types/d3": "^5.0.0",
