@@ -19,4 +19,5 @@ module.exports = {
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
     ]
   },
+  devtool: 'inline-source-map'
 };
