@@ -4,13 +4,6 @@ import * as cola from "webcola/dist/index";
 import toD3 from "../adaptors/toD3";
 import { BaseType, ScaleOrdinal, Selection } from "d3";
 
-declare global {
-  interface Window {
-    optimize: any;
-    toggleGuides: any;
-  }
-}
-
 function isIE() {
   return ((navigator.appName == 'Microsoft Internet Explorer') || ((navigator.appName == 'Netscape') && (new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != null)));
 }
@@ -31,6 +24,7 @@ export default class View {
   private showGuides: boolean;
   private node: any;
   private path: any;
+  private graph: any;
 
   constructor(core) {
     let width = 960,
@@ -52,11 +46,17 @@ export default class View {
     this.showGuides = showGuides;
 
     core.subscribe(() => {
-      let graph = core.getState();
-      graph = this.transferPositionalData(graph);
-      this.svg.selectAll("*").remove();
-      const d3Graph = toD3(JSON.parse(JSON.stringify(graph)));
-      this.render(d3Graph);
+      // TODO Instead of replacing the state we could use json diff in a method core.getDelta() and
+      // apply the delta onto the existing state. Then data-dom link may not need to be broken.
+      const delta = core.getDelta();
+      console.log('delta', delta);
+
+      // let graph = core.getState();
+      // graph = this.transferPositionalData(graph);
+      // this.svg.selectAll("*").remove();
+      // const d3Graph = toD3(JSON.parse(JSON.stringify(graph)));
+
+      this.render(this.graph);
     });
 
     const graph = core.getState();
@@ -111,33 +111,35 @@ export default class View {
       .attr('class', 'link');
 
     let node = this.svg.selectAll(".node")
-      .data(graph.nodes, (d : any) => d.nodeId)
+      .data(graph.nodes)
       .enter().append("g")
+      .attr('class', 'node')
       .call(this.simulation.drag);
-
-    node
-      .filter(function (d) { return d.type === 'Var';})
-      .append('circle')
-      .attr("class", "node")
-      .attr("r", nodeRadius)
-      .style("fill", (d) => {
-        return this.color(d.group);
-      });
 
     // Append images
     node
-      .filter(function (d) { return !!d.img;})
+      .filter(function (d : any) { return !!d.img;})
       .append("svg:image")
-      .attr("xlink:href",  function(d) { return d.img;})
+      .attr("xlink:href",  function(d : any) { return d.img;})
       .attr("x", function(d) { return -nodeRadius;})
       .attr("y", function(d) { return -nodeRadius;})
       .attr("height", 2*nodeRadius)
-      .attr("width", 2*nodeRadius);
+      .attr("width", 2*nodeRadius)
+      .attr("class", "component");
 
-    node.append("title")
-      .text(function(d) {
-        return d.name;
-      });
+    node
+      .filter(function (d : any) { return d.type === 'Var';})
+      .append('circle')
+      .attr("r", nodeRadius)
+      .style("fill", (d : any) => {
+        return this.color(d.group);
+      })
+      .attr("class", "var");
+
+    // node.append("title")
+    //   .text(function(d) {
+    //     return d.name;
+    //   });
 
     const self = this;
     this.simulation.on("tick", () => self.update({ node, path }));
@@ -153,6 +155,7 @@ export default class View {
     };
     this.path = path;
     this.node = node;
+    this.graph = graph;
   }
 
   renderGroups(graph) {

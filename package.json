@@ -50,12 +50,16 @@
         "skipBabel": true
       }
     },
-    "testPathIgnorePatterns" : ["<rootDir>/node_modules/", "<rootDir>/dist/" ]
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/dist/"
+    ]
   },
   "dependencies": {
     "@types/d3": "^5.0.0",
     "d3": "^5.5.0",
     "fmin": "0.0.2",
+    "jsondiffpatch": "^0.3.11",
     "redux": "^4.0.0",
     "typescript": "^2.9.2",
     "webcola": "^3.3.8"

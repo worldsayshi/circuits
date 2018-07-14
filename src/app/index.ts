@@ -4,6 +4,7 @@ import createCore from '../calc/createCore';
 // import toD3 from "../adaptors/toD3";
 // import update from './render/update';
 import View from "./View";
+import TestView from "./TestView";
 
 function initCore() {
   const graph = { nodes: [
@@ -25,12 +26,37 @@ function initCore() {
   return createCore({ graph });
 }
 
+declare global {
+  interface Window {
+    buttonOperations: any
+    foo: any;
+    optimize: any;
+    toggleGuides: any;
+  }
+}
+
 
 
 
 export default function app () {
-  const core = initCore();
-  const view = new View(core);
+  const view = new TestView();
 
-  window.optimize = () => core.dispatch({ type: 'OPTIMIZE' });
+  view.getOperations().forEach(({ name, f }) => {
+    const button = document.createElement('button');
+    button.appendChild(document.createTextNode(name));
+
+    button.onclick = f;
+
+    document.querySelector('#buttons').appendChild(button);
+  });
+  // view.start();
+  // window.changeValue = () => view.changeValue();
 };
+
+// export default function _app () {
+//   const core = initCore();
+//   const view = new View(core);
+//
+//   window.foo = () => core.dispatch({ type: 'FOO' });
+//   window.optimize = () => core.dispatch({ type: 'OPTIMIZE' });
+// };
