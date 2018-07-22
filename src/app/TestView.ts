@@ -1,12 +1,14 @@
 import * as d3 from "d3";
+import * as jsdiff from 'jsondiffpatch';
 import * as cola from "webcola/dist/index";
 import { Layout } from "webcola/dist/src/layout";
 import { LayoutAdaptor } from "webcola/dist/src/adaptor";
-import {ID3StyleLayoutAdaptor, InputNode} from "webcola/dist/index";
+import {ID3StyleLayoutAdaptor, InputNode} from "webcola";
 import {Link} from "d3";
 
 interface MyNode extends InputNode {
   id: string;
+  type: string,
   value?: number;
 }
 
@@ -24,10 +26,12 @@ export default class TestView {
   private domNodes: any;
   private width: number;
   private height: number;
+  private nodeTypes: { [key: string]: any};
 
-  constructor() {
+  constructor(nodeTypes: { [key: string]: any}) {
     this.width = 960;
     this.height = 900;
+    this.nodeTypes = nodeTypes;
 
     this.svg = d3.select("body").append("svg")
       .attr("width", this.width)
@@ -39,11 +43,10 @@ export default class TestView {
       .symmetricDiffLinkLengths(40)
       .on('tick', () => this.tick());
 
-    this.color = d3.scaleOrdinal(d3.schemeCategory10);
-
     this.nodes = [{}, {}, {}].map((n, i) => ({
       ...n,
       id: `${i}`,
+      type: 'Var',
       value: 1,
     }));
     this.links = [
@@ -57,17 +60,13 @@ export default class TestView {
     this.simulation
       .links(this.links);
 
-    // Need to render twice for some reason
-    this.render();
+    this.domNodes = this.svg.selectAll(".node");
     this.render();
     this.simulation.start();
-    // this.simulation.start();
   }
 
-
   render() {
-    console.log('start');
-    let nodeRadius = 30;
+
 
     this.domNodes = this.svg.selectAll(".node")
       .data(this.simulation.nodes(), n => n.id);
@@ -76,40 +75,35 @@ export default class TestView {
       .attr('class', 'node')
       .call(this.simulation.drag);
 
-    nodeContainerCreation
-      .append('circle')
-      .attr("r", nodeRadius)
-      .style("fill", (d : any) => {
-        console.log('node creation');
-        return this.color(d.group);
-      });
-    // .attr("class", "var");
-    //
-    nodeContainerCreation
-      .append('text')
-      .attr('class', 'node-label');
+    for(const nodeTypeName of Object.keys(this.nodeTypes)) {
+      const nodeTypeComponent = this.nodeTypes[nodeTypeName];
+      nodeContainerCreation
+        .filter(({type}) => type === nodeTypeName)
+        .call(nodeTypeComponent);
+      // (nodeContainerCreation);
+    }
 
     this.svg.selectAll(".node-label")
       .text(d => d.value || 'no value');
 
     this.domNodes.exit().remove();
+
+    // This is needed to convert nodes from being enternodes. For some reason.
+    this.domNodes = this.svg.selectAll(".node")
+      .data(this.simulation.nodes(), n => n.id);
   }
 
   tick() {
-    console.log('tick');
     this.domNodes
       .attr('transform', (d: any) => `translate(${d.x},${d.y})`);
   }
 
   changeValue() {
-    // this.svg.selectAll("*").remove();
-    // let valueBefore = this.nodes[0].value;
     this.nodes.forEach((n: any) => {
       n.value = n.value + 1;
     });
 
     this.render();
-    // this.simulation.start();
   }
   removeNode() {
     this.nodes.pop();
@@ -123,17 +117,40 @@ export default class TestView {
     const newNode = {
       id: `${this.nodes.length + 1}`,
       value: 1,
+      type: 'Var',
       x: this.width / 2,
       y: this.height / 2,
     };
     const nodes = this.simulation.nodes();
     nodes.push(newNode);
     this.simulation.links().push({ source: nodes[0], target: newNode });
-    // this.links.push();
-    // this.links.push();
 
-    this.simulation.start();
+    this.simulation.start(0,0,0,0,true, false);
     this.render();
+  }
+
+  private deltaChange() {
+    const newNode = {
+      id: `${this.nodes.length + 1}`,
+      value: 1,
+      type: 'Var',
+      x: this.width / 2,
+      y: this.height / 2,
+    };
+    const nodes = this.simulation.nodes();
+
+    const nodeDiff = jsdiff.diff(nodes, [...nodes, newNode]);
+
+    const links = this.simulation.links();
+
+    const newLink = { source: nodes[0], target: newNode };
+
+    const linkDiff = jsdiff.diff(links, [...links, newLink]);
+
+    jsdiff.patch(this.simulation.nodes(), nodeDiff);
+    jsdiff.patch(this.simulation.links(), linkDiff);
+
+    this.simulation.start(0,0,0,0,true, false);
     this.render();
   }
 
@@ -147,8 +164,10 @@ export default class TestView {
     }, {
       name: 'remove node',
       f: () => this.removeNode(),
+    }, {
+      name: 'delta change',
+      f: () => this.deltaChange(),
     }];
   }
-
 
 }

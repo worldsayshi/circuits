@@ -5,6 +5,7 @@ import createCore from '../calc/createCore';
 // import update from './render/update';
 import View from "./View";
 import TestView from "./TestView";
+import * as d3 from "d3";
 
 function initCore() {
   const graph = { nodes: [
@@ -39,7 +40,23 @@ declare global {
 
 
 export default function app () {
-  const view = new TestView();
+  let nodeRadius = 30;
+  let color = d3.scaleOrdinal(d3.schemeCategory10);
+  const view = new TestView({
+    Var: (container) => {
+      container
+        .append('circle')
+        .attr("r", nodeRadius)
+        .style("fill", (d : any) => {
+          console.log('node creation');
+          return color(d.group);
+        });
+
+      container
+        .append('text')
+        .attr('class', 'node-label');
+    }
+  });
 
   view.getOperations().forEach(({ name, f }) => {
     const button = document.createElement('button');
