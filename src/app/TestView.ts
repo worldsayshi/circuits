@@ -10,11 +10,39 @@ interface MyNode extends InputNode {
   id: string;
   type: string,
   value?: number;
+  [key: string]: any;
+}
+
+interface Graph {
+  nodes: any[];
+  links: any[]; //  {source:number,target:number}
 }
 
 function random() {
   return Math.round(Math.random()*100);
 }
+
+const Var = (n, i) => ({
+  ...n,
+  id: `${i}`,
+  type: 'Var',
+  value: 1,
+})
+
+// TODO: Continue building on TestView until it's on feature parity with View.
+// It should keep its own state internally and get "immutable" updates from the outside.
+// Try to keep the 'toD3' import outside of this TestView.
+
+const clone = obj => JSON.parse(JSON.stringify(obj));
+
+const testGraph = () => clone({
+  nodes: [{}, {}, {}].map(Var),
+  links: [
+    { source: 0, target: 1 },
+    { source: 1, target: 2 },
+    { source: 0, target: 2 },
+  ],
+});
 
 export default class TestView {
   private svg: any;
@@ -29,6 +57,7 @@ export default class TestView {
   private nodeTypes: { [key: string]: any};
 
   constructor(nodeTypes: { [key: string]: any}) {
+    const startGraph = testGraph();
     this.width = 960;
     this.height = 900;
     this.nodeTypes = nodeTypes;
@@ -43,17 +72,8 @@ export default class TestView {
       .symmetricDiffLinkLengths(40)
       .on('tick', () => this.tick());
 
-    this.nodes = [{}, {}, {}].map((n, i) => ({
-      ...n,
-      id: `${i}`,
-      type: 'Var',
-      value: 1,
-    }));
-    this.links = [
-      { source: 0, target: 1 },
-      { source: 1, target: 2 },
-      { source: 0, target: 2 },
-    ];
+    this.nodes = startGraph.nodes;
+    this.links = startGraph.links;
 
     this.simulation
       .nodes(this.nodes);
@@ -137,18 +157,43 @@ export default class TestView {
       x: this.width / 2,
       y: this.height / 2,
     };
-    const nodes = this.simulation.nodes();
 
-    const nodeDiff = jsdiff.diff(nodes, [...nodes, newNode]);
+    const currentNodes = this.simulation.nodes();
+    const newNodes = [...this.simulation.nodes(), newNode];
 
     const links = this.simulation.links();
+    const newLink = { source: 0, target: currentNodes.length };
+    const newLinks = [...links, newLink];
+    this.pushGraph({ nodes: newNodes, links: newLinks });
+  }
 
-    const newLink = { source: nodes[0], target: newNode };
+  private pushGraph({ nodes = [], links = [] } : Graph) {
+    // TODO Maintain positions from currentNodes. They are currently cleared if nodes does not contain positions
 
-    const linkDiff = jsdiff.diff(links, [...links, newLink]);
+    const currentNodes = this.simulation.nodes();
+    const currentLinks = this.simulation.links();
 
-    jsdiff.patch(this.simulation.nodes(), nodeDiff);
-    jsdiff.patch(this.simulation.links(), linkDiff);
+    function keepPositions(nodes: any[], currentNodes: any[]) {
+      return nodes.map((n, ix) => ({
+        x: currentNodes[ix] && currentNodes[ix].x,
+        y: currentNodes[ix] && currentNodes[ix].y,
+        // Override with explicit positions
+        ...n
+      }));
+    }
+
+    const nodeDiff = jsdiff.diff(currentNodes, keepPositions(nodes, currentNodes));
+    console.log('nodes', (nodes));
+    console.log('currentNodes', (currentNodes));
+    jsdiff.patch(currentNodes, nodeDiff);
+
+    console.log('links', currentLinks);
+    // empty array
+    currentLinks.splice(0,currentLinks.length);
+    // Push all new links
+    currentLinks.push(...this.normalizeLinks(currentNodes, links));
+    // const linkDiff = jsdiff.diff(, this.normalizeLinks(nodes, links));
+    // jsdiff.patch(this.simulation.links(), linkDiff);
 
     this.simulation.start(0,0,0,0,true, false);
     this.render();
@@ -167,7 +212,38 @@ export default class TestView {
     }, {
       name: 'delta change',
       f: () => this.deltaChange(),
+    }, {
+      name: 'Graph 1',
+      f: () => {
+        this.pushGraph({
+          nodes: [{  }, {  }].map(Var),
+          links: [{
+            source: 0, target: 1
+          }],
+        });
+      },
+    },  {
+      name: 'Graph 2',
+      f: () => {
+        this.pushGraph(testGraph());
+      },
     }];
   }
 
+  private normalizeLinks(nodes: any[], links: any[]) {
+    return links.map(link => {
+      let source, target;
+      if (Number.isInteger(link.source)) {
+        source = nodes[link.source];
+      } else {
+        source = link.source;
+      }
+      if (Number.isInteger(link.target)) {
+        target = nodes[link.target];
+      } else {
+        target = link.target;
+      }
+      return { ...link, source, target };
+    });
+  }
 }
