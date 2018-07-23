@@ -105,8 +105,6 @@ export default class ReactView extends React.Component {
     return <svg
       onMouseMove={(e) => {
         this.moveDragged(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
-        /*console.log(e.clientY - e.target.offsetY())*/
-        // console.log(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
       }}
       onMouseUp={() => this.setState({ dragged: null })}
       height={this.state.height}
@@ -120,13 +118,7 @@ export default class ReactView extends React.Component {
         <Node
           label={n.value}
           dragStart={() => this.setState({ dragged: ix })}
-          move={(x, y) => {
-          console.log('move', this.state.nodes);
-          this.state.nodes[ix].x = x;
-          this.state.nodes[ix].y = y;
-          this.simulation.start(0,0,0,0,true, false);
-          this.forceUpdate();
-        }} nodeRadius={nodeRadius} color={color} {...n} />
+          nodeRadius={nodeRadius} color={color} {...n} />
       )}
     </svg>;
   }
