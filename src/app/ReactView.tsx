@@ -2,30 +2,9 @@ import * as React from "react";
 import {ID3StyleLayoutAdaptor, InputNode, Layout} from "webcola";
 import * as cola from "webcola/dist/index";
 import * as d3 from "d3";
+import { connect } from "react-redux";
+import * as jsdiff from "jsondiffpatch";
 
-const clone = obj => JSON.parse(JSON.stringify(obj));
-
-const testGraph = () => clone({
-  nodes: [{}, {}, {}].map(Var),
-  links: [
-    {source: 0, target: 1},
-    {source: 1, target: 2},
-    {source: 0, target: 2},
-  ].map(Link),
-});
-
-
-const Var = (n, i) => ({
-  id: `${i}`,
-  type: 'Var',
-  value: 1,
-  ...n,
-});
-
-const Link = (l) => ({
-  type: 'Simple',
-  ...l,
-});
 
 interface MyNode extends InputNode {
   id: string;
@@ -59,7 +38,7 @@ class Node extends React.Component<{[key: string]: any}> {
   }
 }
 
-export default class ReactView extends React.Component {
+class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
   state = {
     width: 960,
     height: 900,
@@ -72,21 +51,63 @@ export default class ReactView extends React.Component {
 
   constructor(props, ...rest) {
     super(props, ...rest);
-    const startGraph = testGraph();
+    const { nodes, links } = props;
     this.simulation = cola.d3adaptor(d3)
       .avoidOverlaps(true)
       .size([this.state.width, this.state.height])
       .symmetricDiffLinkLengths(40)
       .on('tick', () => this.forceUpdate());
 
-    this.state.nodes = startGraph.nodes;
-    this.state.links = startGraph.links;
+    this.state.nodes = nodes;
+    this.state.links = links;
     this.simulation
       .nodes(this.state.nodes);
     this.simulation
       .links(this.state.links);
 
     this.simulation.start();
+  }
+
+  componentWillReceiveProps({ nodes = [], links = [] }) {
+
+    const currentNodes = this.simulation.nodes();
+    const currentLinks = this.simulation.links();
+
+    function keepPositions(nodes: any[], currentNodes: any[]) {
+      return nodes.map((n, ix) => ({
+        x: currentNodes[ix] && currentNodes[ix].x,
+        y: currentNodes[ix] && currentNodes[ix].y,
+        // Override with explicit positions
+        ...n
+      }));
+    }
+
+    const nodeDiff = jsdiff.diff(currentNodes, keepPositions(nodes, currentNodes));
+    jsdiff.patch(currentNodes, nodeDiff);
+
+    // empty array
+    currentLinks.splice(0,currentLinks.length);
+    // Push all new links
+    currentLinks.push(...this.normalizeLinks(currentNodes, links));
+
+    this.simulation.start(0,0,0,0,true, false);
+  }
+
+  private normalizeLinks(nodes: any[], links: any[]) {
+    return links.map(link => {
+      let source, target;
+      if (Number.isInteger(link.source)) {
+        source = nodes[link.source];
+      } else {
+        source = link.source;
+      }
+      if (Number.isInteger(link.target)) {
+        target = nodes[link.target];
+      } else {
+        target = link.target;
+      }
+      return { ...link, source, target };
+    });
   }
 
   moveDragged(toX, toY) {
@@ -99,7 +120,6 @@ export default class ReactView extends React.Component {
   }
 
   render() {
-    console.log('render');
     let nodeRadius = 30;
     let color = d3.scaleOrdinal(d3.schemeCategory10);
     return <svg
@@ -123,3 +143,6 @@ export default class ReactView extends React.Component {
     </svg>;
   }
 }
+
+
+export default connect(({nodes, links}) => ({nodes, links}))(ReactViewInt);

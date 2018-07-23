@@ -8,6 +8,8 @@ import createCore from '../calc/createCore';
 import View from "./View";
 import TestView from "./TestView";
 import * as d3 from "d3";
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 
 function initCore() {
   const graph = { nodes: [
@@ -38,12 +40,66 @@ declare global {
   }
 }
 
+const clone = obj => JSON.parse(JSON.stringify(obj));
+
+
+const testGraph = () => clone({
+  nodes: [{}, {}, {}].map(Var),
+  links: [
+    {source: 0, target: 1},
+    {source: 1, target: 2},
+    {source: 0, target: 2},
+  ].map(Link),
+});
+
+
+const Var = (n, i) => ({
+  id: `${i}`,
+  type: 'Var',
+  value: 1,
+  ...n,
+});
+
+const Link = (l) => ({
+  type: 'Simple',
+  ...l,
+});
 
 export default function app () {
+  const startGraph = testGraph();
+  const store = createStore((state = startGraph, action: { type: string, graph: any }) => {
+    switch (action.type) {
+      case 'REPLACE':
+        return action.graph;
+    }
+    return state;
+  })
   ReactDOM.render(
-      <ReactView></ReactView>,
+      <Provider store={store}>
+        <ReactView></ReactView>
+      </Provider>,
       document.getElementById("view")
   );
+
+  setTimeout(() => {
+    store.dispatch({
+      type: 'REPLACE',
+      graph: {
+        nodes: [{  }, {  }].map(Var),
+        links: [{
+          source: 0, target: 1
+        }].map(Link),
+      },
+    });
+  }, 1000);
+
+
+  setTimeout(() => {
+    store.dispatch({
+      type: 'REPLACE',
+      graph: testGraph(),
+    });
+  }, 2000);
 }
 
 // export default function app () {
