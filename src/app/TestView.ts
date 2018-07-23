@@ -23,11 +23,16 @@ function random() {
 }
 
 const Var = (n, i) => ({
-  ...n,
   id: `${i}`,
   type: 'Var',
   value: 1,
-})
+  ...n,
+});
+
+const Link = (l) => ({
+  type: 'Simple',
+  ...l,
+});
 
 // TODO: Continue building on TestView until it's on feature parity with View.
 // It should keep its own state internally and get "immutable" updates from the outside.
@@ -41,26 +46,30 @@ const testGraph = () => clone({
     { source: 0, target: 1 },
     { source: 1, target: 2 },
     { source: 0, target: 2 },
-  ],
+  ].map(Link),
 });
 
 export default class TestView {
   private svg: any;
   private color: any;
   private nodes: MyNode[];
-  private links: { source: number; target: number }[];
+  private links: { source: number; target: number, type: string }[];
   private simulation: Layout & ID3StyleLayoutAdaptor;
   private tickRegistered: boolean = false;
   private domNodes: any;
+  private domLinks: any;
   private width: number;
   private height: number;
   private nodeTypes: { [key: string]: any};
+  private linkTypes: { [key: string]: any};
 
-  constructor(nodeTypes: { [key: string]: any}) {
+
+  constructor(nodeTypes: { [key: string]: any }, linkTypes:  { [key: string]: any }) {
     const startGraph = testGraph();
     this.width = 960;
     this.height = 900;
     this.nodeTypes = nodeTypes;
+    this.linkTypes = linkTypes;
 
     this.svg = d3.select("body").append("svg")
       .attr("width", this.width)
@@ -80,18 +89,18 @@ export default class TestView {
     this.simulation
       .links(this.links);
 
-    this.domNodes = this.svg.selectAll(".node");
+    // this.domNodes = this.svg.selectAll(".node");
+
     this.render();
     this.simulation.start();
   }
 
-  render() {
-
-
+  renderNodes() {
     this.domNodes = this.svg.selectAll(".node")
       .data(this.simulation.nodes(), n => n.id);
     let nodeContainerCreation = this.domNodes
-      .enter().append("g")
+      .enter()
+      .append("g")
       .attr('class', 'node')
       .call(this.simulation.drag);
 
@@ -99,12 +108,13 @@ export default class TestView {
       const nodeTypeComponent = this.nodeTypes[nodeTypeName];
       nodeContainerCreation
         .filter(({type}) => type === nodeTypeName)
-        .call(nodeTypeComponent);
-      // (nodeContainerCreation);
+        .call(nodeTypeComponent.enter);
     }
 
-    this.svg.selectAll(".node-label")
-      .text(d => d.value || 'no value');
+
+
+    // this.svg.selectAll(".node-label")
+    //   .text(d => d.value || 'no value');
 
     this.domNodes.exit().remove();
 
@@ -113,9 +123,48 @@ export default class TestView {
       .data(this.simulation.nodes(), n => n.id);
   }
 
+  renderLinks() {
+
+    this.domLinks = this.svg.selectAll(".link")
+      .data(this.simulation.links(), l => `${l.source.index}-${l.target.index}`);
+
+    let pathDrawChain = this.domLinks.enter();
+
+    for(const linkTypeName of Object.keys(this.linkTypes)) {
+      const linkTypeComponent = this.linkTypes[linkTypeName];
+      // console.log('rdn', linkTypeName, linkTypeComponent.create);
+      pathDrawChain
+        .filter(({type}) => type === linkTypeName)
+        .call(linkTypeComponent.create);
+    }
+
+
+    this.domLinks.exit().remove();
+
+
+    this.domLinks = this.svg.selectAll(".link")
+      .data(this.simulation.links(), l => `${l.source.index}-${l.target.index}`);
+  }
+
+  render() {
+
+    this.renderLinks();
+    this.renderNodes();
+
+  }
+
   tick() {
     this.domNodes
       .attr('transform', (d: any) => `translate(${d.x},${d.y})`);
+    // let pathDrawChain = this.svg.selectAll(".link");
+    this.domLinks = this.svg.selectAll(".link")
+      .data(this.simulation.links(), l => `${l.source.index}-${l.target.index}`);
+    for(const linkTypeName of Object.keys(this.linkTypes)) {
+      const linkTypeComponent = this.linkTypes[linkTypeName];
+      this.domLinks
+        // .filter(({type}) => console.log('type', type) || type === linkTypeName)
+        .call(linkTypeComponent.tick);
+    }
   }
 
   changeValue() {
@@ -183,17 +232,12 @@ export default class TestView {
     }
 
     const nodeDiff = jsdiff.diff(currentNodes, keepPositions(nodes, currentNodes));
-    console.log('nodes', (nodes));
-    console.log('currentNodes', (currentNodes));
     jsdiff.patch(currentNodes, nodeDiff);
 
-    console.log('links', currentLinks);
     // empty array
     currentLinks.splice(0,currentLinks.length);
     // Push all new links
     currentLinks.push(...this.normalizeLinks(currentNodes, links));
-    // const linkDiff = jsdiff.diff(, this.normalizeLinks(nodes, links));
-    // jsdiff.patch(this.simulation.links(), linkDiff);
 
     this.simulation.start(0,0,0,0,true, false);
     this.render();
@@ -219,7 +263,7 @@ export default class TestView {
           nodes: [{  }, {  }].map(Var),
           links: [{
             source: 0, target: 1
-          }],
+          }].map(Link),
         });
       },
     },  {

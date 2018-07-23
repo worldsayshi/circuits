@@ -43,19 +43,40 @@ export default function app () {
   let nodeRadius = 30;
   let color = d3.scaleOrdinal(d3.schemeCategory10);
   const view = new TestView({
-    Var: (container) => {
-      container
-        .append('circle')
-        .attr("r", nodeRadius)
-        .style("fill", (d : any) => {
-          console.log('node creation');
-          return color(d.group);
-        });
+    Var: {
+      enter: (container) => {
+        console.log('var', container.selectAll(".node-label"));
+        container
+          .append('circle')
+          .attr("r", nodeRadius)
+          .style("fill", (d : any) => {
+            // console.log('node creation');
+            return color(d.group);
+          });
 
-      container
-        .append('text')
-        .attr('class', 'node-label');
-    }
+        container
+          .append('text')
+          .attr('class', 'node-label');
+
+        container.selectAll(".node-label")
+          .text(d => d.value || 'no value');
+      },
+      update: () => {
+
+      },
+    },
+  }, {
+    Simple: {
+      create: e => {
+        // console.log('create', e);
+        e.insert('svg:path', 'g')
+          .attr('class', 'link');
+      },
+      tick: e => {
+        // console.log('update', e);
+        e.attr('d', (d) => 'M' + d.source.x + ',' + d.source.y + 'L' + d.target.x + ',' + d.target.y);
+      },
+    },
   });
 
   view.getOperations().forEach(({ name, f }) => {
