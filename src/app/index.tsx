@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import ReactView from './ReactView';
 import createCore from '../calc/createCore';
 
-// import toD3 from "../adaptors/toD3";
+import toD3 from "../adaptors/toD3";
 // import update from './render/update';
 import View from "./View";
 import TestView from "./TestView";
@@ -67,39 +67,40 @@ const Link = (l) => ({
 
 export default function app () {
   const startGraph = testGraph();
-  const store = createStore((state = startGraph, action: { type: string, graph: any }) => {
-    switch (action.type) {
-      case 'REPLACE':
-        return action.graph;
-    }
-    return state;
-  })
+  // const store = createStore((state = {graph: startGraph}, action: { type: string, graph: any }) => {
+  //   switch (action.type) {
+  //     case 'REPLACE':
+  //       return {graph: action.graph};
+  //   }
+  //   return state;
+  // });
+  const core = initCore();
   ReactDOM.render(
-      <Provider store={store}>
-        <ReactView></ReactView>
+      <Provider store={core}>
+        <ReactView adaptor={toD3}></ReactView>
       </Provider>,
       document.getElementById("view")
   );
 
-  setTimeout(() => {
-    store.dispatch({
-      type: 'REPLACE',
-      graph: {
-        nodes: [{  }, {  }].map(Var),
-        links: [{
-          source: 0, target: 1
-        }].map(Link),
-      },
-    });
-  }, 1000);
-
-
-  setTimeout(() => {
-    store.dispatch({
-      type: 'REPLACE',
-      graph: testGraph(),
-    });
-  }, 2000);
+  // setTimeout(() => {
+  //   store.dispatch({
+  //     type: 'REPLACE',
+  //     graph: {
+  //       nodes: [{  }, {  }].map(Var),
+  //       links: [{
+  //         source: 0, target: 1
+  //       }].map(Link),
+  //     },
+  //   });
+  // }, 1000);
+  //
+  //
+  // setTimeout(() => {
+  //   store.dispatch({
+  //     type: 'REPLACE',
+  //     graph: testGraph(),
+  //   });
+  // }, 2000);
 }
 
 // export default function app () {

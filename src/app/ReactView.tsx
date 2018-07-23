@@ -145,4 +145,7 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
 }
 
 
-export default connect(({nodes, links}) => ({nodes, links}))(ReactViewInt);
+export default connect((state, { adaptor }) => {
+  const { nodes, links } = adaptor(state);
+  return { nodes, links };
+})(ReactViewInt);
