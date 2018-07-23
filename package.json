@@ -57,9 +57,13 @@
   },
   "dependencies": {
     "@types/d3": "^5.0.0",
+    "@types/react": "^16.4.6",
+    "@types/react-dom": "^16.0.6",
     "d3": "^5.5.0",
     "fmin": "0.0.2",
     "jsondiffpatch": "^0.3.11",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
     "redux": "^4.0.0",
     "typescript": "^2.9.2",
     "webcola": "^3.3.8"
