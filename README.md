@@ -1,6 +1,11 @@
 
 
-# TODOs/snippets
+# TODOs
+
+- Add type to links (will break tests)
+
+
+# Reference snippets
 
 ## Modularize d3
 

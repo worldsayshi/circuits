@@ -83,7 +83,7 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
 
     this.state.nodes = nodes;
     this.state.links = links;
-    this.state.groups = groups;
+    this.state.groups = groups || [];
     this.simulation
       .nodes(this.state.nodes);
     this.simulation

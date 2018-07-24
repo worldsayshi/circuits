@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/jest --watch",
+    "test": "node_modules/.bin/jest --watch --notify --notifyMode=change",
     "watch": "webpack --watch",
     "start": "webpack && http-server",
     "debug": "echo \"Go to chrome://inspect\"; node --inspect-brk node_modules/.bin/jest --runInBand"
