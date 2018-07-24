@@ -36,7 +36,7 @@ const Link = (l) => ({
 
 // TODO: Continue building on TestView until it's on feature parity with View.
 // It should keep its own state internally and get "immutable" updates from the outside.
-// Try to keep the 'toD3' import outside of this TestView.
+// Try to keep the 'toCola' import outside of this TestView.
 
 const clone = obj => JSON.parse(JSON.stringify(obj));
 

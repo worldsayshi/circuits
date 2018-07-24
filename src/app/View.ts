@@ -1,7 +1,7 @@
 // import update from "./render/update";
 import * as d3 from "d3";
 import * as cola from "webcola/dist/index";
-import toD3 from "../adaptors/toD3";
+import toCola from "../adaptors/toCola";
 import { BaseType, ScaleOrdinal, Selection } from "d3";
 
 function isIE() {
@@ -54,13 +54,13 @@ export default class View {
       // let graph = core.getState();
       // graph = this.transferPositionalData(graph);
       // this.svg.selectAll("*").remove();
-      // const d3Graph = toD3(JSON.parse(JSON.stringify(graph)));
+      // const d3Graph = toCola(JSON.parse(JSON.stringify(graph)));
 
       this.render(this.graph);
     });
 
     const graph = core.getState();
-    this.render(toD3(JSON.parse(JSON.stringify(graph))));
+    this.render(toCola(JSON.parse(JSON.stringify(graph))));
   }
 
   transferPositionalData({ nodes, components }) {

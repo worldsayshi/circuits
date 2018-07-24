@@ -3,7 +3,9 @@ import * as ReactDOM from "react-dom";
 import ReactView from './ReactView';
 import createCore from '../calc/createCore';
 
-import toD3 from "../adaptors/toD3";
+import toCola from "../adaptors/toCola";
+// import toD3v4 from "../adaptors/toD3v4";
+
 // import update from './render/update';
 import View from "./View";
 import TestView from "./TestView";
@@ -77,7 +79,7 @@ export default function app () {
   const core = initCore();
   ReactDOM.render(
       <Provider store={core}>
-        <ReactView adaptor={toD3}></ReactView>
+        <ReactView adaptor={toCola}></ReactView>
       </Provider>,
       document.getElementById("view")
   );

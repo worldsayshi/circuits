@@ -1,3 +1,3 @@
 
 
-export {default as toD3} from './toD3';
+export {toCola as toD3} from './toCola';
