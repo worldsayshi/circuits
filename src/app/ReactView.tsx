@@ -39,7 +39,7 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
     super(props, ...rest);
     const { nodes, links, groups } = props;
     this.simulation = cola.d3adaptor(d3)
-      .linkDistance(100)
+      .linkDistance(l => l.length || 100)
       .handleDisconnected(true)
       // .avoidOverlaps(true)
       .size([this.state.width, this.state.height])

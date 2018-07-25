@@ -21,20 +21,26 @@ function createD3Links(components, numberOfVars) {
 }
 
 
-function createStructuralLattice(components: any, numberOfVars: any) {
+function createStructuralLattice(components: any, numberOfNodes: any) {
+  let numberOfVars = numberOfNodes - components.length + 2;
   const structuralNodes = [];
   const structuralLinks = [];
   for(const [index, component] of entries(components)) {
+    let componentId = numberOfVars + index;
     structuralNodes.push({ type: 'HiddenNode' });
-    let leftNodeId = numberOfVars+structuralNodes.length+1;
+    let leftNodeId = numberOfNodes+structuralNodes.length+1;
     for(const nodeId of component.left) {
-      structuralLinks.push({ source: leftNodeId, target: nodeId, type: 'HiddenLink' });
+      structuralLinks.push({ source: leftNodeId, target: nodeId, type: 'HiddenLink', length: 50 });
     }
+
     structuralNodes.push({ type: 'HiddenNode' });
-    let rightNodeId = numberOfVars+structuralNodes.length+1;
+    let rightNodeId = numberOfNodes+structuralNodes.length+1;
     for(const nodeId of component.right) {
-      structuralLinks.push({ source: rightNodeId, target: nodeId, type: 'HiddenLink' });
+      structuralLinks.push({ source: rightNodeId, target: nodeId, type: 'HiddenLink', length: 50 });
     }
+
+    structuralLinks.push({ source: leftNodeId, target: componentId, type: 'HiddenLink', length: 75 });
+    structuralLinks.push({ source: rightNodeId, target: componentId, type: 'HiddenLink', length: 75 });
 
   }
   return { structuralNodes, structuralLinks };
