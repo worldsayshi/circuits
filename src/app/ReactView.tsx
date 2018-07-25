@@ -10,19 +10,6 @@ import * as linkComponents from './link';
 
 
 
-interface MyNode extends InputNode {
-  id: string;
-  type: string,
-  value?: number;
-
-  [key: string]: any;
-}
-
-interface Graph {
-  nodes: any[];
-  links: any[]; //  {source:number,target:number}
-}
-
 class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
   state = {
     width: 960,
