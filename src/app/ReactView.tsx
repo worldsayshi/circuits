@@ -6,6 +6,8 @@ import {connect} from "react-redux";
 import * as jsdiff from "jsondiffpatch";
 import DnD from './DragAndDrop';
 import * as nodeComponents from './node';
+import * as linkComponents from './link';
+
 
 
 interface MyNode extends InputNode {
@@ -21,45 +23,6 @@ interface Graph {
   links: any[]; //  {source:number,target:number}
 }
 
-function groupCenter (bounds) {
-  return {
-    x: (bounds.X - bounds.x) / 2 + bounds.x,
-    y: (bounds.Y - bounds.y) / 2 + bounds.y
-  };
-}
-
-const Link = ({ source, target, }) => {
-  let d = '';
-  if (source.x && target.x) {
-    let varNode = source.type === 'Var' ? source : target;
-    let varGroup = varNode.parent;
-
-    let deltaX = target.x - source.x,
-      deltaY = target.y - source.y,
-      dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
-      // normX = deltaX / dist,
-      // normY = deltaY / dist,
-      // sourcePadding = 0, // nodeRadius,
-      // targetPadding = 0, //nodeRadius + 2,
-      sourceX = source.x, // + (sourcePadding * normX),
-      sourceY = source.y, // + (sourcePadding * normY),
-      targetX = target.x, // - (targetPadding * normX),
-      targetY = target.y; // - (targetPadding * normY);
-
-    if ((target.type === 'Var' && source.type === 'Var') || !varGroup) {
-      d = 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
-    } else {
-      let gCenter = groupCenter(varGroup.bounds);
-      // console.log('M' + sourceX + ',' + sourceY + 'S' + gCenter.x + ',' + gCenter.y + ' ' + targetX + ',' + targetY)
-      d = 'M' + sourceX + ',' + sourceY + 'S' + gCenter.x + ',' + gCenter.y + ' ' + targetX + ',' + targetY;
-    }
-
-    return (
-      <path
-        className={'link'}
-        d={d} />);
-  }
-}
 class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
   state = {
     width: 960,
@@ -76,9 +39,11 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
     super(props, ...rest);
     const { nodes, links, groups } = props;
     this.simulation = cola.d3adaptor(d3)
-      .avoidOverlaps(true)
+      .linkDistance(100)
+      .handleDisconnected(true)
+      // .avoidOverlaps(true)
       .size([this.state.width, this.state.height])
-      .symmetricDiffLinkLengths(40)
+      // .symmetricDiffLinkLengths(40)
       .on('tick', () => this.forceUpdate());
 
     this.state.nodes = nodes;
@@ -139,13 +104,7 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
   drag(toX: number, toY: number) {
     if(this.state.dragged !== null) {
       DnD.drag(this.state.nodes[this.state.dragged], { x: toX, y: toY });
-      // Layout.drag(this.state.nodes[this.state.dragged], { x: toX, y: toY });
-      // this.state.nodes[this.state.dragged].x = toX;
-      // this.state.nodes[this.state.dragged].px = toX;
-      // this.state.nodes[this.state.dragged].y = toY;
-      // this.state.nodes[this.state.dragged].py = toY;
       this.simulation.resume();
-      // this.simulation.start(0,0,0,0,true, false);
       this.forceUpdate();
     }
   }
@@ -186,11 +145,12 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
           fillOpacity={0}
         />
       )}
-      {this.state.links.map((l, i) =>
-        <Link
+      {this.state.links.map((l, i) => {
+        const Link = linkComponents[l.type || 'Link'];
+        return <Link
           key={i}
-          {...l} />
-      )}
+          {...l} />;
+      })}
       {this.state.nodes.map((n, ix) => {
         const Node = nodeComponents[n.type];
         return Node && <Node

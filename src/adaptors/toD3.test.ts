@@ -30,12 +30,12 @@ const d3TestGraph = {
     { source: 4, target: 6 },
 
     // Structural links
-    { source: 7, target: 0 },
-    { source: 7, target: 1 },
-    { source: 8, target: 2 },
+    { source: 7, target: 0, type: 'HiddenLink' },
+    { source: 7, target: 1, type: 'HiddenLink' },
+    { source: 8, target: 2, type: 'HiddenLink' },
 
-    { source: 9, target: 3 },
-    { source: 10, target: 4 },
+    { source: 9, target: 3, type: 'HiddenLink' },
+    { source: 10, target: 4, type: 'HiddenLink' },
   ],
 };
 

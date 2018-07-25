@@ -28,12 +28,12 @@ function createStructuralLattice(components: any, numberOfVars: any) {
     structuralNodes.push({ type: 'HiddenNode' });
     let leftNodeId = numberOfVars+structuralNodes.length+1;
     for(const nodeId of component.left) {
-      structuralLinks.push({ source: leftNodeId, target: nodeId });
+      structuralLinks.push({ source: leftNodeId, target: nodeId, type: 'HiddenLink' });
     }
     structuralNodes.push({ type: 'HiddenNode' });
     let rightNodeId = numberOfVars+structuralNodes.length+1;
     for(const nodeId of component.right) {
-      structuralLinks.push({ source: rightNodeId, target: nodeId });
+      structuralLinks.push({ source: rightNodeId, target: nodeId, type: 'HiddenLink' });
     }
 
   }
