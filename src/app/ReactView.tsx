@@ -53,7 +53,6 @@ class ReactViewInt extends React.Component<{
   }
 
   componentWillReceiveProps({ nodes = [], links = [] }) {
-    console.log('componentWillReceiveProps');
 
     const currentNodes = this.simulation.nodes();
     const currentLinks = this.simulation.links();
@@ -132,7 +131,6 @@ class ReactViewInt extends React.Component<{
   }
 
   render() {
-    console.log('render');
     let nodeRadius = 30;
     let color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -183,8 +181,10 @@ export default connect(({ graphContext, interaction: { mode } }, { adaptor }) =>
 }, dispatch => ({
   lockNode: (ix) => {
     dispatch({ type: 'TOGGLE_CONSTANT', index: ix});
+    dispatch({ type: 'OPTIMIZE' });
   },
   incNode: (ix) => {
     dispatch({ type: 'INC_VALUE', index: ix});
-  }
+    dispatch({ type: 'OPTIMIZE' });
+  },
 }))(ReactViewInt);
