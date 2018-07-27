@@ -1,5 +1,5 @@
 
-import createCore from './createCore';
+import {createCore} from './createCore';
 
 describe('createCore', () => {
   it('should return stored graph', () => {

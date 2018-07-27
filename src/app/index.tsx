@@ -1,7 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import ReactView from './ReactView';
-import createCore from '../calc/createCore';
+import { attachDefaultData, createCoreReducer } from '../calc/createCore';
+import { interactionReducer } from "./interaction";
 
 import toCola from "../adaptors/toCola";
 import toD3 from '../adaptors/toD3';
@@ -12,7 +13,8 @@ import View from "./View";
 import TestView from "./TestView";
 import * as d3 from "d3";
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import {combineReducers, createStore} from 'redux'
+import Palette from "./interaction/Palette";
 
 function initCore() {
   const graph = { nodes: [
@@ -31,7 +33,13 @@ function initCore() {
       { left: [0, 1], right: [2, 3], verb: 'sum' },
       { left: [4, 5, 6, 8], right: [7], verb: 'sum' },
     ] };
-  return createCore({ graph });
+  const appReducer = combineReducers({
+    graphContext: createCoreReducer(),
+    interaction: interactionReducer,
+  });
+  return createStore(appReducer, {
+    graphContext: attachDefaultData(graph),
+  });
 }
 
 declare global {
@@ -80,7 +88,13 @@ export default function app () {
   const core = initCore();
   ReactDOM.render(
       <Provider store={core}>
-        <ReactView adaptor={toD3}></ReactView>
+        <div>
+          <Palette></Palette>
+          <ReactView
+            adaptor={toD3}
+            // interactionStyle='DragLink'
+          />
+        </div>
       </Provider>,
       document.getElementById("view")
   );

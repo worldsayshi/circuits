@@ -9,8 +9,9 @@ import * as nodeComponents from './node';
 import * as linkComponents from './link';
 
 
+type InteractionStyle = 'DragNode' | 'DragLink';
 
-class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
+class ReactViewInt extends React.Component<{nodes: any[], links: any[], interactionMode: InteractionStyle}> {
   state = {
     width: 960,
     height: 900,
@@ -60,36 +61,43 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
       }));
     }
 
+    function normalizeLinks(nodes: any[], links: any[]) {
+      return links.map(link => {
+        let source, target;
+        if (Number.isInteger(link.source)) {
+          source = nodes[link.source];
+        } else {
+          source = link.source;
+        }
+        if (Number.isInteger(link.target)) {
+          target = nodes[link.target];
+        } else {
+          target = link.target;
+        }
+        return { ...link, source, target };
+      });
+    }
+
     const nodeDiff = jsdiff.diff(currentNodes, keepPositions(nodes, currentNodes));
     jsdiff.patch(currentNodes, nodeDiff);
 
     // empty array
     currentLinks.splice(0,currentLinks.length);
     // Push all new links
-    currentLinks.push(...this.normalizeLinks(currentNodes, links));
+    currentLinks.push(...normalizeLinks(currentNodes, links));
 
     this.simulation.start(0,0,0,0,true, false);
   }
 
-  private normalizeLinks(nodes: any[], links: any[]) {
-    return links.map(link => {
-      let source, target;
-      if (Number.isInteger(link.source)) {
-        source = nodes[link.source];
-      } else {
-        source = link.source;
-      }
-      if (Number.isInteger(link.target)) {
-        target = nodes[link.target];
-      } else {
-        target = link.target;
-      }
-      return { ...link, source, target };
-    });
+  dragStart(ix) {
+    if(this.props.interactionMode === 'DragNode') {
+      DnD.dragStart(this.state.nodes[ix]);
+      this.setState({ dragged: ix });
+    }
   }
 
   drag(toX: number, toY: number) {
-    if(this.state.dragged !== null) {
+    if(this.state.dragged !== null && this.props.interactionMode === 'DragNode') {
       DnD.drag(this.state.nodes[this.state.dragged], { x: toX, y: toY });
       this.simulation.resume();
       this.forceUpdate();
@@ -97,16 +105,13 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
   }
 
   dragStop() {
-    if(this.state.dragged !== null) {
-      // Layout.dragEnd(this.state.nodes[this.state.dragged]);
-      DnD.dragEnd(this.state.nodes[this.state.dragged]);
+    if(this.props.interactionMode === 'DragNode') {
+      if(this.state.dragged !== null) {
+        // Layout.dragEnd(this.state.nodes[this.state.dragged]);
+        DnD.dragEnd(this.state.nodes[this.state.dragged]);
+      }
+      this.setState({ dragged: null });
     }
-    this.setState({ dragged: null });
-  }
-
-  dragStart(ix) {
-    DnD.dragStart(this.state.nodes[ix]);
-    this.setState({ dragged: ix });
   }
 
   render() {
@@ -153,7 +158,8 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[]}> {
 }
 
 
-export default connect((state, { adaptor }) => {
-  const { nodes, links, groups } = adaptor(state);
-  return { nodes, links, groups };
+export default connect(({ graphContext, interaction: { mode } }, { adaptor }) => {
+  const { nodes, links, groups } = adaptor(graphContext);
+  console.log({interactionMode: mode});
+  return { nodes, links, groups, interactionMode: mode };
 })(ReactViewInt);

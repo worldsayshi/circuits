@@ -6,14 +6,9 @@ import { getNounResolvers } from '../nouns';
 import optimizeGraph from "./optimizeGraph";
 // import {Core} from "./createCore";
 
-export interface Core extends Store {
-  getDelta: any;
-  lastState: any;
-  _getState: any;
-}
 
 
-function createReducer({ nouns, verbs }) {
+function createGraphReducer({ nouns, verbs }) {
   return (graph = { nodes: [], components: [] }, action) => {
 
     switch (action.type) {
@@ -28,37 +23,24 @@ function createReducer({ nouns, verbs }) {
   }
 }
 
-function attachDefaultData({ nodes, components }, defaultVerbData) {
+export function attachDefaultData({ nodes, components }) {
   return {
     nodes,
     components: components.map((component) => ({
       ...component,
-      ...defaultVerbData[component.verb],
+      ...getVerbData()[component.verb],
     })),
   };
 }
 
-
-// Stateful core
-export default function createCore ({ graph, nouns = {}, verbs = {} }) : Core {
-  const core = createStore(createReducer({
+export function createCoreReducer ({ nouns = {}, verbs = {}  } = {}) {
+  return createGraphReducer({
     nouns: { ...getNounResolvers(), ...nouns },
     verbs: { ...getVerbResolvers(), ...verbs },
-  }), attachDefaultData(graph, getVerbData())) as Core;
+  });
+}
 
-  core.lastState = {};
-
-  core._getState = core.getState;
-  core.getState = () => {
-    core.lastState = core._getState();
-    return core.lastState;
-  };
-
-  core.getDelta = () => {
-    const delta = jsdiff.diff(core.lastState, core.getState());
-    core.lastState = core.getState();
-    return delta;
-  };
-
-  return core;
+// Stateful core
+export function createCore ({ graph, nouns = {}, verbs = {} }) {
+  return createStore(createCoreReducer({ nouns, verbs }), attachDefaultData(graph));
 }
