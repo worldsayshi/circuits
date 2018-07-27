@@ -9,7 +9,14 @@ import * as nodeComponents from './node';
 import * as linkComponents from './link';
 import InteractionMode from './InteractionMode.enum';
 
-class ReactViewInt extends React.Component<{nodes: any[], links: any[], interactionMode: InteractionMode}> {
+class ReactViewInt extends React.Component<{
+  nodes: any[],
+  links: any[],
+  interactionMode: InteractionMode,
+  lockNode: (number) => void,
+  incNode: (number) => void,
+}> {
+
   state = {
     width: 960,
     height: 900,
@@ -46,6 +53,7 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[], interact
   }
 
   componentWillReceiveProps({ nodes = [], links = [] }) {
+    console.log('componentWillReceiveProps');
 
     const currentNodes = this.simulation.nodes();
     const currentLinks = this.simulation.links();
@@ -84,7 +92,18 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[], interact
     // Push all new links
     currentLinks.push(...normalizeLinks(currentNodes, links));
 
+    console.log('Start over', nodes);
     this.simulation.start(0,0,0,0,true, false);
+  }
+
+  onClick(ix) {
+    if(this.props.interactionMode === 'LockValue') {
+      this.props.lockNode(ix);
+      this.forceUpdate();
+    } else if (this.props.interactionMode === 'IncValue') {
+      this.props.incNode(ix);
+      this.forceUpdate();
+    }
   }
 
   dragStart(ix) {
@@ -113,6 +132,7 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[], interact
   }
 
   render() {
+    console.log('render');
     let nodeRadius = 30;
     let color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -146,6 +166,7 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[], interact
         return Node && <Node
           key={ix}
           label={n.value}
+          onClick={() => this.onClick(ix)}
           dragStart={() => this.dragStart(ix)}
           nodeRadius={nodeRadius}
           color={color}
@@ -159,4 +180,11 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[], interact
 export default connect(({ graphContext, interaction: { mode } }, { adaptor }) => {
   const { nodes, links, groups } = adaptor(graphContext);
   return { nodes, links, groups, interactionMode: mode };
-})(ReactViewInt);
+}, dispatch => ({
+  lockNode: (ix) => {
+    dispatch({ type: 'TOGGLE_CONSTANT', index: ix});
+  },
+  incNode: (ix) => {
+    dispatch({ type: 'INC_VALUE', index: ix});
+  }
+}))(ReactViewInt);

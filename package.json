@@ -60,6 +60,7 @@
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",
     "d3": "^5.5.0",
+    "dot-prop-immutable": "^1.4.0",
     "fmin": "0.0.2",
     "jsondiffpatch": "^0.3.11",
     "react": "^16.4.1",

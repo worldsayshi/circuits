@@ -1,6 +1,8 @@
 enum InteractionMode {
   DragNode='DragNode',
-  DragLink='DragLink'
+  DragLink='DragLink',
+  LockValue='LockValue',
+  IncValue='IncValue',
 }
 
 export default InteractionMode;
