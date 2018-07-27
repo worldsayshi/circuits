@@ -1,3 +1,4 @@
+import InteractionMode from "../InteractionMode.enum";
 
 
 export default function interaction(state = {mode: 'DragNode'}, action) {
@@ -8,7 +9,6 @@ export default function interaction(state = {mode: 'DragNode'}, action) {
         mode: action.mode,
       };
     default:
-      console.log('reduction', state);
       return state;
   }
 }

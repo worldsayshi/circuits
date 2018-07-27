@@ -7,11 +7,9 @@ import * as jsdiff from "jsondiffpatch";
 import DnD from './DragAndDrop';
 import * as nodeComponents from './node';
 import * as linkComponents from './link';
+import InteractionMode from './InteractionMode.enum';
 
-
-type InteractionStyle = 'DragNode' | 'DragLink';
-
-class ReactViewInt extends React.Component<{nodes: any[], links: any[], interactionMode: InteractionStyle}> {
+class ReactViewInt extends React.Component<{nodes: any[], links: any[], interactionMode: InteractionMode}> {
   state = {
     width: 960,
     height: 900,
@@ -160,6 +158,5 @@ class ReactViewInt extends React.Component<{nodes: any[], links: any[], interact
 
 export default connect(({ graphContext, interaction: { mode } }, { adaptor }) => {
   const { nodes, links, groups } = adaptor(graphContext);
-  console.log({interactionMode: mode});
   return { nodes, links, groups, interactionMode: mode };
 })(ReactViewInt);
