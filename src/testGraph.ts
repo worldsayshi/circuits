@@ -1,6 +1,9 @@
 
 // It's a test graph with evaluation context
 
+import {getNounResolvers} from "./nouns";
+import {getVerbResolvers} from "./components";
+
 export default {
   graph: {
     nodes: [
@@ -12,16 +15,6 @@ export default {
       { left: [0, 1], right: [2], verb: 'sum' }
     ],
   },
-  nouns: {
-    default: ({ value }, index, x) => {
-      if (value === undefined) {
-        return x[index];
-      }
-      return value;
-    }
-  },
-  verbs: {
-    sum: (left, right) =>
-      left.reduce((a, b) => a + b, 0) - right.reduce((a, b) => a + b, 0),
-  },
+  nouns: getNounResolvers(),
+  verbs: getVerbResolvers(),
 };

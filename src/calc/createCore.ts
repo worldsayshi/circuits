@@ -2,14 +2,14 @@
 import { createStore, Store } from 'redux';
 import * as dp from 'dot-prop-immutable';
 import * as jsdiff from 'jsondiffpatch';
-import { getVerbResolvers, getVerbData } from '../components';
-import { getNounResolvers } from '../nouns';
+import { getVerbResolvers, getVerbData, VerbResolvers } from '../components';
+import {getNounResolvers, NounResolvers} from '../nouns';
 import optimizeGraph from "./optimizeGraph";
 // import {Core} from "./createCore";
 
 
 
-function createGraphReducer({ nouns, verbs }) {
+function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: VerbResolvers }) {
   return (graph = { nodes: [], components: [] }, action) => {
 
     switch (action.type) {
@@ -18,15 +18,8 @@ function createGraphReducer({ nouns, verbs }) {
         return newGraph;
       case 'TOGGLE_CONSTANT':
         return dp.set(graph, `nodes.${action.index}.constant`, !graph.nodes[action.index].constant);
-        // graph.nodes[action.index].constant = !graph.nodes[action.index].constant;
-        // return graph;
       case 'INC_VALUE':
         return dp.set(graph, `nodes.${action.index}.value`, graph.nodes[action.index].value + 1);
-        // graph.nodes[action.index].value += 1;
-        // console.log('inc', graph.nodes[action.index].value);
-        // return graph;
-      case 'FOO':
-        return {...graph, foo: 'bar'};
       default:
         return graph;
     }

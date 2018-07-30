@@ -1,7 +1,14 @@
 import sum from './sum';
 
+export interface VerbData {
+  [key: string]: { img: string };
+}
 
-export function getVerbData() {
+export interface VerbResolvers {
+  [key: string]: (left: (number | string)[], right: (number | string)[]) => string
+}
+
+export function getVerbData() : VerbData {
   return {
     sum: {
       img: sum.img,
@@ -9,7 +16,7 @@ export function getVerbData() {
   }
 }
 
-export function getVerbResolvers() {
+export function getVerbResolvers() : VerbResolvers {
   return {
     sum: sum.operation,
   };

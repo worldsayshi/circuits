@@ -1,5 +1,5 @@
 import toD3 from "./toD3";
-import testGraph from "../testGraph2";
+import testGraph2 from "../testGraph2";
 
 const d3TestGraph = {
   nodes: [
@@ -7,7 +7,7 @@ const d3TestGraph = {
     { noun: 'default', constant: true, value: 2, type: 'Var', nodeId: 1 },
     { noun: 'default', type: 'Var', nodeId: 2 },
 
-    { noun: 'default', constant: true, value: 1, type: 'Var', nodeId: 3 },
+    { noun: 'default', constant: true, value: 100, type: 'Var', nodeId: 3 },
     { noun: 'default', type: 'Var', nodeId: 4 },
 
     { left: [0, 1], right: [2], verb: 'sum', type: 'Component' },
@@ -51,7 +51,7 @@ const d3TestGraph = {
 
 describe('toD3', () => {
   it('should convert to d3 representation', () => {
-    const d3Graph = toD3(testGraph.graph);
+    const d3Graph = toD3(testGraph2.graph);
     expect(d3Graph.nodes).toEqual(d3TestGraph.nodes);
     expect(d3Graph.links).toEqual(d3TestGraph.links);
     expect(d3Graph).toEqual(d3TestGraph);

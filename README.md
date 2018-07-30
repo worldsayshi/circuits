@@ -2,8 +2,18 @@
 
 # TODOs
 
-- Add type to links (will break tests)
+## Fix `optimizeGraph`
+Current calculation is wrong because it allows solutions where disparate graphs can each have the wrong solution but the sum of them adds up to zero.
 
+Need a way to handle disparate graphs and graphs consisting of multiple components. 
+
+  1. As a good enough solution for now let's not deal with the possibility of zero input into a product component. Assume the optimizer can handle this.
+  2. Separate disparate graphs (this can be done implicitly in the next step)
+  3. Start from an arbitrary component and form an expression by traversing the graph
+  4. Check if you've covered the entire graph.
+  5. Go back to 3 and select a component that has not yet been selected.
+
+The optimization function can be collected by emitting an expression instead of a function when traversing the graph. The expression should be interpretable by something like mathjs.
 
 # Reference snippets
 

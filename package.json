@@ -63,6 +63,7 @@
     "dot-prop-immutable": "^1.4.0",
     "fmin": "0.0.2",
     "jsondiffpatch": "^0.3.11",
+    "mathjs": "^5.0.4",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
