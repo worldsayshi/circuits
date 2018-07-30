@@ -1,7 +1,5 @@
+import entries from "../util/entries";
 
-function entries (l) {
-  return l.map((e, ix) => [ix, e]);
-}
 
 function createD3Links(components, numberOfVars) {
   let links = [];
