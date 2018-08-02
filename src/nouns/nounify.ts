@@ -1,6 +1,11 @@
 // Turn nodes into values
 export default function nounify(nodes, nouns) {
-  return nodes.map((node, index) => nouns[node.noun](node, index))
+  return nodes.map((node) => {
+    if(!node.constant && !((typeof node.variableCount) === 'number')) {
+      throw new Error('Variable nodes must have variableCount on nounification');
+    }
+    return nouns[node.noun](node);
+  });
 }
 
 // Turn nodes into values

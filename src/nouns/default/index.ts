@@ -1,13 +1,13 @@
 
 
 export default {
-  getNoun: ({ value, constant = false }, index) => {
+  getNoun: ({ value, constant = false, variableCount }: {value: number, constant: boolean, variableCount?: number}) : string | number => {
     if (value === undefined && constant) {
-      throw new Error(`A constant must not be undefined, see node ${index}`);
+      throw new Error(`A constant must not be undefined`);
     }
     if (constant) {
       return value;
     }
-    return `x[${index+1}]`;
+    return `x[${variableCount+1}]`;
   }
 }

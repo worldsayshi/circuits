@@ -16,10 +16,10 @@ describe('nounify', () => {
   });
 
   it('should return variable injections', () => {
-    const exprs = nounify([{ noun: 'default', constant: false }], getNounResolvers());
+    const exprs = nounify([{ noun: 'default', constant: false, variableCount: 0 }], getNounResolvers());
     expect(exprs.map(expr => math.eval(expr, {x:[4]}))).toEqual([4]);
 
-    const exprs2 = nounify([{ noun: 'default' }], getNounResolvers());
+    const exprs2 = nounify([{ noun: 'default', variableCount: 0 }], getNounResolvers());
     expect(exprs.map(expr => math.eval(expr, {x:[4]}))).toEqual([4]);
   });
 
@@ -27,7 +27,7 @@ describe('nounify', () => {
     const exprs = nounify(lookup([2], [
         { noun: 'default', constant: true, value: 1 },
         { noun: 'default', constant: true, value: 2 },
-        { noun: 'default' },
+        { noun: 'default', variableCount: 0 },
     ]), getNounResolvers());
 
     expect(exprs.map(expr => math.eval(expr, {x:[4]}))).toEqual([4]);
