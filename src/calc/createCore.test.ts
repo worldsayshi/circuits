@@ -3,7 +3,7 @@ import {createCore} from './createCore';
 
 describe('createCore', () => {
   it('should return stored graph', () => {
-    const graph = { nodes: [], components: [] };
+    const graph = { nodes: [] };
     const core = createCore({ graph });
 
     const graph2 = core.getState();
@@ -11,7 +11,7 @@ describe('createCore', () => {
   });
 
   it('should call subscription sometimes', (done) => {
-    const graph = { nodes: [], components: [] };
+    const graph = { nodes: [] };
     const core = createCore({ graph });
 
     core.subscribe(() => {
@@ -24,13 +24,13 @@ describe('createCore', () => {
   });
 
   it('should optimize the graph', (done) => {
-    const graph = { nodes: [
-      { noun: 'default', constant: true, value: 1 },
-      { noun: 'default' }
-    ],
-    components: [
-      { left: [0], right: [1], verb: 'sum' },
-    ] };
+    const graph = {
+      nodes: [
+        { noun: 'default', constant: true, value: 1, type: 'Var' },
+        { noun: 'default', constant: false, type: 'Var' },
+        { left: [0], right: [1], verb: 'sum', type: 'Component' },
+      ],
+    };
     const core = createCore({ graph });
 
     core.subscribe(() => {
@@ -44,21 +44,20 @@ describe('createCore', () => {
 
   it('should optimize graph 2', (done) => {
     const graph = { nodes: [
-        { noun: 'default', constant: true, value: 1 },
-        { noun: 'default', constant: true, value: 1 },
-        { noun: 'default', constant: true, value: 1 },
-        { noun: 'default', constant: true, value: 1 },
+        { noun: 'default', constant: true, value: 1, type: 'Var' },
+        { noun: 'default', constant: true, value: 1, type: 'Var' },
+        { noun: 'default', constant: true, value: 1, type: 'Var' },
+        { noun: 'default', constant: true, value: 1, type: 'Var' },
 
-        { noun: 'default', constant: true, value: 1 },
-        { noun: 'default', constant: true, value: 1 },
-        { noun: 'default', constant: true, value: 1 },
-        { noun: 'default', constant: true, value: 1 },
-        { noun: 'default', constant: true, value: 1 },
-      ],
-      components: [
-        { left: [0, 1], right: [2, 3], verb: 'sum' },
-        { left: [4, 5, 6, 8], right: [7], verb: 'sum' },
-      ] };
+        { noun: 'default', constant: true, value: 1, type: 'Var' },
+        { noun: 'default', constant: true, value: 1, type: 'Var' },
+        { noun: 'default', constant: true, value: 1, type: 'Var' },
+        { noun: 'default', constant: true, value: 1, type: 'Var' },
+        { noun: 'default', constant: true, value: 1, type: 'Var' },
+
+        { left: [0, 1], right: [2, 3], verb: 'sum', type: 'Component' },
+        { left: [4, 5, 6, 8], right: [7], verb: 'sum', type: 'Component' },
+      ]};
     const core = createCore({ graph });
 
     core.subscribe(() => {

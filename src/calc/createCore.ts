@@ -10,7 +10,7 @@ import optimizeGraph from "./optimizeGraph";
 
 
 function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: VerbResolvers }) {
-  return (graph = { nodes: [], components: [] }, action) => {
+  return (graph = { nodes: [], }, action) => {
 
     switch (action.type) {
       case 'OPTIMIZE':
@@ -26,13 +26,18 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
   }
 }
 
-export function attachDefaultData({ nodes, components }) {
+export function attachDefaultData({ nodes }) {
+  // const components = nodes.filter(({ type }) => (type === 'Component')).map()
   return {
-    nodes,
-    components: components.map((component) => ({
-      ...component,
-      ...getVerbData()[component.verb],
-    })),
+    nodes: nodes.map((node) => {
+      if (node.type === 'Component') {
+        return {
+          ...node,
+          ...getVerbData()[node.verb],
+        };
+      }
+      return node;
+    })
   };
 }
 

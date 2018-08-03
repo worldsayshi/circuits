@@ -3,14 +3,16 @@ import {lookup} from "./optimizeGraph";
 import nounify from "../nouns/nounify";
 import entries from "../util/entries";
 import counter from "../util/counter";
-import Graph from "../graph";
+import Graph from "../types/graph";
 import addVariableCounts from "../util/addVariableCounts";
 
 const findNextUnvisitedComponent = (components, visitedComponents) => entries(components).find(([ix]) => {
   return !visitedComponents[ix];
 });
 
-function traverseInt({ graph: { nodes, components }, nouns, verbs }, visitedComponents) {
+function traverseInt({ graph: { nodes }, nouns, verbs }, visitedComponents) {
+  const components = nodes.filter(({ type }) => type === 'Component');
+  const varNodes = nodes.filter(({ type }) => type === 'Var');
   let entryToVisit = findNextUnvisitedComponent(components, visitedComponents);
   if(!entryToVisit) {
     return [];
@@ -19,22 +21,20 @@ function traverseInt({ graph: { nodes, components }, nouns, verbs }, visitedComp
   visitedComponents[index] = true;
   const { left, right, verb } = componentToVisit;
 
-
-
-  const leftValues = nounify(lookup(left, nodes), nouns);
-  const rightValues = nounify(lookup(right, nodes), nouns);
+  const leftValues = nounify(lookup(left, varNodes), nouns);
+  const rightValues = nounify(lookup(right, varNodes), nouns);
   const expr = verbs[verb](leftValues, rightValues);
 
-  return [expr, ...traverseInt({ graph: { nodes, components }, nouns, verbs }, visitedComponents)];
-  // nounifyWhileTraversing();
+  return [expr, ...traverseInt({ graph: { nodes: varNodes.concat(components) }, nouns, verbs }, visitedComponents)];
 }
 
 export default function traverseGraph (graphContext: GraphContext) {
-
-  const graph = addVariableCounts(graphContext.graph);
-
+  const nodes = addVariableCounts(graphContext.graph.nodes);
   return traverseInt({
     ...graphContext,
-    graph,
+    graph: {
+      ...graphContext.graph,
+      nodes,
+    },
   }, {});
 }

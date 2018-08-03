@@ -1,16 +1,13 @@
-import Graph from "../graph";
 import counter from "./counter";
+import Node from "../types/node";
 
 
-export default function addVariableCounts({ nodes, ...graph }: Graph): Graph {
+export default function addVariableCounts(nodes: Node[]): Node[] {
   const variableCounter = counter(0);
-  return {
-    ...graph,
-    nodes: nodes.map(n => ({
-      ...n,
-      ...(!n.constant && {
-        variableCount: variableCounter.next().value,
-      })
-    })),
-  };
+  return nodes.map(n => ({
+    ...n,
+    ...(n.type === 'Var' && !n.constant && {
+      variableCount: variableCounter.next().value,
+    })
+  }));
 }

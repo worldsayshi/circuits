@@ -1,4 +1,5 @@
 import entries from "../util/entries";
+import setNodeDefaults from "../util/setNodeDefaults";
 
 
 function createD3Links(components, numberOfVars) {
@@ -23,11 +24,13 @@ function createD3Groups(components, numberOfVars) {
   return groups;
 }
 
-export default function toCola ({ nodes, components }) {
+export default function toCola ({ nodes }) {
   const d3Nodes = [
-    ...nodes.map((node, index) => ({...node, type: 'Var', nodeId: index })),
-    ...components.map(component => ({...component, type: 'Component' })),
+    ...nodes.map(setNodeDefaults),
+    // ...components.map(component => ({...component, type: 'Component' })),
   ];
+
+  const components = nodes.filter(({ type }) => type === 'Component');
 
   const d3Links = createD3Links(components, nodes.length);
 

@@ -1,7 +1,8 @@
 import defaultNounResolver from './default';
+import Var from "../types/var";
 
 export interface NounResolvers {
-  [key: string]: (node: {value: number, constant: boolean, variableCount?: number}) => string | number;
+  [key: string]: (node: Var) => string | number;
 }
 
 export function getNounResolvers() : NounResolvers {

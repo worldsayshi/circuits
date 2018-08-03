@@ -6,6 +6,8 @@
  */
 
 
+import setNodeDefaults from "../util/setNodeDefaults";
+
 function entries (l) {
   return l.map((e, ix) => [ix, e]);
 }
@@ -46,11 +48,13 @@ function createStructuralLattice(components: any, numberOfNodes: any) {
   return { structuralNodes, structuralLinks };
 }
 
-export default function toD3 ({ nodes, components }) {
+export default function toD3 ({ nodes }) {
   const d3Nodes = [
-    ...nodes.map((node, index) => ({...node, type: 'Var', nodeId: index })),
-    ...components.map(component => ({...component, type: 'Component' })),
+    ...nodes.map(setNodeDefaults),
+    // ...components.map(component => ({...component, type: 'Component' })),
   ];
+
+  const components = nodes.filter(({ type }) => type === 'Component');
 
   const d3Links = createD3Links(components, nodes.length);
 
