@@ -2,6 +2,20 @@
 
 # TODOs
 
+## Refactor graph structure 
+
+Refactor the internal graph data format so that components end up inside nodes array. There is no more components array.
+
+Pro:
+1. Allowing components to connect directly to other components (see `testGraph4-NewFormat.ts`)
+2. (Perhaps) simpler conversion between internal and d3 format. Hmm, probably not.
+
+Con:
+1. Transaction cost
+
+
+# Fixed TODOS
+
 ## Fix `optimizeGraph`
 Current calculation is wrong because it allows solutions where disparate graphs can each have the wrong solution but the sum of them adds up to zero.
 
@@ -14,6 +28,7 @@ Need a way to handle disparate graphs and graphs consisting of multiple componen
   5. Go back to 3 and select a component that has not yet been selected.
 
 The optimization function can be collected by emitting an expression instead of a function when traversing the graph. The expression should be interpretable by something like mathjs.
+
 
 # Reference snippets
 
