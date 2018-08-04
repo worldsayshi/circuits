@@ -55,10 +55,11 @@ export default function toD3 ({ nodes }) {
   ];
 
   const components = nodes.filter(({ type }) => type === 'Component');
+  const nrOfVars = nodes.length-components.length;
 
-  const d3Links = createD3Links(components, nodes.length);
+  const d3Links = createD3Links(components, nrOfVars);
 
-  const { structuralNodes, structuralLinks } = createStructuralLattice(components, nodes.length);
+  const { structuralNodes, structuralLinks } = createStructuralLattice(components, nrOfVars);
 
 
   return { nodes: d3Nodes.concat(structuralNodes), links: d3Links.concat(structuralLinks) };

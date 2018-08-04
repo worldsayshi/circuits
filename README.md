@@ -2,6 +2,16 @@
 
 # TODOs
 
+## Fix `traverseGraph`
+
+
+
+## Make node ids order-agnostic
+
+
+
+# Fixed TODOS
+
 ## Refactor graph structure 
 
 Refactor the internal graph data format so that components end up inside nodes array. There is no more components array.
@@ -12,9 +22,6 @@ Pro:
 
 Con:
 1. Transaction cost
-
-
-# Fixed TODOS
 
 ## Fix `optimizeGraph`
 Current calculation is wrong because it allows solutions where disparate graphs can each have the wrong solution but the sum of them adds up to zero.

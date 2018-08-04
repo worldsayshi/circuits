@@ -31,10 +31,11 @@ export default function toCola ({ nodes }) {
   ];
 
   const components = nodes.filter(({ type }) => type === 'Component');
+  const nrOfVars = nodes.length-components.length;
 
-  const d3Links = createD3Links(components, nodes.length);
+  const d3Links = createD3Links(components, nrOfVars);
 
-  const d3Groups = createD3Groups(components, nodes.length);
+  const d3Groups = createD3Groups(components, nrOfVars);
 
   return { nodes: d3Nodes, links: d3Links, groups: d3Groups };
 }
