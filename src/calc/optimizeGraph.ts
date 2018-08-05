@@ -35,10 +35,7 @@ export default function optimizeGraph (graphContext: GraphContext) {
 
   const initialValues = getInitialVariableValues(graphContext.graph.nodes);
 
-  const optimization = nelderMead((x) => {
-    const sum = objectiveFunction(graphContext, x);
-    return Math.abs(sum);
-  }, initialValues);
+  const optimization = nelderMead((x) => objectiveFunction(graphContext, x), initialValues);
 
   const values = optimization.x.map(v => Math.round(v * 100) / 100);
 
