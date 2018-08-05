@@ -5,7 +5,7 @@ import counter from "../util/counter";
 import desugarNodes from "../util/desugarNodes";
 import Component from "../types/component";
 
-export function evalGraph ({ graph, nouns, verbs }, x) {
+export function objectiveFunction ({ graph, nouns, verbs }, x) {
 
 
   // B1. Add product component and a test example including a product component

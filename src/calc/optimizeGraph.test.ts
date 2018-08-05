@@ -5,8 +5,8 @@ import testGraph2 from '../testGraph2';
 import {getNounResolvers} from "../nouns";
 import nounify from "../nouns/nounify";
 import * as math from 'mathjs';
-import {evalGraph} from "./evalGraph";
-// import evalGraph from "./evalGraph";
+import {objectiveFunction} from "./objectiveFunction";
+// import objectiveFunction from "./objectiveFunction";
 
 describe('nounify', () => {
   it('should return constants', () => {

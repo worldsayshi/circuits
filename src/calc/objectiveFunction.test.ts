@@ -1,4 +1,4 @@
-import {evalGraph} from "./evalGraph";
+import {objectiveFunction} from "./objectiveFunction";
 import testGraph from "../testGraph";
 
 
@@ -8,9 +8,9 @@ describe('sum ops', () => {
     expect(testGraph.verbs.sum([11], [6,5])).toBe('11 - (6 + 5)');
     expect(testGraph.verbs.sum([11, 69], [80])).toBe('11 + 69 - (80)');
     expect(testGraph.verbs.sum([-20], [-30,10])).toBe('-20 - (-30 + 10)');
-    expect(evalGraph(testGraph, [4])).toBe(-1);
-    expect(evalGraph(testGraph, [3])).toBe(0);
-    expect(evalGraph(testGraph, [2])).toBe(1);
-    expect(evalGraph(testGraph, [1])).toBe(2);
+    expect(objectiveFunction(testGraph, [4])).toBe(1);
+    expect(objectiveFunction(testGraph, [3])).toBe(0);
+    expect(objectiveFunction(testGraph, [2])).toBe(1);
+    expect(objectiveFunction(testGraph, [1])).toBe(2);
   });
 });

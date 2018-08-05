@@ -1,7 +1,7 @@
 
 import { nelderMead } from 'fmin';
 import GraphContext from "../graphContext";
-import {evalGraph} from "./evalGraph";
+import {objectiveFunction} from "./objectiveFunction";
 
 function getInitialVariableValues(nodes) {
   return nodes
@@ -36,7 +36,7 @@ export default function optimizeGraph (graphContext: GraphContext) {
   const initialValues = getInitialVariableValues(graphContext.graph.nodes);
 
   const optimization = nelderMead((x) => {
-    const sum = evalGraph(graphContext, x);
+    const sum = objectiveFunction(graphContext, x);
     return Math.abs(sum);
   }, initialValues);
 
