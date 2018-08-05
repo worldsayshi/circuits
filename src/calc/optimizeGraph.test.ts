@@ -39,11 +39,11 @@ describe('graph optimization and evaluation', () => {
     expect(optimizeGraph(testGraph).graph.nodes[2].value).toBeCloseTo(3, 2);
   });
 
-  it.skip('should optimize graph with two disparate networks', () => {
+  it('should optimize graph with two disparate networks', () => {
     expect(optimizeGraph(testGraph2).graph.nodes[2].value).toBeCloseTo(3, 2);
   });
 
-  it.skip('should optimize graph with two disparate networks', () => {
+  it('should optimize graph with two disparate networks', () => {
     expect(optimizeGraph(testGraph2).graph.nodes[4].value).toBeCloseTo(100, 2);
   });
 });

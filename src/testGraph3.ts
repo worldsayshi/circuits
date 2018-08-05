@@ -13,10 +13,11 @@ const graphContext : GraphContext = {
       { noun: 'default', constant: false, type: 'Var' },
 
       { noun: 'default', constant: false, type: 'Var' },
+      { noun: 'default', constant: false, type: 'Var' },
 
       // These points in part to each other.
-      { left: [0, 1, 5], right: [2], verb: 'sum', type: 'Component' },
-      { left: [4], right: [3], verb: 'sum', type: 'Component' },
+      { left: [0, 1, 3], right: [2], verb: 'sum', type: 'Component' },
+      { left: [3], right: [4], verb: 'sum', type: 'Component' },
     ],
   },
   nouns: getNounResolvers(),

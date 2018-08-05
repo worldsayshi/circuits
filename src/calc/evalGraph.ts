@@ -21,7 +21,7 @@ export function evalGraph ({ graph, nouns, verbs }, x) {
   const expr = components.reduce((acc, {left, right, verb}) => {
     const leftValues = nounify(lookup(left, nodes), nouns);
     const rightValues = nounify(lookup(right, nodes), nouns);
-    return `${acc} + ${verbs[verb](leftValues, rightValues)}`;
+    return `${acc} + abs(${verbs[verb](leftValues, rightValues)})`;
   }, '0');
   return math.eval(expr, { x });
 }
