@@ -30,17 +30,19 @@ class ReactViewInt extends React.Component<{
 
   constructor(props, ...rest) {
     super(props, ...rest);
+    console.log('constructor');
     const { nodes, links, groups } = props;
     this.simulation = cola.d3adaptor(d3)
-      .linkDistance(l => l.length || 100)
-      .handleDisconnected(true)
-      // .avoidOverlaps(true)
+      // .linkDistance(l => l.length || 100)
+      // .handleDisconnected(true)
+      .avoidOverlaps(true)
       .size([this.state.width, this.state.height])
-      // .symmetricDiffLinkLengths(40)
-      .on('tick', () => this.forceUpdate());
+      .symmetricDiffLinkLengths(40)
+      .on('tick', () => console.log('forceUpdate') || this.forceUpdate());
 
     this.state.nodes = nodes;
     this.state.links = links;
+    console.log('links', links);
     this.state.groups = groups || [];
     this.simulation
       .nodes(this.state.nodes);
@@ -53,7 +55,7 @@ class ReactViewInt extends React.Component<{
   }
 
   componentWillReceiveProps({ nodes = [], links = [] }) {
-
+    console.log('componentWillReceiveProps');
     const currentNodes = this.simulation.nodes();
     const currentLinks = this.simulation.links();
 
@@ -131,6 +133,7 @@ class ReactViewInt extends React.Component<{
   }
 
   render() {
+    console.log('render');
     let nodeRadius = 30;
     let color = d3.scaleOrdinal(d3.schemeCategory10);
 
