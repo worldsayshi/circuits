@@ -5,8 +5,8 @@ const d3TestGraph = {
   nodes: [
     { noun: 'default', constant: true, value: 1, type: 'Var', nodeId: 0 },
     { noun: 'default', constant: true, value: 2, type: 'Var', nodeId: 1 },
-    { noun: 'default', constant: false, type: 'Var', nodeId: 2 },
-    { left: [0, 1], right: [2], verb: 'sum', type: 'Component' }
+    { noun: 'default', constant: false, type: 'Var', nodeId: 2, variableCount: 0 },
+    { left: [0, 1], right: [2], verb: 'sum', type: 'Component', nodeId: 3 }
   ],
   links: [
     { source: 0, target: 3 },

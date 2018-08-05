@@ -4,6 +4,7 @@
     "allowJs": true,
     "target": "es5",
     "lib": ["DOM", "ES7"],
+    "downlevelIteration": true,
     "jsx": "react"
   },
   "include": [

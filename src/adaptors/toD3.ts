@@ -7,6 +7,7 @@
 
 
 import setNodeDefaults from "../util/setNodeDefaults";
+import desugarNodes from "../util/desugarNodes";
 
 function entries (l) {
   return l.map((e, ix) => [ix, e]);
@@ -50,7 +51,7 @@ function createStructuralLattice(components: any, numberOfNodes: any) {
 
 export default function toD3 ({ nodes }) {
   const d3Nodes = [
-    ...nodes.map(setNodeDefaults),
+    ...desugarNodes(nodes),
     // ...components.map(component => ({...component, type: 'Component' })),
   ];
 

@@ -2,7 +2,7 @@ import * as math from 'mathjs';
 import {lookup} from "./optimizeGraph";
 import nounify from "../nouns/nounify";
 import counter from "../util/counter";
-import addVariableCounts from "../util/addVariableCounts";
+import desugarNodes from "../util/desugarNodes";
 import Component from "../types/component";
 
 export function evalGraph ({ graph, nouns, verbs }, x) {
@@ -13,8 +13,8 @@ export function evalGraph ({ graph, nouns, verbs }, x) {
 
   const variableCounter = counter(0);
 
-  // const { nodes, components } = addVariableCounts(graph);
-  const nodes = addVariableCounts(graph.nodes);
+  // const { nodes, components } = desugarNodes(graph);
+  const nodes = desugarNodes(graph.nodes);
 
   const components : Component[] = nodes.filter(({ type }) => type === 'Component') as Component[];
 

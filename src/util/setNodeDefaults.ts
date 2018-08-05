@@ -1,3 +1,5 @@
+// Should be redundant. Use desugarNodes instead
+
 export default function setNodeDefaults(node, index) {
   if(node.left && node.right) {
     return {...node, type: 'Component' };
