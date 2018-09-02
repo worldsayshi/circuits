@@ -37,5 +37,9 @@ export default function Link ({ source, target, }) {
       <path
         className={'link'}
     d={d} />);
+  } else {
+    console.log('source', source);
+    console.log('target', target);
+    throw new Error('Invalid source and/or target');
   }
 }

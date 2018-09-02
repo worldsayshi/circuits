@@ -2,11 +2,14 @@
 
 # TODOs
 
-## Fix `traverseGraph`
+- Drag and drop link creation
 
 
+# Unclear TODOs
 
-## Make node ids order-agnostic
+- Fix `traverseGraph`
+
+- Make node ids order-agnostic
 
 
 

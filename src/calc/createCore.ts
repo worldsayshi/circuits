@@ -20,6 +20,9 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         return dp.set(graph, `nodes.${action.index}.constant`, !graph.nodes[action.index].constant);
       case 'INC_VALUE':
         return dp.set(graph, `nodes.${action.index}.value`, graph.nodes[action.index].value + 1);
+      case 'ADD_LINK':
+        console.log('ADD_LINK', action.fromId, action.toId);
+        return graph;
       default:
         return graph;
     }

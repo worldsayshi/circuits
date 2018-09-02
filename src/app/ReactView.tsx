@@ -8,6 +8,13 @@ import DnD from './DragAndDrop';
 import * as nodeComponents from './node';
 import * as linkComponents from './link';
 import InteractionMode from './InteractionMode.enum';
+import {dispatch} from "d3";
+
+function isNumber(num) {
+  return typeof num === "number" && num !== NaN;
+}
+
+const DefaultLink = linkComponents['Link'];
 
 class ReactViewInt extends React.Component<{
   nodes: any[],
@@ -15,11 +22,14 @@ class ReactViewInt extends React.Component<{
   interactionMode: InteractionMode,
   lockNode: (number) => void,
   incNode: (number) => void,
+  addLink: (l: { fromId: number, toId: number }) => void,
 }> {
 
   state = {
     width: 960,
     height: 900,
+    dragLinkSource: null,
+    dragLinkTarget: null,
     dragged: null,
     nodes: [],
     links: [],
@@ -30,19 +40,17 @@ class ReactViewInt extends React.Component<{
 
   constructor(props, ...rest) {
     super(props, ...rest);
-    console.log('constructor');
     const { nodes, links, groups } = props;
     this.simulation = cola.d3adaptor(d3)
-      // .linkDistance(l => l.length || 100)
+      .linkDistance(l => l.length || 100)
       // .handleDisconnected(true)
       .avoidOverlaps(true)
       .size([this.state.width, this.state.height])
       .symmetricDiffLinkLengths(40)
-      .on('tick', () => console.log('forceUpdate') || this.forceUpdate());
+      .on('tick', () => this.forceUpdate());
 
     this.state.nodes = nodes;
     this.state.links = links;
-    console.log('links', links);
     this.state.groups = groups || [];
     this.simulation
       .nodes(this.state.nodes);
@@ -52,10 +60,15 @@ class ReactViewInt extends React.Component<{
       .groups(this.state.groups);
 
     this.simulation.start();
+
+  }
+
+  componentDidMount() {
+    // mouse event listener
+    // window.addEventListener('mousemove', (...args) => console.log('hello', args));
   }
 
   componentWillReceiveProps({ nodes = [], links = [] }) {
-    console.log('componentWillReceiveProps');
     const currentNodes = this.simulation.nodes();
     const currentLinks = this.simulation.links();
 
@@ -93,7 +106,6 @@ class ReactViewInt extends React.Component<{
     // Push all new links
     currentLinks.push(...normalizeLinks(currentNodes, links));
 
-    console.log('Start over', nodes);
     this.simulation.start(0,0,0,0,true, false);
   }
 
@@ -112,6 +124,14 @@ class ReactViewInt extends React.Component<{
       DnD.dragStart(this.state.nodes[ix]);
       this.setState({ dragged: ix });
     }
+
+    if(this.props.interactionMode === 'DragLink') {
+      this.setState({ dragLinkSource: {
+        nodeId: this.state.nodes[ix].nodeId,
+        x: this.state.nodes[ix].x,
+        y: this.state.nodes[ix].y,
+      } });
+    }
   }
 
   drag(toX: number, toY: number) {
@@ -120,9 +140,12 @@ class ReactViewInt extends React.Component<{
       this.simulation.resume();
       this.forceUpdate();
     }
+    if(this.props.interactionMode === 'DragLink' && this.state.dragLinkSource) {
+      this.setState({ dragLinkTarget: { x: toX, y: toY } });
+    }
   }
 
-  dragStop() {
+  dragStop(ix) {
     if(this.props.interactionMode === 'DragNode') {
       if(this.state.dragged !== null) {
         // Layout.dragEnd(this.state.nodes[this.state.dragged]);
@@ -130,19 +153,27 @@ class ReactViewInt extends React.Component<{
       }
       this.setState({ dragged: null });
     }
+    if(this.props.interactionMode === 'DragLink') {
+      this.setState({ dragLinkSource:  null, dragLinkTarget: null });
+    }
+    if(this.props.interactionMode === 'DragLink' && isNumber(ix)) {
+      this.props.addLink({
+        fromId: this.state.dragLinkSource.nodeId,
+        toId:  this.state.nodes[ix].nodeId,
+      });
+      this.setState({ dragLinkSource:  null, dragLinkTarget: null });
+    }
   }
 
   render() {
-    console.log('render');
     let nodeRadius = 30;
     let color = d3.scaleOrdinal(d3.schemeCategory10);
-
-
+    
     return <svg
       onMouseMove={(e) => {
         this.drag(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
       }}
-      onMouseUp={() => this.dragStop()}
+      onMouseUp={() => this.dragStop(null)}
       height={this.state.height}
       width={this.state.width}>
       {this.state.groups.map((g, i) =>
@@ -162,6 +193,9 @@ class ReactViewInt extends React.Component<{
           key={i}
           {...l} />;
       })}
+      {this.state.dragLinkSource && this.state.dragLinkTarget &&
+        <DefaultLink source={this.state.dragLinkSource} target={this.state.dragLinkTarget} />
+      }
       {this.state.nodes.map((n, ix) => {
         const Node = nodeComponents[n.type];
         return Node && <Node
@@ -169,6 +203,7 @@ class ReactViewInt extends React.Component<{
           label={n.value}
           onClick={() => this.onClick(ix)}
           dragStart={() => this.dragStart(ix)}
+          dragStop={() => this.dragStop(ix)}
           nodeRadius={nodeRadius}
           color={color}
           {...n} />
@@ -189,5 +224,8 @@ export default connect(({ graphContext, interaction: { mode } }, { adaptor }) =>
   incNode: (ix) => {
     dispatch({ type: 'INC_VALUE', index: ix});
     dispatch({ type: 'OPTIMIZE' });
+  },
+  addLink: ({ fromId, toId }) => {
+    dispatch({ type: 'ADD_LINK', fromId, toId });
   },
 }))(ReactViewInt);
