@@ -2,8 +2,8 @@
 import { createStore, Store } from 'redux';
 import * as dp from 'dot-prop-immutable';
 import * as jsdiff from 'jsondiffpatch';
-import { getVerbResolvers, getVerbData, VerbResolvers } from '../components';
-import {getNounResolvers, NounResolvers} from '../nouns';
+import { getVerbResolvers, getVerbData, VerbResolvers } from '../components/index';
+import {getNounResolvers, NounResolvers} from '../nouns/index';
 import optimizeGraph from "./optimizeGraph";
 // import {Core} from "./createCore";
 

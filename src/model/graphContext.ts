@@ -1,5 +1,5 @@
-import {VerbResolvers} from "./components";
-import {NounResolvers} from "./nouns";
+import {VerbResolvers} from "./components/index";
+import {NounResolvers} from "./nouns/index";
 import Graph from "./types/graph";
 
 export default interface GraphContext {

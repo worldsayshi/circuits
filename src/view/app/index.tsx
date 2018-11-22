@@ -1,11 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import ReactView from './ReactView';
-import { attachDefaultData, createCoreReducer } from '../calc/createCore';
-import { interactionReducer } from "./interaction";
+import { attachDefaultData, createCoreReducer } from '../../model/calc/createCore';
+import { interactionReducer } from "./interaction/index";
 
-import toCola from "../adaptors/toCola";
-import toD3 from '../adaptors/toD3';
+import toCola from "../../adaptors/toCola";
+import toD3 from '../../adaptors/toD3';
 // import toD3v4 from "../adaptors/toD3v4";
 
 // import update from './render/update';

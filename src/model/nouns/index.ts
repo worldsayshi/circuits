@@ -1,4 +1,4 @@
-import defaultNounResolver from './default';
+import defaultNounResolver from './default/index';
 import Var from "../types/var";
 
 export interface NounResolvers {

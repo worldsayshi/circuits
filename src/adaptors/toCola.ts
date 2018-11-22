@@ -1,6 +1,6 @@
-import entries from "../util/entries";
-import setNodeDefaults from "../util/setNodeDefaults";
-import desugarNodes from "../util/desugarNodes";
+import entries from "../model/util/entries";
+import setNodeDefaults from "../model/util/setNodeDefaults";
+import desugarNodes from "../model/util/desugarNodes";
 
 
 function createD3Links(components, numberOfVars) {

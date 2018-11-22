@@ -1,8 +1,8 @@
 
 // It's a test graph with evaluation context
 
-import {getNounResolvers} from "./nouns";
-import {getVerbResolvers} from "./components";
+import {getNounResolvers} from "./nouns/index";
+import {getVerbResolvers} from "./components/index";
 import GraphContext from "./graphContext";
 
 const graphContext: GraphContext = {

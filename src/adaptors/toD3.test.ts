@@ -1,5 +1,5 @@
 import toD3 from "./toD3";
-import testGraph2 from "../testGraph2";
+import testGraph2 from "../model/testGraph2";
 
 const d3TestGraph = {
   nodes: [

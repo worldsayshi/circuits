@@ -2,7 +2,7 @@
 import optimizeGraph, { lookup } from './optimizeGraph';
 import testGraph from '../testGraph';
 import testGraph2 from '../testGraph2';
-import {getNounResolvers} from "../nouns";
+import {getNounResolvers} from "../nouns/index";
 import nounify from "../nouns/nounify";
 import * as math from 'mathjs';
 import {objectiveFunction} from "./objectiveFunction";

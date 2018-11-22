@@ -1,7 +1,7 @@
 // import update from "./render/update";
 import * as d3 from "d3";
 import * as cola from "webcola/dist/index";
-import toCola from "../adaptors/toCola";
+import toCola from "../../adaptors/toCola";
 import { BaseType, ScaleOrdinal, Selection } from "d3";
 
 function isIE() {

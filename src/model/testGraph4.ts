@@ -3,8 +3,8 @@
 // This is the sugared version of testGraph3, no intermediate variable between components
 // TODO support this
 
-import {getNounResolvers} from "./nouns";
-import {getVerbResolvers} from "./components";
+import {getNounResolvers} from "./nouns/index";
+import {getVerbResolvers} from "./components/index";
 import GraphContext from "./graphContext";
 
 const graphContext : GraphContext = {

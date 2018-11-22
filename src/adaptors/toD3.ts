@@ -6,8 +6,8 @@
  */
 
 
-import setNodeDefaults from "../util/setNodeDefaults";
-import desugarNodes from "../util/desugarNodes";
+import setNodeDefaults from "../model/util/setNodeDefaults";
+import desugarNodes from "../model/util/desugarNodes";
 
 function entries (l) {
   return l.map((e, ix) => [ix, e]);

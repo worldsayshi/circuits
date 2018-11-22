@@ -1,5 +1,5 @@
 import toCola from "./toCola";
-import testGraph from "../testGraph";
+import testGraph from "../model/testGraph";
 
 const d3TestGraph = {
   nodes: [
