@@ -4,10 +4,10 @@ import * as cola from "webcola/dist/index";
 import * as d3 from "d3";
 import {connect} from "react-redux";
 import * as jsdiff from "jsondiffpatch";
-import DnD from './DragAndDrop';
-import * as nodeComponents from './node/index';
-import * as linkComponents from './link/index';
-import InteractionMode from './InteractionMode.enum';
+import DnD from '../DragAndDrop';
+import * as nodeComponents from '../node/index';
+import * as linkComponents from '../link/index';
+import InteractionMode from '../InteractionMode.enum';
 import {dispatch} from "d3";
 
 function isNumber(num) {
