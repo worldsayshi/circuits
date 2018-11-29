@@ -7,7 +7,9 @@
     "test": "node_modules/.bin/jest --watch --notify --notifyMode=change",
     "watch": "webpack --watch",
     "start": "webpack && http-server",
-    "debug": "echo \"Go to chrome://inspect\"; node --inspect-brk node_modules/.bin/jest --runInBand"
+    "debug": "echo \"Go to chrome://inspect\"; node --inspect-brk node_modules/.bin/jest --runInBand",
+    "styleguide": "styleguidist server",
+    "styleguide:build": "styleguidist build"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,7 @@
     "awesome-typescript-loader": "^5.2.0",
     "http-server": "^0.11.1",
     "jest": "^23.2.0",
+    "react-styleguidist": "^7.3.8",
     "regenerator-runtime": "^0.12.0",
     "source-map-loader": "^0.2.3",
     "ts-jest": "^23.0.0",
@@ -69,6 +72,6 @@
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "typescript": "^2.9.2",
-    "webcola": "^3.3.8"
+    "webcola": "worldsayshi/webcola#dist"
   }
 }

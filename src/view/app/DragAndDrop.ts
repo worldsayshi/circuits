@@ -1,7 +1,9 @@
 
 import * as d3 from "d3";
 
-
+/*
+  Deprecated, not really used
+ */
 
 export default {
   dragStart(node) {

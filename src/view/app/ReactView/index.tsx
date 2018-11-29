@@ -6,15 +6,16 @@ import {connect} from "react-redux";
 import * as jsdiff from "jsondiffpatch";
 import DnD from '../DragAndDrop';
 import * as nodeComponents from '../node/index';
-import * as linkComponents from '../link/index';
 import InteractionMode from '../InteractionMode.enum';
 import {dispatch} from "d3";
+import View from './View';
+import simulation from "./simulation";
 
 function isNumber(num) {
   return typeof num === "number" && num !== NaN;
 }
 
-const DefaultLink = linkComponents['Link'];
+
 
 class ReactViewInt extends React.Component<{
   nodes: any[],
@@ -121,7 +122,8 @@ class ReactViewInt extends React.Component<{
 
   dragStart(ix) {
     if(this.props.interactionMode === 'DragNode') {
-      DnD.dragStart(this.state.nodes[ix]);
+      const node = this.state.nodes[ix];
+      node.fixed = true;
       this.setState({ dragged: ix });
     }
 
@@ -136,7 +138,12 @@ class ReactViewInt extends React.Component<{
 
   drag(toX: number, toY: number) {
     if(this.state.dragged !== null && this.props.interactionMode === 'DragNode') {
-      DnD.drag(this.state.nodes[this.state.dragged], { x: toX, y: toY });
+      const node = this.state.nodes[this.state.dragged];
+      const position = { x: toX, y: toY };
+      node.x = position.x;
+      node.px = position.x;
+      node.y = position.y;
+      node.py = position.y;
       this.simulation.resume();
       this.forceUpdate();
     }
@@ -147,12 +154,14 @@ class ReactViewInt extends React.Component<{
 
   dragStop(ix) {
     if(this.props.interactionMode === 'DragNode') {
+      // end drag
       if(this.state.dragged !== null) {
-        // Layout.dragEnd(this.state.nodes[this.state.dragged]);
-        DnD.dragEnd(this.state.nodes[this.state.dragged]);
+        const node = this.state.nodes[this.state.dragged];
+        node.fixed = false;
       }
       this.setState({ dragged: null });
     }
+
     if(this.props.interactionMode === 'DragLink') {
       this.setState({ dragLinkSource:  null, dragLinkTarget: null });
     }
@@ -166,52 +175,30 @@ class ReactViewInt extends React.Component<{
   }
 
   render() {
-    let nodeRadius = 30;
-    let color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const {
+      height, width,
+      groups, links,
+      nodes,
+      dragLinkSource,
+      dragLinkTarget,
+    } = this.state;
     
-    return <svg
-      onMouseMove={(e) => {
-        this.drag(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
-      }}
-      onMouseUp={() => this.dragStop(null)}
-      height={this.state.height}
-      width={this.state.width}>
-      {this.state.groups.map((g, i) =>
-        <rect
-          key={i}
-          x={g.bounds.x}
-          y={g.bounds.y}
-          width={g.bounds.X-g.bounds.x}
-          height={g.bounds.Y-g.bounds.y}
-          stroke='black'
-          fillOpacity={0}
-        />
-      )}
-      {this.state.links.map((l, i) => {
-        const Link = linkComponents[l.type || 'Link'];
-        return <Link
-          key={i}
-          {...l} />;
-      })}
-      {this.state.dragLinkSource && this.state.dragLinkTarget &&
-        <DefaultLink source={this.state.dragLinkSource} target={this.state.dragLinkTarget} />
-      }
-      {this.state.nodes.map((n, ix) => {
-        const Node = nodeComponents[n.type];
-        return Node && <Node
-          key={ix}
-          label={n.value}
-          onClick={() => this.onClick(ix)}
-          dragStart={() => this.dragStart(ix)}
-          dragStop={() => this.dragStop(ix)}
-          nodeRadius={nodeRadius}
-          color={color}
-          {...n} />
-      })}
-    </svg>;
+    return (<View
+      height={height}
+      width={width}
+      groups={groups}
+      links={links}
+      nodes={nodes}
+      dragLinkSource={dragLinkSource}
+      dragLinkTarget={dragLinkTarget}
+      drag={this.drag.bind(this)}
+      dragStart={this.dragStart.bind(this)}
+      dragStop={this.dragStop.bind(this)}
+      onClick={this.onClick.bind(this)}
+    />);
   }
 }
-
 
 export default connect(({ graphContext, interaction: { mode } }, { adaptor }) => {
   const { nodes, links, groups } = adaptor(graphContext);
@@ -228,4 +215,4 @@ export default connect(({ graphContext, interaction: { mode } }, { adaptor }) =>
   addLink: ({ fromId, toId }) => {
     dispatch({ type: 'ADD_LINK', fromId, toId });
   },
-}))(ReactViewInt);
+}))(simulation(ReactViewInt));

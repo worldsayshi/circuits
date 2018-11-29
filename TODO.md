@@ -2,6 +2,12 @@
 
 # TODOs
 
+### Split ReactView into smaller parts
+
+One for drag and drop behavior, one for simulation and one for actual rendering.
+
+Then they can be tested in isolation.
+
 ### Test rig for visual testing
 
 Create a "menagerie" server that displays visual unit tests.

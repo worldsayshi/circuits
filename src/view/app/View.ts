@@ -15,6 +15,10 @@ function groupCenter (bounds) {
   };
 }
 
+/*
+  Deprecated, kept for reference I guess?
+ */
+
 export default class View {
 
   private simulation: any;
