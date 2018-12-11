@@ -15,6 +15,8 @@ import * as d3 from "d3";
 import { Provider } from 'react-redux'
 import {combineReducers, createStore} from 'redux'
 import Palette from "./interaction/Palette";
+import GraphContext from "../../model/graphContext";
+import Graph from "../../model/types/graph";
 
 function initCore() {
   const graph = { nodes: [
@@ -76,6 +78,50 @@ const Link = (l) => ({
   ...l,
 });
 
+const core = initCore();
+
+
+class App extends React.Component<{}, {
+  graphContext: Graph;
+  interaction: any;
+}> {
+
+
+  constructor(props, ...rest) {
+    super(props, ...rest);
+    this.state = core.getState();
+  }
+
+  render() {
+    const { graphContext, interaction: { mode } } = this.state;
+    const { nodes, links } = toD3(graphContext);
+    return (
+      <div>
+        <Palette></Palette>
+        <ReactView
+          nodes={nodes}
+          links={links}
+          groups={[]}
+          interactionMode={mode}
+
+          lockNode={(ix) => {
+            core.dispatch({ type: 'TOGGLE_CONSTANT', index: ix});
+            core.dispatch({ type: 'OPTIMIZE' });
+          }}
+          incNode={(ix) => {
+            core.dispatch({ type: 'INC_VALUE', index: ix});
+            core.dispatch({ type: 'OPTIMIZE' });
+          }}
+          addLink={({ fromId, toId }) => {
+            core.dispatch({ type: 'ADD_LINK', fromId, toId });
+          }}
+          // interactionStyle='DragLink'
+        />
+      </div>
+    );
+  }
+}
+
 export default function app () {
   const startGraph = testGraph();
   // const store = createStore((state = {graph: startGraph}, action: { type: string, graph: any }) => {
@@ -85,17 +131,9 @@ export default function app () {
   //   }
   //   return state;
   // });
-  const core = initCore();
+
   ReactDOM.render(
-      <Provider store={core}>
-        <div>
-          <Palette></Palette>
-          <ReactView
-            adaptor={toD3}
-            // interactionStyle='DragLink'
-          />
-        </div>
-      </Provider>,
+    <App />,
       document.getElementById("view")
   );
 

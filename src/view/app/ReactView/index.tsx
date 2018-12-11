@@ -20,6 +20,7 @@ function isNumber(num) {
 class ReactViewInt extends React.Component<{
   nodes: any[],
   links: any[],
+  groups: any[],
   interactionMode: InteractionMode,
   lockNode: (number) => void,
   incNode: (number) => void,
@@ -200,19 +201,4 @@ class ReactViewInt extends React.Component<{
   }
 }
 
-export default connect(({ graphContext, interaction: { mode } }, { adaptor }) => {
-  const { nodes, links, groups } = adaptor(graphContext);
-  return { nodes, links, groups, interactionMode: mode };
-}, dispatch => ({
-  lockNode: (ix) => {
-    dispatch({ type: 'TOGGLE_CONSTANT', index: ix});
-    dispatch({ type: 'OPTIMIZE' });
-  },
-  incNode: (ix) => {
-    dispatch({ type: 'INC_VALUE', index: ix});
-    dispatch({ type: 'OPTIMIZE' });
-  },
-  addLink: ({ fromId, toId }) => {
-    dispatch({ type: 'ADD_LINK', fromId, toId });
-  },
-}))(simulation(ReactViewInt));
+export default ReactViewInt;
