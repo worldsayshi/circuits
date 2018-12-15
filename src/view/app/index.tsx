@@ -123,8 +123,8 @@ class App extends React.Component<{}, {
             core.dispatch({ type: 'INC_VALUE', index: ix});
             core.dispatch({ type: 'OPTIMIZE' });
           }}
-          addLink={({ fromId, toId }) => {
-            core.dispatch({ type: 'ADD_LINK', fromId, toId });
+          addLink={({ fromId, toId, fromSubselection, toSubselection }) => {
+            core.dispatch({ type: 'ADD_LINK', fromId, toId, fromSubselection, toSubselection });
           }}
           // interactionStyle='DragLink'
         />

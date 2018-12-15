@@ -59,8 +59,8 @@ export default ({
           key={ix}
           label={n.value}
           onClick={() => onClick(ix)}
-          dragStart={() => dragStart(ix)}
-          dragStop={() => dragStop(ix)}
+          dragStart={(subSelection) => dragStart(ix, subSelection)}
+          dragStop={(subSelection) => dragStop(ix, subSelection)}
           nodeRadius={nodeRadius}
           color={color}
           {...n} />

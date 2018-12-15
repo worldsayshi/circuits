@@ -23,7 +23,7 @@ class ReactViewInt extends React.Component<{
   interactionMode: InteractionMode,
   lockNode: (number) => void,
   incNode: (number) => void,
-  addLink: (l: { fromId: number, toId: number }) => void,
+  addLink: (l: { fromId: number, toId: number, fromSubselection: string, toSubselection: string, }) => void,
 }> {
 
   state = {
@@ -120,7 +120,7 @@ class ReactViewInt extends React.Component<{
     }
   }
 
-  dragStart(ix) {
+  dragStart(ix, subSelection) {
     if(this.props.interactionMode === 'DragNode') {
       const node = this.state.nodes[ix];
       node.fixed = true;
@@ -132,6 +132,7 @@ class ReactViewInt extends React.Component<{
         nodeId: this.state.nodes[ix].nodeId,
         x: this.state.nodes[ix].x,
         y: this.state.nodes[ix].y,
+        subSelection
       } });
     }
   }
@@ -153,7 +154,7 @@ class ReactViewInt extends React.Component<{
   }
 
   // Need to add information about which side of the node is hit
-  dragStop(ix) {
+  dragStop(ix, subSelection) {
     if(this.props.interactionMode === 'DragNode') {
       // end drag
       if(this.state.dragged !== null) {
@@ -169,7 +170,9 @@ class ReactViewInt extends React.Component<{
     if(this.props.interactionMode === 'DragLink' && isNumber(ix)) {
       this.props.addLink({
         fromId: this.state.dragLinkSource.nodeId,
+        fromSubselection: this.state.dragLinkSource.subSelection,
         toId:  this.state.nodes[ix].nodeId,
+        toSubselection: subSelection,
       });
       this.setState({ dragLinkSource:  null, dragLinkTarget: null });
     }
