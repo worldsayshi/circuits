@@ -22,7 +22,7 @@ function nounifyWithTraversal(nodes, nouns, visitedComponents) {
 
 function traverseInt({ nodes, nouns, verbs }, visitedComponents) {
   const components = nodes.filter(({ type }) => type === 'Component');
-  // const varNodes = nodes.filter(({ type }) => type === 'Var');
+
   let componentToVisit = findNextUnvisitedComponent(components, visitedComponents);
   if(!componentToVisit) {
     return [];

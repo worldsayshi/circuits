@@ -9,7 +9,6 @@ import * as nodeComponents from '../node/index';
 import InteractionMode from '../InteractionMode.enum';
 import {dispatch} from "d3";
 import View from './View';
-import simulation from "./simulation";
 
 function isNumber(num) {
   return typeof num === "number" && num !== NaN;
@@ -153,6 +152,7 @@ class ReactViewInt extends React.Component<{
     }
   }
 
+  // Need to add information about which side of the node is hit
   dragStop(ix) {
     if(this.props.interactionMode === 'DragNode') {
       // end drag

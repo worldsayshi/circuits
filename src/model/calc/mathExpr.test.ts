@@ -13,7 +13,7 @@ const expectedMathJsRepresentation = {
   }], "fn": "add", "implicit": false, "mathjs": "OperatorNode", "op": "+"
 };
 
-describe('Testing howo to work with math expressions that can then be interpreted', () => {
+describe('Testing howto to work with math expressions that can then be interpreted', () => {
   it('can parse math expressions', () => {
     const expr = math.parse('x + 2x');
     expect(JSON.parse(JSON.stringify(expr))).toEqual(expectedMathJsRepresentation);
@@ -28,13 +28,11 @@ describe('Testing howo to work with math expressions that can then be interprete
 
   it('can handle vectorized variables', () => {
 
-    // Index is one based, wow.
     expect(math.eval('x[1] + x[2]', {x: [3, 2]})).toEqual(5);
   });
 
   it('can handle negative values', () => {
 
-    // Index is one based, wow.
     expect(math.eval('-1 + - 3')).toEqual(-4);
   });
 });
