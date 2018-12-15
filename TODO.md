@@ -18,6 +18,13 @@ Suggestion: Use Storybook and testcafe.
 ### Drag and drop link creation
 
 
+### Fix drag and drop on mobile
+
+This tutorial works: http://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
+
+Check for "Working on mobile" 
+
+
 # Unclear TODOs
 
 - Fix `traverseGraph`
