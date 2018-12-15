@@ -90,6 +90,9 @@ class App extends React.Component<{}, {
   constructor(props, ...rest) {
     super(props, ...rest);
     this.state = core.getState();
+    core.subscribe(() => {
+      this.setState(core.getState());
+    })
   }
 
   render() {
@@ -97,7 +100,15 @@ class App extends React.Component<{}, {
     const { nodes, links } = toD3(graphContext);
     return (
       <div>
-        <Palette></Palette>
+        <Palette
+          switchMode={(mode) => {
+            core.dispatch({
+              type: 'SWITCH_MODE',
+              mode,
+            });
+          }}
+          interactionMode={mode}
+        />
         <ReactView
           nodes={nodes}
           links={links}

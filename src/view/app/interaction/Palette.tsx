@@ -16,11 +16,4 @@ function PaletteInt ({ switchMode, interactionMode }) {
   </div>;
 }
 
-export default connect(
-  ({ interaction: { mode } }) => ({ interactionMode: mode }),
-  (dispatch) => ({
-    switchMode: (mode) => {
-      dispatch({ type: 'SWITCH_MODE', mode });
-    },
-  })
-)(PaletteInt);
+export default PaletteInt;
