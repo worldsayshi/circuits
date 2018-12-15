@@ -30,14 +30,17 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
 
         const fromNode = graph.nodes[fromId];
         const toNode =  graph.nodes[toId];
+        // Add the node to the list of adjacencies of the component
         if (fromNode.type === 'Component') {
           if (toNode.type !== 'Component') {
+            // Drawing from a component to a node
             const adjacencies = dp.get(graph, `nodes.${fromId}.${fromSubselection}`);
             return dp.set(graph, `nodes.${fromId}.${fromSubselection}`,
               adjacencies.includes(toId) ? adjacencies : [...adjacencies, toId]);
           }
         } else if (toNode.type === 'Component') {
           if (fromNode.type !== 'Component') {
+            // Drawing from a node to a component
             const adjacencies = dp.get(graph, `nodes.${toId}.${toSubselection}`);
             return dp.set(graph, `nodes.${toId}.${toSubselection}`,
               adjacencies.includes(fromId) ? adjacencies : [...adjacencies, fromId]);
