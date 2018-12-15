@@ -21,8 +21,28 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
       case 'INC_VALUE':
         return dp.set(graph, `nodes.${action.index}.value`, graph.nodes[action.index].value + 1);
       case 'ADD_LINK':
+
         console.log('ADD_LINK', action.fromId, action.toId, action.fromSubselection, action.toSubselection);
         console.log('graph', graph);
+        const fromNode = graph.nodes[action.fromId];
+        const toNode =  graph.nodes[action.toId];
+        if (fromNode.type === 'Component') {
+          if (toNode.type !== 'Component') {
+            console.log('action', action);
+            console.log('looking', graph, `nodes.${action.fromId}.${action.fromSubselection}`);
+            const adjacencies = dp.get(graph, `nodes.${action.fromId}.${action.fromSubselection}`);
+            return dp.set(graph, `nodes.${action.fromId}.${action.fromSubselection}`,
+              adjacencies.includes(action.toId) ? adjacencies : [...adjacencies, action.toId]);
+          }
+        } else if (toNode.type === 'Component') {
+          if (fromNode.type !== 'Component') {
+            console.log('action', action);
+            console.log('looking', graph, `nodes.${action.toId}.${action.toSubselection}`);
+            const adjacencies = dp.get(graph, `nodes.${action.toId}.${action.toSubselection}`);
+            return dp.set(graph, `nodes.${action.toId}.${action.toSubselection}`,
+              adjacencies.includes(action.fromId) ? adjacencies : [...adjacencies, action.fromId]);
+          }
+        }
         return graph;
       default:
         return graph;
