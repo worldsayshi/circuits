@@ -21,7 +21,14 @@ export default ({
   return (
     <svg
       onMouseMove={(e) => {
+        console.log('onMouseMove');
         drag(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+      }}
+
+      onTouchMove={(e) => {
+        console.log('onTouchMove', e.nativeEvent);
+        // No offset on touch events, need to calculate?
+        // drag(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
       }}
       onMouseUp={() => dragStop(null)}
       height={height}

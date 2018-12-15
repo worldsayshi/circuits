@@ -22,6 +22,7 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         return dp.set(graph, `nodes.${action.index}.value`, graph.nodes[action.index].value + 1);
       case 'ADD_LINK':
         console.log('ADD_LINK', action.fromId, action.toId);
+        console.log('graph', graph);
         return graph;
       default:
         return graph;
