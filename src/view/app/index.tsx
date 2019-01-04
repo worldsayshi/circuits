@@ -21,15 +21,15 @@ import Graph from "../../model/types/graph";
 function initCore() {
   const graph = { nodes: [
       { noun: 'default', constant: true, value: 1, type: 'Var' },
-      { noun: 'default', constant: true, value: 1, type: 'Var' },
-      { noun: 'default', constant: true, value: 1, type: 'Var' },
-      { noun: 'default', constant: true, value: 1, type: 'Var' },
+      { noun: 'default', constant: false, value: 1, type: 'Var' },
+      { noun: 'default', constant: false, value: 1, type: 'Var' },
+      { noun: 'default', constant: false, value: 1, type: 'Var' },
 
-      { noun: 'default', constant: true, value: 1, type: 'Var' },
-      { noun: 'default', constant: true, value: 1, type: 'Var' },
-      { noun: 'default', constant: true, value: 1, type: 'Var' },
-      { noun: 'default', constant: true, value: 1, type: 'Var' },
-      { noun: 'default', constant: true, value: 1, type: 'Var' },
+      { noun: 'default', constant: false, value: 1, type: 'Var' },
+      { noun: 'default', constant: false, value: 1, type: 'Var' },
+      { noun: 'default', constant: false, value: 1, type: 'Var' },
+      { noun: 'default', constant: false, value: 1, type: 'Var' },
+      { noun: 'default', constant: false, value: 1, type: 'Var' },
 
       { left: [0, 1], right: [2, 3], verb: 'sum', type: 'Component' },
       { left: [4, 5, 6, 8], right: [7], verb: 'sum', type: 'Component' },
