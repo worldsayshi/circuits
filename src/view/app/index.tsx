@@ -131,6 +131,10 @@ class App extends React.Component<{}, {
           addNode={(coordinates) => {
             core.dispatch({ type: 'ADD_NODE', coordinates });
           }}
+
+          addComponent={(coordinates) => {
+            core.dispatch({ type: 'ADD_COMPONENT', coordinates });
+          }}
           // interactionStyle='DragLink'
         />
       </div>

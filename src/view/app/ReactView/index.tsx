@@ -24,6 +24,7 @@ class ReactViewInt extends React.Component<{
   lockNode: (number) => void,
   incNode: (number) => void,
   addNode: (Coordinate) => void,
+  addComponent:  (Coordinate) => void,
   addLink: (l: { fromId: number, toId: number, fromSubselection: string, toSubselection: string, }) => void,
 }> {
 
@@ -121,7 +122,11 @@ class ReactViewInt extends React.Component<{
     } else if (this.props.interactionMode === 'AddNode') {
       console.log('AddNode', coord);
       this.props.addNode(coord);
+    } else if (this.props.interactionMode === 'AddComponent') {
+      console.log('AddNode', coord);
+      this.props.addComponent(coord);
     }
+
   }
 
   dragStart(ix, subSelection) {

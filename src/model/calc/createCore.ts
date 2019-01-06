@@ -49,13 +49,24 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
           }
         }
         return graph;
-      case 'ADD_NODE':
+      case 'ADD_NODE': {
         const { coordinates: { x, y } } = action;
         return { ...graph, nodes: [
-          ...graph.nodes,
             { noun: 'default', constant: true, value: 1, type: 'Var', x, y },
+            ...graph.nodes,
           ],
         };
+      }
+      case 'ADD_COMPONENT': {
+        const { coordinates: { x, y } } = action;
+        return { ...graph, nodes: [
+            ...graph.nodes,
+            { left: [], right: [], verb: 'sum', type: 'Component', x, y },
+          ],
+        };
+      }
+
+
 
       default:
         return graph;
