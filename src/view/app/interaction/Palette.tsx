@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import InteractionMode from "../InteractionMode.enum";
 
 
-function PaletteInt ({ switchMode, interactionMode }) {
+function PaletteInt ({ switchMode, interactionMode, clearGraph }) {
   const interactionModes = Object.keys(InteractionMode as any);
   return <div>
     modes:
@@ -11,6 +11,7 @@ function PaletteInt ({ switchMode, interactionMode }) {
       {interactionModes.map(mode => {
         return <button key={mode} onClick={() => switchMode(mode)}>{mode}</button>
       })}
+      <button onClick={() => clearGraph()}>clear graph</button>
     </div>
     selected mode: <div>{ interactionMode }</div>
   </div>;

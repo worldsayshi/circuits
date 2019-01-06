@@ -4,6 +4,15 @@ import * as linkComponents from '../link';
 import * as d3 from "d3";
 const DefaultLink = linkComponents['Link'];
 
+function calcCoordinates(event) {
+  // This solution has limitations and might not work at some point.
+  // Here's an alternative: https://stackoverflow.com/a/42711775/439034
+  const bounds = event.target.getBoundingClientRect();
+  let x = event.clientX - bounds.left;
+  let y = event.clientY - bounds.top;
+  return { x, y, };
+}
+
 export default ({
   height, width,
   groups, links,
@@ -20,6 +29,7 @@ export default ({
 
   return (
     <svg
+      onClick={(ev) => console.log(calcCoordinates(ev)) || onClick(null, calcCoordinates(ev))}
       onMouseMove={(e) => {
         drag(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
       }}
@@ -31,7 +41,8 @@ export default ({
       }}
       onMouseUp={() => dragStop(null)}
       height={height}
-      width={width}>
+      width={width}
+    >
       {groups.map((g, i) =>
         <rect
           key={i}
@@ -57,7 +68,7 @@ export default ({
         return Node && <Node
           key={ix}
           label={n.value}
-          onClick={() => onClick(ix)}
+          onClick={(pos) => onClick(ix, pos)}
           dragStart={(subSelection) => dragStart(ix, subSelection)}
           dragStop={(subSelection) => dragStop(ix, subSelection)}
           nodeRadius={nodeRadius}

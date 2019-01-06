@@ -14,7 +14,7 @@ function isNumber(num) {
   return typeof num === "number" && num !== NaN;
 }
 
-
+type Coordinate = { x: number, y: number };
 
 class ReactViewInt extends React.Component<{
   nodes: any[],
@@ -23,6 +23,7 @@ class ReactViewInt extends React.Component<{
   interactionMode: InteractionMode,
   lockNode: (number) => void,
   incNode: (number) => void,
+  addNode: (Coordinate) => void,
   addLink: (l: { fromId: number, toId: number, fromSubselection: string, toSubselection: string, }) => void,
 }> {
 
@@ -110,13 +111,16 @@ class ReactViewInt extends React.Component<{
     this.simulation.start(0,0,0,0,true, false);
   }
 
-  onClick(ix) {
+  onClick(ix, coord) {
     if(this.props.interactionMode === 'LockValue') {
       this.props.lockNode(ix);
       this.forceUpdate();
     } else if (this.props.interactionMode === 'IncValue') {
       this.props.incNode(ix);
       this.forceUpdate();
+    } else if (this.props.interactionMode === 'AddNode') {
+      console.log('AddNode', coord);
+      this.props.addNode(coord);
     }
   }
 

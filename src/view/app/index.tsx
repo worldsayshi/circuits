@@ -108,6 +108,7 @@ class App extends React.Component<{}, {
             });
           }}
           interactionMode={mode}
+          clearGraph={() => core.dispatch({ type: 'CLEAR_GRAPH'})}
         />
         <ReactView
           nodes={nodes}
@@ -125,6 +126,10 @@ class App extends React.Component<{}, {
           }}
           addLink={({ fromId, toId, fromSubselection, toSubselection }) => {
             core.dispatch({ type: 'ADD_LINK', fromId, toId, fromSubselection, toSubselection });
+          }}
+
+          addNode={(coordinates) => {
+            core.dispatch({ type: 'ADD_NODE', coordinates });
           }}
           // interactionStyle='DragLink'
         />

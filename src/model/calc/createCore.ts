@@ -13,6 +13,8 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
   return (graph = { nodes: [], }, action) => {
 
     switch (action.type) {
+      case 'CLEAR_GRAPH':
+        return { nodes: [], };
       case 'OPTIMIZE':
         const { graph: newGraph } = optimizeGraph({ graph, nouns, verbs });
         return newGraph;
@@ -47,6 +49,14 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
           }
         }
         return graph;
+      case 'ADD_NODE':
+        const { coordinates: { x, y } } = action;
+        return { ...graph, nodes: [
+          ...graph.nodes,
+            { noun: 'default', constant: true, value: 1, type: 'Var', x, y },
+          ],
+        };
+
       default:
         return graph;
     }
