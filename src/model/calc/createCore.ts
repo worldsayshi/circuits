@@ -7,7 +7,13 @@ import {getNounResolvers, NounResolvers} from '../nouns/index';
 import optimizeGraph from "./optimizeGraph";
 // import {Core} from "./createCore";
 
-
+function increaseAllComponentIndexes(nodes) {
+  return nodes.map(n => n.type === 'Component' ? ({
+    ...n,
+    left: n.left.map(i => i +1),
+    right: n.right.map(i => i +1),
+  }) : n)
+}
 
 function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: VerbResolvers }) {
   return (graph = { nodes: [], }, action) => {
@@ -53,7 +59,7 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         const { coordinates: { x, y } } = action;
         return { ...graph, nodes: [
             { noun: 'default', constant: true, value: 1, type: 'Var', x, y },
-            ...graph.nodes,
+            ...increaseAllComponentIndexes(graph.nodes),
           ],
         };
       }
