@@ -1,6 +1,37 @@
 
 import {createCore} from './createCore';
 
+const clone = obj => JSON.parse(JSON.stringify(obj));
+
+const graph = {
+  nodes: [
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+    { noun: 'default', constant: false, type: 'Var' },
+    { left: [0], right: [1], verb: 'sum', type: 'Component' },
+  ],
+};
+
+const graph2 = { nodes: [
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+
+    { left: [0, 1], right: [2, 3], verb: 'sum', type: 'Component' },
+    { left: [], right: [], verb: 'sum', type: 'Component' },
+    { left: [4, 5, 6, 8], right: [7], verb: 'sum', type: 'Component' },
+  ],
+};
+
+// TODO
+// Recreate a problematic
+
 describe('createCore', () => {
   it('should return stored graph', () => {
     const graph = { nodes: [] };
@@ -24,14 +55,7 @@ describe('createCore', () => {
   });
 
   it('should optimize the graph', (done) => {
-    const graph = {
-      nodes: [
-        { noun: 'default', constant: true, value: 1, type: 'Var' },
-        { noun: 'default', constant: false, type: 'Var' },
-        { left: [0], right: [1], verb: 'sum', type: 'Component' },
-      ],
-    };
-    const core = createCore({ graph });
+    const core = createCore({ graph: clone(graph) });
 
     core.subscribe(() => {
       const graph2 = core.getState();
@@ -43,22 +67,8 @@ describe('createCore', () => {
   });
 
   it('should optimize graph 2', (done) => {
-    const graph = { nodes: [
-        { noun: 'default', constant: true, value: 1, type: 'Var' },
-        { noun: 'default', constant: true, value: 1, type: 'Var' },
-        { noun: 'default', constant: true, value: 1, type: 'Var' },
-        { noun: 'default', constant: true, value: 1, type: 'Var' },
 
-        { noun: 'default', constant: true, value: 1, type: 'Var' },
-        { noun: 'default', constant: true, value: 1, type: 'Var' },
-        { noun: 'default', constant: true, value: 1, type: 'Var' },
-        { noun: 'default', constant: true, value: 1, type: 'Var' },
-        { noun: 'default', constant: true, value: 1, type: 'Var' },
-
-        { left: [0, 1], right: [2, 3], verb: 'sum', type: 'Component' },
-        { left: [4, 5, 6, 8], right: [7], verb: 'sum', type: 'Component' },
-      ]};
-    const core = createCore({ graph });
+    const core = createCore({ graph: clone(graph2) });
 
     core.subscribe(() => {
       const graph2 = core.getState();
@@ -67,5 +77,52 @@ describe('createCore', () => {
     });
 
     core.dispatch({ type: 'OPTIMIZE' });
+  });
+
+  it('should allow adding node', (done) => {
+    const core = createCore({ graph: clone(graph2) });
+
+    core.subscribe(() => {
+      const graph2 = core.getState();
+      console.log('graph2', JSON.stringify(graph2.nodes, null, 2));
+
+      /*
+      Assuming that the node is added first,
+      no component should refer to it.
+       */
+
+      expect(graph2.nodes).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            left: expect.arrayContaining([0])
+          })
+        ])
+      );
+      expect(graph2.nodes).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            right: expect.arrayContaining([0])
+          })
+        ])
+      );
+      done();
+    });
+
+    core.dispatch({ type: 'ADD_NODE', coordinates: { x: 10, y: 10 } });
+  });
+
+  it('trying out toMatchObject', () => {
+    const things = [
+      {foo: [1,2], bar: [1, 3]},
+      {foo: [2], bar: [4, 5]}
+    ];
+    expect(things).toContainEqual({
+      foo: expect.arrayContaining([1]),
+      bar: expect.arrayContaining([3]),
+    });
+    expect(things).not.toContainEqual({
+      foo: expect.arrayContaining([0]),
+      bar: expect.arrayContaining([0]),
+    });
   });
 });
