@@ -53,33 +53,7 @@ declare global {
   }
 }
 
-const clone = obj => JSON.parse(JSON.stringify(obj));
-
-
-const testGraph = () => clone({
-  nodes: [{}, {}, {}].map(Var),
-  links: [
-    {source: 0, target: 1},
-    {source: 1, target: 2},
-    {source: 0, target: 2},
-  ].map(Link),
-});
-
-
-const Var = (n, i) => ({
-  id: `${i}`,
-  type: 'Var',
-  value: 1,
-  ...n,
-});
-
-const Link = (l) => ({
-  type: 'Simple',
-  ...l,
-});
-
 const core = initCore();
-
 
 class App extends React.Component<{}, {
   graphContext: Graph;
@@ -143,97 +117,10 @@ class App extends React.Component<{}, {
 }
 
 export default function app () {
-  const startGraph = testGraph();
-  // const store = createStore((state = {graph: startGraph}, action: { type: string, graph: any }) => {
-  //   switch (action.type) {
-  //     case 'REPLACE':
-  //       return {graph: action.graph};
-  //   }
-  //   return state;
-  // });
 
   ReactDOM.render(
     <App />,
       document.getElementById("view")
   );
 
-  // setTimeout(() => {
-  //   store.dispatch({
-  //     type: 'REPLACE',
-  //     graph: {
-  //       nodes: [{  }, {  }].map(Var),
-  //       links: [{
-  //         source: 0, target: 1
-  //       }].map(Link),
-  //     },
-  //   });
-  // }, 1000);
-  //
-  //
-  // setTimeout(() => {
-  //   store.dispatch({
-  //     type: 'REPLACE',
-  //     graph: testGraph(),
-  //   });
-  // }, 2000);
 }
-
-// export default function app () {
-//   let nodeRadius = 30;
-//   let color = d3.scaleOrdinal(d3.schemeCategory10);
-//   const view = new TestView({
-//     Var: {
-//       enter: (container) => {
-//         console.log('var', container.selectAll(".node-label"));
-//         container
-//           .append('circle')
-//           .attr("r", nodeRadius)
-//           .style("fill", (d : any) => {
-//             // console.log('node creation');
-//             return color(d.group);
-//           });
-//
-//         container
-//           .append('text')
-//           .attr('class', 'node-label');
-//
-//         container.selectAll(".node-label")
-//           .text(d => d.value || 'no value');
-//       },
-//       update: () => {
-//
-//       },
-//     },
-//   }, {
-//     Simple: {
-//       create: e => {
-//         // console.log('create', e);
-//         e.insert('svg:path', 'g')
-//           .attr('class', 'link');
-//       },
-//       tick: e => {
-//         // console.log('update', e);
-//         e.attr('d', (d) => 'M' + d.source.x + ',' + d.source.y + 'L' + d.target.x + ',' + d.target.y);
-//       },
-//     },
-//   });
-//
-//   view.getOperations().forEach(({ name, f }) => {
-//     const button = document.createElement('button');
-//     button.appendChild(document.createTextNode(name));
-//
-//     button.onclick = f;
-//
-//     document.querySelector('#buttons').appendChild(button);
-//   });
-//   // view.start();
-//   // window.changeValue = () => view.changeValue();
-// };
-
-// export default function _app () {
-//   const core = initCore();
-//   const view = new View(core);
-//
-//   window.foo = () => core.dispatch({ type: 'FOO' });
-//   window.optimize = () => core.dispatch({ type: 'OPTIMIZE' });
-// };
