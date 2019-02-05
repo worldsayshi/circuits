@@ -67,7 +67,7 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         const { coordinates: { x, y } } = action;
         return { ...graph, nodes: [
             ...graph.nodes,
-            { left: [], right: [], verb: 'sum', type: 'Component', x, y },
+            { left: [], right: [], verb: 'sum', type: 'Component', x, y, ...getVerbData()['sum'], },
           ],
         };
       }
