@@ -72,8 +72,6 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         };
       }
 
-
-
       default:
         return graph;
     }

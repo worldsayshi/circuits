@@ -84,7 +84,6 @@ describe('createCore', () => {
 
     core.subscribe(() => {
       const graph2 = core.getState();
-      console.log('graph2', JSON.stringify(graph2.nodes, null, 2));
 
       /*
       Assuming that the node is added first,
@@ -109,6 +108,23 @@ describe('createCore', () => {
     });
 
     core.dispatch({ type: 'ADD_NODE', coordinates: { x: 10, y: 10 } });
+  });
+
+  it('should not regress', (done) => {
+    const core = createCore({ graph: clone(graph2) });
+
+    core.subscribe(() => {
+      const graph2 = core.getState();
+      console.log('graph2', JSON.stringify(graph2.nodes, null, 2));
+
+      expect(graph2.nodes).toMatchSnapshot('regression-test-1');
+      done();
+    });
+
+    core.dispatch({ type: 'ADD_NODE', coordinates: { x: 10, y: 10 } });
+    core.dispatch({ type: 'ADD_COMPONENT', coordinates: { x: 20, y: 20 } });
+    core.dispatch({ type: 'ADD_COMPONENT', coordinates: { x: 20, y: 20 } });
+
   });
 
   it('trying out toMatchObject', () => {
