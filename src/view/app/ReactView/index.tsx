@@ -44,6 +44,7 @@ class ReactViewInt extends React.Component<{
   constructor(props, ...rest) {
     super(props, ...rest);
     const { nodes, links, groups } = props;
+    // console.log('props', props)
     this.simulation = cola.d3adaptor(d3)
       .linkDistance(l => l.length || 100)
       // .handleDisconnected(true)
@@ -52,8 +53,8 @@ class ReactViewInt extends React.Component<{
       .symmetricDiffLinkLengths(40)
       .on('tick', () => this.forceUpdate());
 
-    this.state.nodes = nodes;
-    this.state.links = links;
+    this.state.nodes = nodes || [];
+    this.state.links = links || [];
     this.state.groups = groups || [];
     this.simulation
       .nodes(this.state.nodes);
@@ -120,10 +121,10 @@ class ReactViewInt extends React.Component<{
       this.props.incNode(ix);
       this.forceUpdate();
     } else if (this.props.interactionMode === 'AddNode') {
-      console.log('AddNode', coord);
+      // console.log('AddNode', coord);
       this.props.addNode(coord);
     } else if (this.props.interactionMode === 'AddComponent') {
-      console.log('AddNode', coord);
+      // console.log('AddNode', coord);
       this.props.addComponent(coord);
     }
 

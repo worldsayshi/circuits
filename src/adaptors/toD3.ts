@@ -49,19 +49,26 @@ function createStructuralLattice(components: any, numberOfNodes: any) {
   return { structuralNodes, structuralLinks };
 }
 
+
+
 export default function toD3 ({ nodes }) {
-  const d3Nodes = [
-    ...desugarNodes(nodes),
-    // ...components.map(component => ({...component, type: 'Component' })),
-  ];
+  const d3Nodes = desugarNodes(nodes);
 
   const components = nodes.filter(({ type }) => type === 'Component');
   const nrOfVars = nodes.length-components.length;
 
   const d3Links = createD3Links(components, nrOfVars);
 
-  const { structuralNodes, structuralLinks } = createStructuralLattice(components, nrOfVars);
+  // const { structuralNodes, structuralLinks } = createStructuralLattice(components, nrOfVars);
 
-
-  return { nodes: d3Nodes.concat(structuralNodes), links: d3Links.concat(structuralLinks) };
+  return {
+    nodes: [
+      ...d3Nodes,
+      // ...structuralNodes,
+    ],
+    links: [
+      ...d3Links,
+      // ...structuralLinks,
+    ],
+  };
 }

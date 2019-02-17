@@ -115,7 +115,7 @@ describe('createCore', () => {
 
     core.subscribe(() => {
       const graph2 = core.getState();
-      console.log('graph2', JSON.stringify(graph2.nodes, null, 2));
+      // console.log('graph2', JSON.stringify(graph2.nodes, null, 2));
 
       expect(graph2.nodes).toMatchSnapshot('regression-test-1');
       done();

@@ -17,31 +17,40 @@ import {combineReducers, createStore} from 'redux'
 import Palette from "./interaction/Palette";
 import GraphContext from "../../model/graphContext";
 import Graph from "../../model/types/graph";
+import {getVerbData} from "../../model/components";
+
+const graph2 = { nodes: [
+    { noun: 'default', constant: true, value: 1, type: 'Var' },
+    { noun: 'default', constant: false, value: 1, type: 'Var' },
+    { noun: 'default', constant: false, value: 1, type: 'Var' },
+    { noun: 'default', constant: false, value: 1, type: 'Var' },
+
+    { noun: 'default', constant: false, value: 1, type: 'Var' },
+    { noun: 'default', constant: false, value: 1, type: 'Var' },
+    { noun: 'default', constant: false, value: 1, type: 'Var' },
+    { noun: 'default', constant: false, value: 1, type: 'Var' },
+    { noun: 'default', constant: false, value: 1, type: 'Var' },
+
+    { left: [], right: [], verb: 'sum', type: 'Component', },
+    { left: [0, 1], right: [2, 3], verb: 'sum', type: 'Component' },
+    { left: [4, 5, 6, 8], right: [7], verb: 'sum', type: 'Component' },
+  ],
+};
+
+const graph = { nodes: [
+    { left: [], right: [], verb: 'sum', type: 'Component', }
+  ],
+};
+
 
 function initCore() {
-  const graph = { nodes: [
-      { noun: 'default', constant: true, value: 1, type: 'Var' },
-      { noun: 'default', constant: false, value: 1, type: 'Var' },
-      { noun: 'default', constant: false, value: 1, type: 'Var' },
-      { noun: 'default', constant: false, value: 1, type: 'Var' },
 
-      { noun: 'default', constant: false, value: 1, type: 'Var' },
-      { noun: 'default', constant: false, value: 1, type: 'Var' },
-      { noun: 'default', constant: false, value: 1, type: 'Var' },
-      { noun: 'default', constant: false, value: 1, type: 'Var' },
-      { noun: 'default', constant: false, value: 1, type: 'Var' },
-
-      { left: [], right: [], verb: 'sum', type: 'Component', },
-      { left: [0, 1], right: [2, 3], verb: 'sum', type: 'Component' },
-      { left: [4, 5, 6, 8], right: [7], verb: 'sum', type: 'Component' },
-    ],
-  };
   const appReducer = combineReducers({
     graphContext: createCoreReducer(),
     interaction: interactionReducer,
   });
   return createStore(appReducer, {
-    graphContext: attachDefaultData(graph),
+    graphContext: attachDefaultData(graph2),
   });
 }
 
@@ -81,6 +90,23 @@ class App extends React.Component<{}, {
               type: 'SWITCH_MODE',
               mode,
             });
+          }}
+          storeCurrent={(name) => {
+            let cores = JSON.parse(localStorage.getItem('cores'));
+            cores = {
+              ...cores,
+              [name]: core.getState(),
+            };
+            localStorage.setItem(`cores`, JSON.stringify(cores));
+          }}
+          loadGraph={(name) => {
+            let cores = JSON.parse(localStorage.getItem('cores'));
+            if (cores) {
+              core.dispatch({
+                type: 'REPLACE_GRAPH',
+                core: cores[name],
+              });
+            }
           }}
           interactionMode={mode}
           clearGraph={() => core.dispatch({ type: 'CLEAR_GRAPH'})}

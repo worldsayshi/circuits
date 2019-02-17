@@ -13,11 +13,11 @@ const d3TestGraph = {
     { left: [0, 1], right: [2], verb: 'sum', type: 'Component', nodeId: 5 },
     { left: [3], right: [4], verb: 'sum', type: 'Component', nodeId: 6 },
 
-    { type: 'HiddenNode' },
-    { type: 'HiddenNode' },
-
-    { type: 'HiddenNode' },
-    { type: 'HiddenNode' },
+    // { type: 'HiddenNode' },
+    // { type: 'HiddenNode' },
+    //
+    // { type: 'HiddenNode' },
+    // { type: 'HiddenNode' },
   ],
   links: [
 
@@ -31,21 +31,21 @@ const d3TestGraph = {
 
     /* Structural links */
     // For first component - to Vars
-    { source: 7, target: 0, type: 'HiddenLink', length: 50 },
-    { source: 7, target: 1, type: 'HiddenLink', length: 50 },
-    { source: 8, target: 2, type: 'HiddenLink', length: 50 },
-
-    // For first component - to Component
-    { source: 7, target: 5, type: 'HiddenLink', length: 75 },
-    { source: 8, target: 5, type: 'HiddenLink', length: 75 },
-
-    // For second component - to Vars
-    { source: 9, target: 3, type: 'HiddenLink', length: 50 },
-    { source: 10, target: 4, type: 'HiddenLink', length: 50 },
-
-    // For second component - to Component
-    { source: 9, target: 6, type: 'HiddenLink', length: 75 },
-    { source: 10, target: 6, type: 'HiddenLink', length: 75 },
+    // { source: 7, target: 0, type: 'HiddenLink', length: 50 },
+    // { source: 7, target: 1, type: 'HiddenLink', length: 50 },
+    // { source: 8, target: 2, type: 'HiddenLink', length: 50 },
+    //
+    // // For first component - to Component
+    // { source: 7, target: 5, type: 'HiddenLink', length: 75 },
+    // { source: 8, target: 5, type: 'HiddenLink', length: 75 },
+    //
+    // // For second component - to Vars
+    // { source: 9, target: 3, type: 'HiddenLink', length: 50 },
+    // { source: 10, target: 4, type: 'HiddenLink', length: 50 },
+    //
+    // // For second component - to Component
+    // { source: 9, target: 6, type: 'HiddenLink', length: 75 },
+    // { source: 10, target: 6, type: 'HiddenLink', length: 75 },
   ],
 };
 
