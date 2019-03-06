@@ -4,7 +4,6 @@ import * as cola from "webcola/dist/index";
 import * as d3 from "d3";
 import {connect} from "react-redux";
 import * as jsdiff from "jsondiffpatch";
-import DnD from '../DragAndDrop';
 import * as nodeComponents from '../node/index';
 import InteractionMode from '../InteractionMode.enum';
 import {dispatch} from "d3";
@@ -16,27 +15,62 @@ function isNumber(num) {
 
 type Coordinate = { x: number, y: number };
 
+interface Node extends cola.Node {
+  // fixed: boolean;
+  nodeId: number; // not needed?
+  px?: number; // not needed?
+  py?: number; // not needed?
+}
+
+type SubSelection = 'left' | 'right';
+
+interface DragNode extends Node {
+  subSelection?: SubSelection;
+}
+
+interface Link extends cola.Link<Node> {
+  fromSubSelection?: SubSelection;
+  toSubSelection?: SubSelection;
+}
+
+interface ViewerState {
+  nodes: Node[];
+  links: Link[];
+  dragLinkTarget: DragNode | { x: number, y: number } | null;
+  dragLinkSource: DragNode | null;
+  width: number;
+  groups: any[];
+  dragged: number;
+  height: number,
+}
+
+// { fromId: number, toId: number, fromSubselection: SubSelection, toSubselection: SubSelection, }
+
+const startState = {
+  width: 960,
+  height: 900,
+  dragLinkSource: null,
+  dragLinkTarget: null,
+  dragged: -1,
+  nodes: [],
+  links: [],
+  groups: [],
+};
+
 class ReactViewInt extends React.Component<{
-  nodes: any[],
-  links: any[],
+  nodes: Node[],
+  links: Link[],
   groups: any[],
   interactionMode: InteractionMode,
   lockNode: (number) => void,
   incNode: (number) => void,
   addNode: (Coordinate) => void,
   addComponent:  (Coordinate) => void,
-  addLink: (l: { fromId: number, toId: number, fromSubselection: string, toSubselection: string, }) => void,
-}> {
+  addLink: (Link) => void,
+}, ViewerState> {
 
-  state = {
-    width: 960,
-    height: 900,
-    dragLinkSource: null,
-    dragLinkTarget: null,
-    dragged: null,
-    nodes: [],
-    links: [],
-    groups: [],
+  state: ViewerState = {
+    ...startState,
   };
 
   private simulation: Layout & ID3StyleLayoutAdaptor;
@@ -65,6 +99,12 @@ class ReactViewInt extends React.Component<{
 
     this.simulation.start();
 
+    this.setDragState(props);
+
+  }
+
+  setDragState(props) {
+
   }
 
   componentDidMount() {
@@ -72,7 +112,7 @@ class ReactViewInt extends React.Component<{
     // window.addEventListener('mousemove', (...args) => console.log('hello', args));
   }
 
-  componentWillReceiveProps({ nodes = [], links = [] }) {
+  componentWillReceiveProps({ nodes = [], links = [] }: { nodes: Node[], links: Link[] }) {
     const currentNodes = this.simulation.nodes();
     const currentLinks = this.simulation.links();
 
@@ -103,7 +143,7 @@ class ReactViewInt extends React.Component<{
     }
 
     const nodeDiff = jsdiff.diff(currentNodes, keepPositions(nodes, currentNodes));
-    jsdiff.patch(currentNodes, nodeDiff);
+    nodeDiff && jsdiff.patch(currentNodes, nodeDiff);
 
     // empty array
     currentLinks.splice(0,currentLinks.length);
@@ -133,8 +173,10 @@ class ReactViewInt extends React.Component<{
   dragStart(ix, subSelection) {
     if(this.props.interactionMode === 'DragNode') {
       const node = this.state.nodes[ix];
-      node.fixed = true;
-      this.setState({ dragged: ix });
+      node.fixed = 1;
+      this.setState({
+        dragged: ix,
+      });
     }
 
     if(this.props.interactionMode === 'DragLink') {
@@ -148,7 +190,7 @@ class ReactViewInt extends React.Component<{
   }
 
   drag(toX: number, toY: number) {
-    if(this.state.dragged !== null && this.props.interactionMode === 'DragNode') {
+    if(this.state.dragged !== -1 && this.props.interactionMode === 'DragNode') {
       const node = this.state.nodes[this.state.dragged];
       const position = { x: toX, y: toY };
       node.x = position.x;
@@ -163,29 +205,25 @@ class ReactViewInt extends React.Component<{
     }
   }
 
-  // Need to add information about which side of the node is hit
+  // end drag
   dragStop(ix, subSelection) {
     if(this.props.interactionMode === 'DragNode') {
-      // end drag
       if(this.state.dragged !== null) {
         const node = this.state.nodes[this.state.dragged];
-        node.fixed = false;
+        node.fixed = 0;
       }
-      this.setState({ dragged: null });
     }
 
-    if(this.props.interactionMode === 'DragLink') {
-      this.setState({ dragLinkSource:  null, dragLinkTarget: null });
-    }
-    if(this.props.interactionMode === 'DragLink' && isNumber(ix)) {
+    if (this.props.interactionMode === 'DragLink' && isNumber(ix)) {
+      if (!this.state.dragLinkSource) throw new Error('Not a proper drag');
       this.props.addLink({
         fromId: this.state.dragLinkSource.nodeId,
         fromSubselection: this.state.dragLinkSource.subSelection,
         toId:  this.state.nodes[ix].nodeId,
         toSubselection: subSelection,
       });
-      this.setState({ dragLinkSource:  null, dragLinkTarget: null });
     }
+    this.setState({ dragged: -1, dragLinkSource:  null, dragLinkTarget: null });
   }
 
   render() {

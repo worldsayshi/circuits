@@ -81,7 +81,7 @@ class App extends React.Component<{}, {
 
   render() {
     const { graphContext, interaction: { mode } } = this.state;
-    const { nodes, links } = toD3(graphContext);
+    const { nodes, links }: { nodes: Node[]; links: any[] } = toD3(graphContext);
     return (
       <div>
         <Palette
@@ -92,7 +92,8 @@ class App extends React.Component<{}, {
             });
           }}
           storeCurrent={(name) => {
-            let cores = JSON.parse(localStorage.getItem('cores'));
+            let coresStr = localStorage.getItem('cores');
+            let cores = coresStr ? JSON.parse(coresStr) : null;
             cores = {
               ...cores,
               [name]: core.getState(),
@@ -100,7 +101,8 @@ class App extends React.Component<{}, {
             localStorage.setItem(`cores`, JSON.stringify(cores));
           }}
           loadGraph={(name) => {
-            let cores = JSON.parse(localStorage.getItem('cores'));
+            let coresStr = localStorage.getItem('cores');
+            let cores = coresStr ? JSON.parse(coresStr) : null;
             if (cores) {
               core.dispatch({
                 type: 'REPLACE_GRAPH',

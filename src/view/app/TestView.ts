@@ -232,7 +232,7 @@ export default class TestView {
     }
 
     const nodeDiff = jsdiff.diff(currentNodes, keepPositions(nodes, currentNodes));
-    jsdiff.patch(currentNodes, nodeDiff);
+    nodeDiff && jsdiff.patch(currentNodes, nodeDiff);
 
     // empty array
     currentLinks.splice(0,currentLinks.length);
