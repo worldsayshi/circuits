@@ -1,26 +1,18 @@
 import * as React from "react";
-import {ID3StyleLayoutAdaptor, InputNode, Layout} from "webcola";
+import {ID3StyleLayoutAdaptor, Layout} from "webcola";
 import * as cola from "webcola/dist/index";
 import * as d3 from "d3";
 import {connect} from "react-redux";
 import * as jsdiff from "jsondiffpatch";
-import * as nodeComponents from '../node/index';
 import InteractionMode from '../InteractionMode.enum';
-import {dispatch} from "d3";
 import View from './View';
+import {Node} from "./node";
 
 function isNumber(num) {
   return typeof num === "number" && num !== NaN;
 }
 
 type Coordinate = { x: number, y: number };
-
-interface Node extends cola.Node {
-  // fixed: boolean;
-  nodeId: number; // not needed?
-  px?: number; // not needed?
-  py?: number; // not needed?
-}
 
 type SubSelection = 'left' | 'right';
 
@@ -208,7 +200,8 @@ class ReactViewInt extends React.Component<{
   // end drag
   dragStop(ix, subSelection) {
     if(this.props.interactionMode === 'DragNode') {
-      if(this.state.dragged !== null) {
+      if(this.state.dragged !== -1) {
+        console.log('this.state.dragged', this.state.dragged);
         const node = this.state.nodes[this.state.dragged];
         node.fixed = 0;
       }

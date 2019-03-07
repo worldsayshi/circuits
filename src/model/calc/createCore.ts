@@ -5,6 +5,9 @@ import * as jsdiff from 'jsondiffpatch';
 import { getVerbResolvers, getVerbData, VerbResolvers } from '../components/index';
 import {getNounResolvers, NounResolvers} from '../nouns/index';
 import optimizeGraph from "./optimizeGraph";
+import Var, {isVar} from "../types/var";
+import Node from '../types/node';
+import Component from "../types/component";
 // import {Core} from "./createCore";
 
 function increaseAllComponentIndexes(nodes) {
@@ -16,7 +19,7 @@ function increaseAllComponentIndexes(nodes) {
 }
 
 function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: VerbResolvers }) {
-  return (graph = { nodes: [], }, action) => {
+  return (graph : { nodes: Node[] } = { nodes: [], }, action) => {
 
     switch (action.type) {
       case 'CLEAR_GRAPH':
@@ -24,10 +27,22 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
       case 'OPTIMIZE':
         const { graph: newGraph } = optimizeGraph({ graph, nouns, verbs });
         return newGraph;
-      case 'TOGGLE_CONSTANT':
-        return dp.set(graph, `nodes.${action.index}.constant`, !graph.nodes[action.index].constant);
-      case 'INC_VALUE':
-        return dp.set(graph, `nodes.${action.index}.value`, graph.nodes[action.index].value + 1);
+      case 'TOGGLE_CONSTANT': {
+        let node = graph.nodes[action.index];
+        if (isVar(node)) {
+          return dp.set(graph, `nodes.${action.index}.constant`, !(node).constant);
+        }
+        console.warn('TOGGLE_CONSTANT failed');
+        return dp;
+      }
+      case 'INC_VALUE': {
+        let node : Node = graph.nodes[action.index];
+        if (isVar(node)) {
+          return dp.set(graph, `nodes.${action.index}.value`, (node.value || 0) + 1);
+        }
+        console.warn('TOGGLE_CONSTANT failed');
+        return dp;
+      }
       case 'ADD_LINK':
         const {
           fromId,
@@ -47,7 +62,7 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
               adjacencies.includes(toId) ? adjacencies : [...adjacencies, toId]);
           }
         } else if (toNode.type === 'Component') {
-          if (fromNode.type !== 'Component') {
+          if (fromNode.type === 'Var') {
             // Drawing from a node to a component
             const adjacencies = dp.get(graph, `nodes.${toId}.${toSubselection}`);
             return dp.set(graph, `nodes.${toId}.${toSubselection}`,
@@ -83,7 +98,7 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
       default:
         return graph;
     }
-  }
+  };
 }
 
 export function attachDefaultData({ nodes }) {

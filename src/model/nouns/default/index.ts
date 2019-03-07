@@ -2,7 +2,7 @@ import Var from "../../types/var";
 
 
 export default {
-  getNoun: ({ value, constant = false, variableCount }: Var) : string | number => {
+  getNoun: ({ value = 0, constant = false, variableCount = -1 }: Var): string | number => {
     if (value === undefined && constant) {
       throw new Error(`A constant must not be undefined`);
     }

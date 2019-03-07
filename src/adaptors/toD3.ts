@@ -14,7 +14,7 @@ function entries (l) {
 }
 
 function createD3Links(components, numberOfVars) {
-  let links = [];
+  let links = [] as any[];
   for(const [index, component] of entries(components)) {
     for(const nodeId of [...component.left, ...component.right]) {
       links.push({source: nodeId, target: numberOfVars+index});
@@ -26,8 +26,8 @@ function createD3Links(components, numberOfVars) {
 
 function createStructuralLattice(components: any, numberOfNodes: any) {
   let numberOfVars = numberOfNodes - components.length + 2;
-  const structuralNodes = [];
-  const structuralLinks = [];
+  const structuralNodes = [] as any[];
+  const structuralLinks = [] as any[];
   for(const [index, component] of entries(components)) {
     let componentId = numberOfVars + index;
     structuralNodes.push({ type: 'HiddenNode' });
@@ -51,7 +51,7 @@ function createStructuralLattice(components: any, numberOfNodes: any) {
 
 
 
-export default function toD3 ({ nodes }) {
+export default function toD3 ({ nodes }) : { nodes: any[], links: any[] } {
   const d3Nodes = desugarNodes(nodes);
 
   const components = nodes.filter(({ type }) => type === 'Component');

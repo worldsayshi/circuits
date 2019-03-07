@@ -4,7 +4,7 @@ import desugarNodes from "../model/util/desugarNodes";
 
 
 function createD3Links(components, numberOfVars) {
-  let links = [];
+  let links = [] as any[];
   for(const [index, component] of entries(components)) {
     for(const nodeId of [...component.left, ...component.right]) {
       links.push({source: nodeId, target: numberOfVars+index});
@@ -14,7 +14,7 @@ function createD3Links(components, numberOfVars) {
 }
 
 function createD3Groups(components, numberOfVars) {
-  let groups = [];
+  let groups = [] as any[];
   let groupCount = 0;
   for(const [index, component] of entries(components)) {
     groups.push({ leaves: component.left });

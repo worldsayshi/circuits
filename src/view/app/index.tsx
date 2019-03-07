@@ -3,21 +3,12 @@ import * as ReactDOM from "react-dom";
 import ReactView from './ReactView';
 import { attachDefaultData, createCoreReducer } from '../../model/calc/createCore';
 import { interactionReducer } from "./interaction/index";
-
-import toCola from "../../adaptors/toCola";
 import toD3 from '../../adaptors/toD3';
-// import toD3v4 from "../adaptors/toD3v4";
-
-// import update from './render/update';
-import View from "./View";
-import TestView from "./TestView";
-import * as d3 from "d3";
 import { Provider } from 'react-redux'
 import {combineReducers, createStore} from 'redux'
 import Palette from "./interaction/Palette";
-import GraphContext from "../../model/graphContext";
 import Graph from "../../model/types/graph";
-import {getVerbData} from "../../model/components";
+import { Node } from './ReactView/node';
 
 const graph2 = { nodes: [
     { noun: 'default', constant: true, value: 1, type: 'Var' },
