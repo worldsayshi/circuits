@@ -2,6 +2,10 @@
 
 # TODOs
 
+### Add input/output nodes (Sockets)
+
+### Allow socketed graphs to be loaded as components
+
 ### Split ReactView into smaller parts
 
 One for drag and drop behavior, one for simulation and one for actual rendering.
@@ -14,8 +18,6 @@ Create a "menagerie" server that displays visual unit tests.
 Here links and components can be rendered one by one in isolation and without clever layouting. Also, interactions can also be tested.
 
 Suggestion: Use Storybook and testcafe. 
-
-### Drag and drop link creation
 
 
 ### Fix drag and drop on mobile
@@ -34,6 +36,8 @@ Check for "Working on mobile"
 
 
 # Fixed TODOS
+
+### Drag and drop link creation
 
 ## Refactor graph structure 
 
