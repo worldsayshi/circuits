@@ -29,19 +29,19 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         return newGraph;
       case 'TOGGLE_CONSTANT': {
         let node = graph.nodes[action.index];
-        if (isVar(node)) {
+        if (node && isVar(node)) {
           return dp.set(graph, `nodes.${action.index}.constant`, !(node).constant);
         }
-        console.warn('TOGGLE_CONSTANT failed');
-        return dp;
+        console.warn('TOGGLE_CONSTANT failed', action.index, graph.nodes[action.index]);
+        return graph;
       }
       case 'INC_VALUE': {
         let node : Node = graph.nodes[action.index];
-        if (isVar(node)) {
+        if (node && isVar(node)) {
           return dp.set(graph, `nodes.${action.index}.value`, (node.value || 0) + 1);
         }
-        console.warn('TOGGLE_CONSTANT failed');
-        return dp;
+        console.warn('TOGGLE_CONSTANT failed', action.index, graph.nodes[action.index]);
+        return graph;
       }
       case 'ADD_LINK':
         const {

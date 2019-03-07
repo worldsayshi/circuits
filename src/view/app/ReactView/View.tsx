@@ -29,7 +29,7 @@ export default ({
 
   return (
     <svg
-      onClick={(ev) => console.log(calcCoordinates(ev)) || onClick(null, calcCoordinates(ev))}
+      onClick={(ev) => console.log('svg fallback', calcCoordinates(ev)) || onClick(null, calcCoordinates(ev))}
       onMouseMove={(e) => {
         drag(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
       }}

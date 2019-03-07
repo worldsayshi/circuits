@@ -9,7 +9,13 @@ export default class Var extends React.Component<{ [key: string]: any }> {
     return <g
       transform={`translate(${x},${y})`}
       className='node'
-      onClick={(e) => onClick && onClick({x, y})}
+      onClick={(e) => {
+        if (onClick) {
+          e.preventDefault();
+          e.stopPropagation();
+          onClick({x, y});
+        }
+      }}
       onMouseDown={(e) => e.button === 0 && dragStart()}
       onMouseUp={(e) => dragStop && dragStop()}
     >
