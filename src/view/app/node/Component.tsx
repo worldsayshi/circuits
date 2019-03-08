@@ -26,6 +26,8 @@ export default class Component extends React.Component<{ [key: string]: any }> {
           stroke="blue"
           onMouseDown={(e) => e.button === 0 && dragStart('right')}
           onMouseUp={(e) => dragStop && dragStop('right')}
+          onTouchEnd={() => dragStop && dragStop('right')}
+          onTouchStart={() => dragStart && dragStart('right')}
           // onMouseDown={(event) => console.log('right', event)}
         />
         <path
@@ -37,6 +39,8 @@ export default class Component extends React.Component<{ [key: string]: any }> {
           stroke="red"
           onMouseDown={(e) => e.button === 0 && dragStart('left')}
           onMouseUp={(e) => dragStop && dragStop('left')}
+          onTouchEnd={() => dragStop && dragStop('left')}
+          onTouchStart={() => dragStart && dragStart('left')}
           // onMouseDown={(event) => console.log('left', event)}
         />
       </g>
