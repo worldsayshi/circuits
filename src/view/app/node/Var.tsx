@@ -16,7 +16,10 @@ export default class Var extends React.Component<{ [key: string]: any }> {
           onClick({x, y});
         }
       }}
-      onMouseDown={(e) => e.button === 0 && dragStart()}
+      onTouchEnd={() => dragStop && dragStop()}
+      onTouchStart={() => dragStart && dragStart()}
+      // onTouchMove={() => console.log('onTouchMove!!!!!')}
+      onMouseDown={(e) => e.button === 0 && dragStart && dragStart()}
       onMouseUp={(e) => dragStop && dragStop()}
     >
       <circle

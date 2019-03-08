@@ -29,15 +29,19 @@ export default ({
 
   return (
     <svg
+      style={{touchAction: 'none'}}
       onClick={(ev) => console.log('svg fallback', calcCoordinates(ev)) || onClick(null, calcCoordinates(ev))}
       onMouseMove={(e) => {
         drag(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
       }}
 
       onTouchMove={(e) => {
-        console.log('onTouchMove not implemented', e.nativeEvent);
-        // No offset on touch events, need to calculate?
-        // drag(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        e.stopPropagation();
+        e.preventDefault();
+        let rect = (e.currentTarget as SVGSVGElement).getBoundingClientRect();
+        let x = e.targetTouches[0].pageX - rect.left;
+        let y = e.targetTouches[0].pageY - rect.top;
+        drag(x, y);
       }}
       onMouseUp={() => dragStop(null)}
       height={height}

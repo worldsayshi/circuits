@@ -40,7 +40,7 @@ interface ViewerState {
 
 const startState = {
   width: 960,
-  height: 900,
+  height: 600,
   dragLinkSource: null,
   dragLinkTarget: null,
   dragged: -1,
