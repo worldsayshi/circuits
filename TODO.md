@@ -2,6 +2,10 @@
 
 # TODOs
 
+### Move tickets below to [trello](https://trello.com/b/ELKI4Gj6/circuits)
+
+### Save/Load graphs
+
 ### Add input/output nodes (Sockets)
 
 ### Allow socketed graphs to be loaded as components
@@ -20,13 +24,6 @@ Here links and components can be rendered one by one in isolation and without cl
 Suggestion: Use Storybook and testcafe. 
 
 
-### Fix drag and drop on mobile
-
-This tutorial works: http://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
-
-Check for "Working on mobile" 
-
-
 # Unclear TODOs
 
 - Fix `traverseGraph`
@@ -36,6 +33,12 @@ Check for "Working on mobile"
 
 
 # Fixed TODOS
+
+### Fix drag and drop on mobile
+
+This tutorial works: http://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
+
+Check for "Working on mobile" s
 
 ### Drag and drop link creation
 
