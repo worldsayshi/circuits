@@ -5,6 +5,7 @@ enum InteractionMode {
   IncValue='IncValue',
   AddNode='AddNode',
   AddComponent='AddComponent',
+  AddCustomComponent='AddCustomComponent'
 }
 
 export default InteractionMode;

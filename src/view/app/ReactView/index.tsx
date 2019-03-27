@@ -58,6 +58,7 @@ class ReactViewInt extends React.Component<{
   incNode: (number) => void,
   addNode: (Coordinate) => void,
   addComponent:  (Coordinate) => void,
+  addCustomComponent:  (Coordinate) => void,
   addLink: (Link) => void,
 }, ViewerState> {
 
@@ -158,6 +159,8 @@ class ReactViewInt extends React.Component<{
     } else if (this.props.interactionMode === 'AddComponent') {
       // console.log('AddNode', coord);
       this.props.addComponent(coord);
+    } else if (this.props.interactionMode === 'AddCustomComponent') {
+      this.props.addCustomComponent(coord);
     }
 
   }

@@ -56,23 +56,43 @@ declare global {
 
 const core = initCore();
 
-class App extends React.Component<{}, {
+interface Core {
   graphContext: Graph;
   interaction: any;
+}
+
+class App extends React.Component<{}, {
+  core: Core,
+  cores: Core[],
+  paletteCore?: Core,
 }> {
 
 
   constructor(props, ...rest) {
     super(props, ...rest);
-    this.state = core.getState();
+
+    let coresStr = localStorage.getItem('cores');
+    let cores = coresStr ? JSON.parse(coresStr) : null;
+    this.state = { core: core.getState(), cores };
+
+    // Subscribe to core reducer
     core.subscribe(() => {
-      this.setState(core.getState());
-    })
+      this.setState({ core: core.getState() });
+    });
+
+    // Subscribe to changes in localStorage
+    window.addEventListener('storage', event => {
+      if (event.storageArea === localStorage) {
+        // It's local storage
+        this.setState({ cores });
+      }
+    }, false);
   }
 
   render() {
-    const { graphContext, interaction: { mode } } = this.state;
+    const { core: { graphContext, interaction: { mode } }, cores, paletteCore } = this.state;
     const { nodes, links }: { nodes: Node[]; links: any[] } = toD3(graphContext);
+
     return (
       <div>
         <Palette
@@ -82,6 +102,7 @@ class App extends React.Component<{}, {
               mode,
             });
           }}
+          cores={cores}
           storeCurrent={(name) => {
             let coresStr = localStorage.getItem('cores');
             let cores = coresStr ? JSON.parse(coresStr) : null;
@@ -101,6 +122,9 @@ class App extends React.Component<{}, {
               });
             }
           }}
+          selectCore={(name) => this.setState({
+            paletteCore: cores[name],
+          })}
           interactionMode={mode}
           clearGraph={() => core.dispatch({ type: 'CLEAR_GRAPH'})}
         />
@@ -128,6 +152,11 @@ class App extends React.Component<{}, {
 
           addComponent={(coordinates) => {
             core.dispatch({ type: 'ADD_COMPONENT', coordinates });
+          }}
+
+          addCustomComponent={(coordinates) => {
+            core.dispatch({ type: 'ADD_CUSTOM_COMPONENT', coordinates, attachment: paletteCore });
+            console.log('core', core.getState());
           }}
           // interactionStyle='DragLink'
         />

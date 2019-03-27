@@ -86,6 +86,14 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
           ],
         };
       }
+      case 'ADD_CUSTOM_COMPONENT': {
+        const { coordinates: { x, y }, attachment } = action;
+        return { ...graph, nodes: [
+            ...graph.nodes,
+            { left: [], right: [], verb: 'sum', type: 'Component', x, y, ...getVerbData()['sum'], attachment },
+          ],
+        };
+      }
       case 'REPLACE_GRAPH': {
         const { core } = action;
         console.log('core', core);
