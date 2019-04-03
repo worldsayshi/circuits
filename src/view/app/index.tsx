@@ -9,6 +9,7 @@ import {combineReducers, createStore} from 'redux'
 import Palette from "./interaction/Palette";
 import Graph from "../../model/types/graph";
 import { Node } from './ReactView/node';
+import InteractionMode from "./InteractionMode.enum";
 
 const graph2 = { nodes: [
     { noun: 'default', constant: true, value: 1, type: 'Var' },
@@ -63,7 +64,7 @@ interface Core {
 
 class App extends React.Component<{}, {
   core: Core,
-  cores: Core[],
+  cores: { [name: string]: Core },
   paletteCore?: Core,
 }> {
 
@@ -96,14 +97,15 @@ class App extends React.Component<{}, {
     return (
       <div>
         <Palette
+          modes={Object.keys(InteractionMode as any)}
           switchMode={(mode) => {
             core.dispatch({
               type: 'SWITCH_MODE',
               mode,
             });
           }}
-          cores={cores}
-          storeCurrent={(name) => {
+          stored={Object.keys(cores)}
+          storeAs={(name) => {
             let coresStr = localStorage.getItem('cores');
             let cores = coresStr ? JSON.parse(coresStr) : null;
             cores = {
@@ -112,7 +114,7 @@ class App extends React.Component<{}, {
             };
             localStorage.setItem(`cores`, JSON.stringify(cores));
           }}
-          loadGraph={(name) => {
+          load={(name) => {
             let coresStr = localStorage.getItem('cores');
             let cores = coresStr ? JSON.parse(coresStr) : null;
             if (cores) {
@@ -122,11 +124,11 @@ class App extends React.Component<{}, {
               });
             }
           }}
-          selectCore={(name) => this.setState({
-            paletteCore: cores[name],
-          })}
-          interactionMode={mode}
-          clearGraph={() => core.dispatch({ type: 'CLEAR_GRAPH'})}
+          selectedMode={mode}
+          actions={[{
+            name: 'Clear Graph',
+            f: () => core.dispatch({ type: 'CLEAR_GRAPH'})
+          }]}
         />
         <ReactView
           nodes={nodes}

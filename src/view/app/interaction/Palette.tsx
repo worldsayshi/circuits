@@ -9,26 +9,56 @@ import Input from '../components/Input';
 import Select from "../components/Select";
 import Option from "../components/Option";
 
+interface PaletteProps {
+  modes: string[],
+  switchMode: (mode: string) => void,
+  load: (name: string) => void,
+  storeAs: (mode: string) => void,
+  stored: string[],
+  actions: {
+    name: string,
+    f: () => void,
+  }[],
+  selectedMode: string
+}
 
-function PaletteInt ({ switchMode, loadGraph, storeCurrent, interactionMode, clearGraph, cores, selectCore }) {
-  const [graphName, setGraphName] = useState("");
-  const interactionModes = Object.keys(InteractionMode as any);
+const PaletteInt = ({ modes, switchMode, load, storeAs, actions, selectedMode, stored }: PaletteProps) => {
+
+  const [storageName, setStorageName] = useState("");
+  const [selectedStored, selectStored] = useState(stored.length > 0 ? stored[0] : "");
+
   return <div>
-    modes:
+
+    modes: (selected mode: <div>{ selectedMode }</div>)
     <div>
-      {interactionModes.map(mode => {
+      {modes.map(mode => {
         return <Button key={mode} onClick={() => switchMode(mode)}>{mode}</Button>
       })}
-      <Button onClick={() => clearGraph()}>Clear graph</Button>
-      <Input onChange={val => setGraphName(val.target.value)} value={graphName}/>
-      <Button onClick={() => loadGraph(graphName)}>Load graph</Button>
-      <Button onClick={() => storeCurrent(graphName)}>Save graph</Button>
-      <Select onChange={val => selectCore(val.target.value)}>
-        {Object.keys(cores).map(coreName => <Option key={coreName} value={coreName}>{coreName}</Option>)}
+    </div>
+
+    actions:
+    <div>
+      {actions.map(action =>
+        <Button key={action.name} onClick={() => action.f()}>
+          {action.name}
+        </Button>)}
+      {/*<Button onClick={() => clearGraph()}>Clear graph</Button>
+      <Button onClick={() => createComponent()}>Create component</Button>*/}
+    </div>
+
+    storage:
+    <div>
+      <Input onChange={val => setStorageName(val.target.value)} value={storageName} />
+      <Button onClick={() => load(selectedStored)}>Load graph</Button>
+      <Button onClick={() => storeAs(storageName)}>Save graph</Button>
+      <Select onChange={val => selectStored(val.target.value)}>
+        {Object.keys(stored).map(name =>
+          <Option key={name} value={name}>{name}</Option>
+        )}
       </Select>
     </div>
-    selected mode: <div>{ interactionMode }</div>
+
   </div>;
-}
+};
 
 export default PaletteInt;
