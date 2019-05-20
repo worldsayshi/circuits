@@ -24,6 +24,22 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
     switch (action.type) {
       case 'CLEAR_GRAPH':
         return { nodes: [], };
+      case 'NEW_COMPONENT': {
+        /*
+        * const { coordinates: { x, y } } = action;
+        return { ...graph, nodes: [
+            { noun: 'default', constant: true, value: 1, type: 'Var', x, y },
+            ...increaseAllComponentIndexes(graph.nodes),
+          ],
+        };*/
+        return {
+          nodes: [
+            { type: 'Socket', },
+            { type: 'Socket', },
+          ],
+        };
+      }
+
       case 'OPTIMIZE':
         const { graph: newGraph } = optimizeGraph({ graph, nouns, verbs });
         return newGraph;

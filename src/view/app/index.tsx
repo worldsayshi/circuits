@@ -128,6 +128,9 @@ class App extends React.Component<{}, {
           actions={[{
             name: 'Clear Graph',
             f: () => core.dispatch({ type: 'CLEAR_GRAPH'})
+          }, {
+            name: 'Custom Component',
+            f: () => core.dispatch({ type: 'NEW_COMPONENT' })
           }]}
         />
         <ReactView
