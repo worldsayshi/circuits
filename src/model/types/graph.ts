@@ -1,6 +1,5 @@
-import Var from "./var";
-import Component from "./component";
+import Node from './node';
 
 export default interface Graph {
-  nodes: (Var | Component)[];
+  nodes: Node[];
 }

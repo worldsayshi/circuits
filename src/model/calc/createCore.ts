@@ -78,7 +78,7 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
               adjacencies.includes(toId) ? adjacencies : [...adjacencies, toId]);
           }
         } else if (toNode.type === 'Component') {
-          if (fromNode.type === 'Var') {
+          if (fromNode.type === 'Var' || fromNode.type === 'Socket') {
             // Drawing from a node to a component
             const adjacencies = dp.get(graph, `nodes.${toId}.${toSubselection}`);
             return dp.set(graph, `nodes.${toId}.${toSubselection}`,

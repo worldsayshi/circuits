@@ -2,6 +2,7 @@
 import optimizeGraph, { lookup } from './optimizeGraph';
 import testGraph from '../testGraph';
 import testGraph2 from '../testGraph2';
+import testGraph3 from '../testGraph_socket';
 import {getNounResolvers} from "../nouns/index";
 import nounify from "../nouns/nounify";
 import * as math from 'mathjs';
@@ -45,5 +46,10 @@ describe('graph optimization and evaluation', () => {
 
   it('should optimize graph with two disparate networks', () => {
     expect(optimizeGraph(testGraph2).graph.nodes[4].value).toBeCloseTo(100, 2);
+  });
+
+  it('should optimize graph with embedded custom component', () => {
+    //expect(optimizeGraph(testGraph3).graph.nodes.);
+    throw new Error("FOOO");
   });
 });
