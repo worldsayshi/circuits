@@ -72,7 +72,7 @@ class App extends React.Component<{}, {
   constructor(props, ...rest) {
     super(props, ...rest);
 
-    let coresStr = localStorage.getItem('cores');
+    let coresStr = localStorage.getItem('cores') || "{}";
     let cores = coresStr ? JSON.parse(coresStr) : null;
     this.state = { core: core.getState(), cores };
 
@@ -106,7 +106,7 @@ class App extends React.Component<{}, {
           }}
           stored={Object.keys(cores)}
           storeAs={(name) => {
-            let coresStr = localStorage.getItem('cores');
+            let coresStr = localStorage.getItem('cores') || "{}";
             let cores = coresStr ? JSON.parse(coresStr) : null;
             cores = {
               ...cores,
@@ -115,7 +115,7 @@ class App extends React.Component<{}, {
             localStorage.setItem(`cores`, JSON.stringify(cores));
           }}
           load={(name) => {
-            let coresStr = localStorage.getItem('cores');
+            let coresStr = localStorage.getItem('cores') || "{}";
             let cores = coresStr ? JSON.parse(coresStr) : null;
             if (cores) {
               core.dispatch({

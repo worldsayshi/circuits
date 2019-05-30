@@ -52,7 +52,7 @@ const PaletteInt = ({ modes, switchMode, load, storeAs, actions, selectedMode, s
       <Button onClick={() => load(selectedStored)}>Load graph</Button>
       <Button onClick={() => storeAs(storageName)}>Save graph</Button>
       <Select onChange={val => selectStored(val.target.value)}>
-        {Object.keys(stored).map(name =>
+        {stored.map(name =>
           <Option key={name} value={name}>{name}</Option>
         )}
       </Select>
