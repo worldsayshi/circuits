@@ -110,17 +110,18 @@ class App extends React.Component<{}, {
             let cores = coresStr ? JSON.parse(coresStr) : null;
             cores = {
               ...cores,
-              [name]: core.getState(),
+              [name]: core.getState().graphContext,
             };
             localStorage.setItem(`cores`, JSON.stringify(cores));
           }}
           load={(name) => {
             let coresStr = localStorage.getItem('cores') || "{}";
             let cores = coresStr ? JSON.parse(coresStr) : null;
+            console.log('loading', cores[name]);
             if (cores) {
               core.dispatch({
                 type: 'REPLACE_GRAPH',
-                core: cores[name],
+                graph: cores[name],
               });
             }
           }}

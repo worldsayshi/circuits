@@ -111,12 +111,7 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         };
       }
       case 'REPLACE_GRAPH': {
-        const { core } = action;
-        console.log('core', core);
-        console.log('graph', graph);
-        graph.nodes = core.graphContext.nodes;
-
-        return graph;
+        return action.graph;
       }
 
       default:
