@@ -34,8 +34,8 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         };*/
         return {
           nodes: [
-            { type: 'Socket', },
-            { type: 'Socket', },
+            { type: 'Socket', noun: 'default' },
+            { type: 'Socket', noun: 'default' },
           ],
         };
       }

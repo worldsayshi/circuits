@@ -2,7 +2,7 @@
 
 export const nounifySingle = (node, nouns) => {
   if(!node.constant && !((typeof node.variableCount) === 'number')) {
-    throw new Error('Variable nodes must have variableCount on nounification');
+    throw new Error('Variable nodes must have variableCount on nounification: ' + JSON.stringify(node));
   }
   return nouns[node.noun](node);
 };

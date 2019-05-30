@@ -10,11 +10,14 @@ export default function desugarNodes(nodes: Node[]): Node[] {
 
   return nodes.map((n, ix) => {
     const type = (<Component>n).left && (<Component>n).right ? 'Component' : 'Var';
+    const shouldHaveVariableCount =
+      (n.type === 'Var' && !n.constant)
+      || n.type === 'Socket';
     return {
       type,
       ...n,
       nodeId: ix,
-      ...(n.type === 'Var' && !n.constant && {
+      ...(shouldHaveVariableCount && {
         variableCount: variableCounter.next().value,
       })
     };
