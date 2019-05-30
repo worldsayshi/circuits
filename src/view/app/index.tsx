@@ -10,6 +10,8 @@ import Palette from "./interaction/Palette";
 import Graph from "../../model/types/graph";
 import { Node } from './ReactView/node';
 import InteractionMode from "./InteractionMode.enum";
+import addNode from "../../model/calc/actions/addNode";
+import addComponent from "../../model/calc/actions/addComponent";
 
 const graph2 = { nodes: [
     { noun: 'default', constant: true, value: 1, type: 'Var' },
@@ -153,11 +155,11 @@ class App extends React.Component<{}, {
           }}
 
           addNode={(coordinates) => {
-            core.dispatch({ type: 'ADD_NODE', coordinates });
+            core.dispatch(addNode({ coordinates }));
           }}
 
           addComponent={(coordinates) => {
-            core.dispatch({ type: 'ADD_COMPONENT', coordinates });
+            core.dispatch(addComponent({ coordinates }));
           }}
 
           addCustomComponent={(coordinates) => {

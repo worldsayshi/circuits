@@ -1,5 +1,7 @@
 
 import {createCore} from './createCore';
+import addNode from "./actions/addNode";
+import addComponent from "./actions/addComponent";
 
 const clone = obj => JSON.parse(JSON.stringify(obj));
 
@@ -107,7 +109,7 @@ describe('createCore', () => {
       done();
     });
 
-    core.dispatch({ type: 'ADD_NODE', coordinates: { x: 10, y: 10 } });
+    core.dispatch(addNode({ coordinates: { x: 10, y: 10 }}));
   });
 
   it('should not regress', (done) => {
@@ -121,9 +123,9 @@ describe('createCore', () => {
       done();
     });
 
-    core.dispatch({ type: 'ADD_NODE', coordinates: { x: 10, y: 10 } });
-    core.dispatch({ type: 'ADD_COMPONENT', coordinates: { x: 20, y: 20 } });
-    core.dispatch({ type: 'ADD_COMPONENT', coordinates: { x: 20, y: 20 } });
+    core.dispatch(addNode({ coordinates: { x: 10, y: 10 } }));
+    core.dispatch(addComponent({ coordinates: { x: 20, y: 20 } }));
+    core.dispatch(addComponent({ coordinates: { x: 20, y: 20 } }));
 
   });
 

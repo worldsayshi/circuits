@@ -59,7 +59,7 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         console.warn('TOGGLE_CONSTANT failed', action.index, graph.nodes[action.index]);
         return graph;
       }
-      case 'ADD_LINK':
+      case 'ADD_LINK': {
         const {
           fromId,
           toId,
@@ -86,6 +86,15 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
           }
         }
         return graph;
+      }
+      case 'ADD_NODE_2': {
+        const { coordinates: { x, y } } = action;
+        return { ...graph, nodes: [
+            { noun: 'default', constant: true, value: 1, type: 'Var', x, y },
+            ...increaseAllComponentIndexes(graph.nodes),
+          ],
+        };
+      }
       case 'ADD_NODE': {
         const { coordinates: { x, y } } = action;
         return { ...graph, nodes: [
