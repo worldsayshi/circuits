@@ -6,7 +6,7 @@ import InteractionMode from "../InteractionMode.enum";
   Add SELECT_BRUSH that takes node or component as input
  */
 
-export default function interaction(state = {mode: 'DragNode'}, action) {
+export default function interaction(state = {mode: 'DragNode', brush: null}, action) {
   switch (action.type) {
     case 'SWITCH_MODE': {
       return {

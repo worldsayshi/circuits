@@ -12,6 +12,7 @@ import { Node } from './ReactView/node';
 import InteractionMode from "./InteractionMode.enum";
 import addNode from "../../model/calc/actions/addNode";
 import addComponent from "../../model/calc/actions/addComponent";
+import addCustomComponent from "../../model/calc/actions/addCustomComponent";
 
 const graph2 = { nodes: [
     { noun: 'default', constant: true, value: 1, type: 'Var' },
@@ -67,7 +68,6 @@ interface Core {
 class App extends React.Component<{}, {
   core: Core,
   cores: { [name: string]: Core },
-  paletteCore?: Core,
 }> {
 
 
@@ -93,7 +93,7 @@ class App extends React.Component<{}, {
   }
 
   render() {
-    const { core: { graphContext, interaction: { mode } }, cores, paletteCore } = this.state;
+    const { core: { graphContext, interaction: { mode, brush }, }, cores } = this.state;
     const { nodes, links }: { nodes: Node[]; links: any[] } = toD3(graphContext);
 
     return (
@@ -127,13 +127,27 @@ class App extends React.Component<{}, {
               });
             }
           }}
+          selectBrush={(name) => {
+            let coresStr = localStorage.getItem('cores') || "{}";
+            let cores = coresStr ? JSON.parse(coresStr) : null;
+            if (cores) {
+              core.dispatch({
+                type: 'SELECT_BRUSH',
+                brush: {
+                  name,
+                  brush: cores[name],
+                },
+              });
+            }
+          }}
           selectedMode={mode}
+          selectedBrush={brush}
           actions={[{
             name: 'Clear Graph',
-            f: () => core.dispatch({ type: 'CLEAR_GRAPH'})
+            f: () => core.dispatch({ type: 'CLEAR_GRAPH' }),
           }, {
             name: 'Custom Component',
-            f: () => core.dispatch({ type: 'NEW_COMPONENT' })
+            f: () => core.dispatch({ type: 'NEW_COMPONENT' }),
           }]}
         />
         <ReactView
@@ -163,7 +177,7 @@ class App extends React.Component<{}, {
           }}
 
           addCustomComponent={(coordinates) => {
-            core.dispatch({ type: 'ADD_CUSTOM_COMPONENT', coordinates, attachment: paletteCore });
+            core.dispatch(addCustomComponent({ coordinates, attachment: brush }));
             console.log('core', core.getState());
           }}
           // interactionStyle='DragLink'

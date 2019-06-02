@@ -112,10 +112,10 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         };
       }
       case 'ADD_CUSTOM_COMPONENT': {
-        const { coordinates: { x, y }, attachment } = action;
+        const { component } = action;
         return { ...graph, nodes: [
             ...graph.nodes,
-            { left: [], right: [], verb: 'sum', type: 'Component', x, y, ...getVerbData()['sum'], attachment },
+            component,
           ],
         };
       }

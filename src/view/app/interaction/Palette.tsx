@@ -8,21 +8,27 @@ import {
 import Input from '../components/Input';
 import Select from "../components/Select";
 import Option from "../components/Option";
+import Graph from "../../../model/types/graph";
 
 interface PaletteProps {
   modes: string[],
   switchMode: (mode: string) => void,
   load: (name: string) => void,
+  selectBrush: (name: string) => void,
   storeAs: (mode: string) => void,
   stored: string[],
   actions: {
     name: string,
     f: () => void,
   }[],
-  selectedMode: string
+  selectedMode: string,
+  selectedBrush: {
+    name: string,
+    brush: Graph
+  },
 }
 
-const PaletteInt = ({ modes, switchMode, load, storeAs, actions, selectedMode, stored }: PaletteProps) => {
+const PaletteInt = ({ modes, switchMode, load, selectBrush, storeAs, actions, selectedMode, selectedBrush, stored }: PaletteProps) => {
 
   const [storageName, setStorageName] = useState("");
   const [selectedStored, selectStored] = useState(stored.length > 0 ? stored[0] : "");
@@ -46,10 +52,11 @@ const PaletteInt = ({ modes, switchMode, load, storeAs, actions, selectedMode, s
       <Button onClick={() => createComponent()}>Create component</Button>*/}
     </div>
 
-    storage:
+    storage: (selected brush: <div>{ selectedBrush && selectedBrush.name }</div>)
     <div>
       <Input onChange={val => setStorageName(val.target.value)} value={storageName} />
       <Button onClick={() => load(selectedStored)}>Load graph</Button>
+      <Button onClick={() => selectBrush(selectedStored)}>Select brush</Button>
       <Button onClick={() => storeAs(storageName)}>Save graph</Button>
       <Select onChange={val => selectStored(val.target.value)}>
         {stored.map(name =>
