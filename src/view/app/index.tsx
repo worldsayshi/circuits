@@ -156,12 +156,16 @@ class App extends React.Component<{}, {
           groups={[]}
           interactionMode={mode}
 
+
+          // TODO Use actions directly instead in a more idiomatic way,
+          // with mapDispatchToProps and Provider
+          // (should remove some indirection)
           lockNode={(ix) => {
             core.dispatch({ type: 'TOGGLE_CONSTANT', index: ix});
             core.dispatch({ type: 'OPTIMIZE' });
           }}
           incNode={(ix) => {
-            core.dispatch({ type: 'INC_VALUE', index: ix});
+            core.dispatch({ type: 'INC_VALUE', index: ix });
             core.dispatch({ type: 'OPTIMIZE' });
           }}
           addLink={({ fromId, toId, fromSubselection, toSubselection }) => {
@@ -176,8 +180,8 @@ class App extends React.Component<{}, {
             core.dispatch(addComponent({ coordinates }));
           }}
 
-          addCustomComponent={(coordinates) => {
-            core.dispatch(addCustomComponent({ coordinates, attachment: brush }));
+          useBrush={(coordinates) => {
+            core.dispatch(addCustomComponent({ coordinates, component: brush }));
             console.log('core', core.getState());
           }}
           // interactionStyle='DragLink'

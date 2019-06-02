@@ -58,7 +58,7 @@ class ReactViewInt extends React.Component<{
   incNode: (number) => void,
   addNode: (Coordinate) => void,
   addComponent:  (Coordinate) => void,
-  addCustomComponent:  (Coordinate) => void,
+  useBrush:  (Coordinate) => void,
   addLink: (Link) => void,
 }, ViewerState> {
 
@@ -154,13 +154,11 @@ class ReactViewInt extends React.Component<{
       this.props.incNode(ix);
       this.forceUpdate();
     } else if (this.props.interactionMode === 'AddNode') {
-      // console.log('AddNode', coord);
       this.props.addNode(coord);
     } else if (this.props.interactionMode === 'AddComponent') {
-      // console.log('AddNode', coord);
       this.props.addComponent(coord);
-    } else if (this.props.interactionMode === 'AddCustomComponent') {
-      this.props.addCustomComponent(coord);
+    } else if (this.props.interactionMode === 'UseBrush') {
+      this.props.useBrush(coord);
     }
 
   }
