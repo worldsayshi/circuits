@@ -13,6 +13,7 @@ import InteractionMode from "./InteractionMode.enum";
 import addNode from "../../model/calc/actions/addNode";
 import addComponent from "../../model/calc/actions/addComponent";
 import addCustomComponent from "../../model/calc/actions/addCustomComponent";
+import {getVerbData} from "../../model/components";
 
 const graph2 = { nodes: [
     { noun: 'default', constant: true, value: 1, type: 'Var' },
@@ -135,7 +136,13 @@ class App extends React.Component<{}, {
                 type: 'SELECT_BRUSH',
                 brush: {
                   name,
-                  brush: cores[name],
+                  brush: {
+                    verb: 'embedded',
+                    left: [], right: [],
+                    type: 'Component',
+                    graph: cores[name],
+                    ...getVerbData()['embedded'],
+                  },
                 },
               });
             }
@@ -158,7 +165,7 @@ class App extends React.Component<{}, {
 
 
           // TODO Use actions directly instead in a more idiomatic way,
-          // with mapDispatchToProps and Provider
+          // with bindActionCreators and Provider
           // (should remove some indirection)
           lockNode={(ix) => {
             core.dispatch({ type: 'TOGGLE_CONSTANT', index: ix});

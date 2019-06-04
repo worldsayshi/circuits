@@ -34,8 +34,8 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         };*/
         return {
           nodes: [
-            { type: 'Socket', noun: 'default' },
-            { type: 'Socket', noun: 'default' },
+            { type: 'Socket', noun: 'default', side: 'right' },
+            { type: 'Socket', noun: 'default', side: 'left' },
           ],
         };
       }
@@ -104,15 +104,16 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
         };
       }
       case 'ADD_COMPONENT': {
-        const { coordinates: { x, y } } = action;
+        const { coordinates: { x, y }, component } = action;
         return { ...graph, nodes: [
             ...graph.nodes,
-            { left: [], right: [], verb: 'sum', type: 'Component', x, y, ...getVerbData()['sum'], },
+            { ...component, x, y },
           ],
         };
       }
       case 'ADD_CUSTOM_COMPONENT': {
         const { component } = action;
+        console.log('ADD_CUSTOM_COMPONENT')
         return { ...graph, nodes: [
             ...graph.nodes,
             component,

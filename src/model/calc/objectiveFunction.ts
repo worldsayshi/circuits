@@ -18,10 +18,11 @@ export function objectiveFunction ({ graph, nouns, verbs }, x) {
 
   const components : Component[] = nodes.filter(({ type }) => type === 'Component') as Component[];
 
-  const expr = components.reduce((acc, {left, right, verb}) => {
+  const expr = components.reduce((acc, component) => {
+    const { left, right, verb } = component;
     const leftValues = nounify(lookup(left, nodes), nouns);
     const rightValues = nounify(lookup(right, nodes), nouns);
-    return `${acc} + abs(${verbs[verb](leftValues, rightValues)})`;
+    return `${acc} + abs(${verbs[verb](leftValues, rightValues, component)})`;
   }, '0');
   return math.eval(expr, { x });
 }

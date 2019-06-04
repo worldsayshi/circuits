@@ -7,4 +7,5 @@ export function isSocket(node: Node): node is Socket {
 
 export default interface Socket {
   type: 'Socket';
+  side: 'right' | 'left';
 }

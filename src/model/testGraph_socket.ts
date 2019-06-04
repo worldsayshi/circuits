@@ -13,9 +13,14 @@ const graphContext : GraphContext = {
       { noun: 'default', constant: false, type: 'Var' },
       { noun: 'default', constant: false, type: 'Var' },
 
-      // These points in part to each other.
-      { left: [0, 1, 3], right: [2], verb: 'sum', type: 'CustomComponent', embeddedGraph: {}},
-      { left: [3], right: [4], verb: 'sum', type: 'Component' },
+      { left: [0], right: [1], verb: 'embedded', type: 'Component', semantics: {
+        nodes: [
+          { type: 'Socket', noun: 'default', side: 'left' },
+          { type: 'Socket', noun: 'default', side: 'right' },
+          { left: [0], right: [1], verb: 'sum', type: 'Component' },
+        ],
+      }},
+      { left: [1], right: [2], verb: 'sum', type: 'Component' },
     ],
   },
   nouns: getNounResolvers(),

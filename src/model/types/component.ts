@@ -9,4 +9,5 @@ export default interface Component {
   left: any[];
   right: any[];
   verb: string;
+  semantics?: any;
 }

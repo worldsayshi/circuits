@@ -49,7 +49,6 @@ describe('graph optimization and evaluation', () => {
   });
 
   it('should optimize graph with embedded custom component', () => {
-    //expect(optimizeGraph(testGraph3).graph.nodes.);
-    throw new Error("FOOO");
+    expect(optimizeGraph(testGraph3).graph.nodes[2].value).toBeCloseTo(1, 2);
   });
 });
