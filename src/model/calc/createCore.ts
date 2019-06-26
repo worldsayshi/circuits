@@ -8,15 +8,9 @@ import optimizeGraph from "./optimizeGraph";
 import Var, {isVar} from "../types/var";
 import Node from '../types/node';
 import Component from "../types/component";
+import increaseAllComponentIndexes from "../util/increaseAllComponentIndexes";
 // import {Core} from "./createCore";
 
-function increaseAllComponentIndexes(nodes) {
-  return nodes.map(n => n.type === 'Component' ? ({
-    ...n,
-    left: n.left.map(i => i +1),
-    right: n.right.map(i => i +1),
-  }) : n)
-}
 
 function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: VerbResolvers }) {
   return (graph : { nodes: Node[] } = { nodes: [], }, action) => {

@@ -13,10 +13,10 @@ const graphContext : GraphContext = {
       { noun: 'default', constant: false, type: 'Var' },
       { noun: 'default', constant: false, type: 'Var' },
 
-      { left: [0], right: [1], verb: 'embedded', type: 'Component', semantics: {
+      { left: [0], right: [1], verb: 'embedded', type: 'Component', embedded: {
         nodes: [
-          { type: 'Socket', noun: 'default', side: 'left' },
-          { type: 'Socket', noun: 'default', side: 'right' },
+          { type: 'Socket', side: 'left' },
+          { type: 'Socket', side: 'right' },
           { left: [0], right: [1], verb: 'sum', type: 'Component' },
         ],
       }},

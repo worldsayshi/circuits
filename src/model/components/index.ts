@@ -23,6 +23,6 @@ export function getVerbData() : VerbData {
 export function getVerbResolvers() : VerbResolvers {
   return {
     sum: sum.operation,
-    embedded: embedded.operation,
+    //embedded: embedded.operation,
   };
 }

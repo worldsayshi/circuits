@@ -48,6 +48,8 @@ describe('graph optimization and evaluation', () => {
     expect(optimizeGraph(testGraph2).graph.nodes[4].value).toBeCloseTo(100, 2);
   });
 
+  // TODO Before this is possible I should rewrite Graph so that I don't need to alter
+  // indices each time I change nodes
   it('should optimize graph with embedded custom component', () => {
     expect(optimizeGraph(testGraph3).graph.nodes[2].value).toBeCloseTo(1, 2 );
   });

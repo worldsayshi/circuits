@@ -7,7 +7,7 @@ export function isVar(node: Node): node is Var {
 
 export default interface Var {
   type: 'Var';
-  noun: string;
+  noun: 'default';
   value?: number;
   constant: boolean;
 
