@@ -7,7 +7,7 @@
 
 
 import setNodeDefaults from "../model/util/setNodeDefaults";
-import desugarNodes from "../model/util/desugarNodes";
+import countVariables from "../model/util/countVariables";
 
 function entries (l) {
   return l.map((e, ix) => [ix, e]);
@@ -52,7 +52,7 @@ function createStructuralLattice(components: any, numberOfNodes: any) {
 
 
 export default function toD3 ({ nodes }) : { nodes: any[], links: any[] } {
-  const d3Nodes = desugarNodes(nodes);
+  const d3Nodes = countVariables(nodes);
 
   const components = nodes.filter(({ type }) => type === 'Component');
   const nrOfVars = nodes.length-components.length;

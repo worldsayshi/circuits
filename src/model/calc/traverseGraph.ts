@@ -4,7 +4,7 @@ import nounify, { nounifySingle } from "../nouns/nounify";
 import entries from "../util/entries";
 import counter from "../util/counter";
 import Graph from "../types/graph";
-import desugarNodes from "../util/desugarNodes";
+import countVariables from "../util/countVariables";
 
 const findNextUnvisitedComponent = (components, visitedComponents) => components.find(({nodeId}) => {
   return !visitedComponents[nodeId];
@@ -38,7 +38,7 @@ function traverseInt({ nodes, nouns, verbs }, visitedComponents) {
 }
 
 export default function traverseGraph (graphContext: GraphContext) {
-  const nodes = desugarNodes(graphContext.graph.nodes);
+  const nodes = countVariables(graphContext.graph.nodes);
   return traverseInt({
     nouns: graphContext.nouns,
     verbs: graphContext.verbs,

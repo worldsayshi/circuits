@@ -1,4 +1,4 @@
-// Should be redundant. Use desugarNodes instead
+// Should be redundant.
 
 export default function setNodeDefaults(node, index) {
   if(node.left && node.right) {

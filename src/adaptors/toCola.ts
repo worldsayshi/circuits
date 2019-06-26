@@ -1,6 +1,6 @@
 import entries from "../model/util/entries";
 import setNodeDefaults from "../model/util/setNodeDefaults";
-import desugarNodes from "../model/util/desugarNodes";
+import countVariables from "../model/util/countVariables";
 
 
 function createD3Links(components, numberOfVars) {
@@ -27,7 +27,7 @@ function createD3Groups(components, numberOfVars) {
 
 export default function toCola ({ nodes }) {
   const d3Nodes = [
-    ...desugarNodes(nodes),
+    ...countVariables(nodes),
     // ...components.map(component => ({...component, type: 'Component' })),
   ];
 

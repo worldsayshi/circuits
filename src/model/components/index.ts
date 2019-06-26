@@ -1,7 +1,8 @@
 import sum from './sum/index';
+import embedded from './embedded/index';
 
 export interface VerbData {
-  [key: string]: { img: string };
+  [key: string]: { img?: string };
 }
 
 export interface VerbResolvers {
@@ -13,11 +14,15 @@ export function getVerbData() : VerbData {
     sum: {
       img: sum.img,
     },
+    embedded: {
+
+    },
   }
 }
 
 export function getVerbResolvers() : VerbResolvers {
   return {
     sum: sum.operation,
+    embedded: embedded.operation,
   };
 }
