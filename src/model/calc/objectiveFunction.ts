@@ -68,7 +68,7 @@ function expandEmbeddedGraphs(nodes: Node[]): Node[] {
         expandSingleEmbedded(node, (nodes.length + nodesToAppend.length) - 1, index)
       );
 
-      // todo decrease all component indices that >
+      // todo decrease all component indices that > ... AHFUCKIT (too complicated this way)
     } else {
       newNodes.push(node);
     }

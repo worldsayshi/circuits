@@ -3,15 +3,15 @@ import testGraph2 from "../model/testGraph2";
 
 const d3TestGraph = {
   nodes: [
-    { noun: 'default', constant: true, value: 1, type: 'Var', nodeId: 0 },
-    { noun: 'default', constant: true, value: 2, type: 'Var', nodeId: 1 },
-    { noun: 'default', constant: false, type: 'Var', nodeId: 2, variableCount: 0 },
+    { noun: 'default', constant: true, value: 1, type: 'Var', nodeId: "0" },
+    { noun: 'default', constant: true, value: 2, type: 'Var', nodeId: "1" },
+    { noun: 'default', constant: false, type: 'Var', nodeId: "2", variableCount: 0 },
 
-    { noun: 'default', constant: true, value: 100, type: 'Var', nodeId: 3 },
-    { noun: 'default', constant: false, type: 'Var', nodeId: 4, variableCount: 1 },
+    { noun: 'default', constant: true, value: 100, type: 'Var', nodeId: "3" },
+    { noun: 'default', constant: false, type: 'Var', nodeId: "4", variableCount: 1 },
 
-    { left: [0, 1], right: [2], verb: 'sum', type: 'Component', nodeId: 5 },
-    { left: [3], right: [4], verb: 'sum', type: 'Component', nodeId: 6 },
+    { left: [0, 1], right: [2], verb: 'sum', type: 'Component', nodeId: "5" },
+    { left: [3], right: [4], verb: 'sum', type: 'Component', nodeId: "6" },
 
     // { type: 'HiddenNode' },
     // { type: 'HiddenNode' },

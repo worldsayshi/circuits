@@ -13,7 +13,7 @@ import increaseAllComponentIndexes from "../util/increaseAllComponentIndexes";
 
 
 function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: VerbResolvers }) {
-  return (graph : { nodes: Node[] } = { nodes: [], }, action) => {
+  return (graph : { nodes: {[key: string]: Node} } = { nodes: {}, }, action) => {
 
     switch (action.type) {
       case 'CLEAR_GRAPH':
@@ -99,19 +99,19 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
       }
       case 'ADD_COMPONENT': {
         const { coordinates: { x, y }, component } = action;
-        return { ...graph, nodes: [
+        return { ...graph, nodes: {
             ...graph.nodes,
-            { ...component, x, y },
-          ],
+            [Object.keys(graph.nodes).length]: { ...component, x, y },
+          },
         };
       }
       case 'ADD_CUSTOM_COMPONENT': {
         const { component } = action;
         console.log('ADD_CUSTOM_COMPONENT')
-        return { ...graph, nodes: [
+        return { ...graph, nodes: {
             ...graph.nodes,
-            component,
-          ],
+            [Object.keys(graph.nodes).length]: component,
+          },
         };
       }
       case 'REPLACE_GRAPH': {
