@@ -56,7 +56,6 @@ export default function optimizeGraph (graphContext: GraphContext) {
 
   const optimizedGraph = insertValues(graphContext.graph, values);
 
-  console.log('optimizedGraph', optimizedGraph);
   return {
     ...graphContext,
     graph: optimizedGraph,

@@ -48,9 +48,10 @@ describe('graph optimization and evaluation', () => {
     expect(optimizeGraph(testGraph2).graph.nodes[4].value).toBeCloseTo(100, 2);
   });
 
-  // TODO Before this is possible I should rewrite Graph so that I don't need to alter
-  // indices each time I change nodes
+  // TODO Currently doesn't work because I've failed to maintain connections to external vars when expanding an embedded component. FIX!!
   it('should optimize graph with embedded custom component', () => {
-    expect(optimizeGraph(testGraph3).graph.nodes[2].value).toBeCloseTo(1, 2 );
+    let optimizedGraph = optimizeGraph(testGraph3);
+    console.log('optimized graph', JSON.stringify(optimizedGraph, null, 2));
+    expect(optimizedGraph.graph.nodes[2].value).toBeCloseTo(1, 2 );
   });
 });
