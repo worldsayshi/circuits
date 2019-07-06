@@ -36,15 +36,15 @@ const graph2 = { nodes: [
 
 describe('createCore', () => {
   it('should return stored graph', () => {
-    const graph = { nodes: [] };
+    const graph = { nodes: {} };
     const core = createCore({ graph });
 
     const graph2 = core.getState();
-    expect(graph).toEqual(graph2);
+    expect(graph2).toEqual(graph);
   });
 
   it('should call subscription sometimes', (done) => {
-    const graph = { nodes: [] };
+    const graph = { nodes: {} };
     const core = createCore({ graph });
 
     core.subscribe(() => {

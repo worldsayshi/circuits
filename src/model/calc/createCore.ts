@@ -18,7 +18,7 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
 
     switch (action.type) {
       case 'CLEAR_GRAPH':
-        return { nodes: [], };
+        return { nodes: {}, };
       case 'NEW_COMPONENT': {
         /*
         * const { coordinates: { x, y } } = action;
@@ -28,10 +28,10 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
           ],
         };*/
         return {
-          nodes: [
-            { type: 'Socket', noun: 'default', side: 'right' },
-            { type: 'Socket', noun: 'default', side: 'left' },
-          ],
+          nodes: {
+            0: { type: 'Socket', noun: 'default', side: 'right' },
+            1: { type: 'Socket', noun: 'default', side: 'left' },
+          },
         };
       }
 

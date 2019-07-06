@@ -31,10 +31,12 @@ function insertValues(graph: Graph, values) {
       input = rest;
       return {
         ...acc,
+        [id]: {...node, value: newValue},
       };
     }
     return {
       ...acc,
+      [id]: node,
     };
     // node;
   }, {});
@@ -54,6 +56,7 @@ export default function optimizeGraph (graphContext: GraphContext) {
 
   const optimizedGraph = insertValues(graphContext.graph, values);
 
+  console.log('optimizedGraph', optimizedGraph);
   return {
     ...graphContext,
     graph: optimizedGraph,
