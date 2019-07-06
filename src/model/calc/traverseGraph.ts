@@ -5,6 +5,7 @@ import entries from "../util/entries";
 import counter from "../util/counter";
 import Graph from "../types/graph";
 import countVariables from "../util/countVariables";
+import objectValues from "../util/objectValues";
 
 const findNextUnvisitedComponent = (components, visitedComponents) => components.find(({nodeId}) => {
   return !visitedComponents[nodeId];
@@ -38,7 +39,7 @@ function traverseInt({ nodes, nouns, verbs }, visitedComponents) {
 }
 
 export default function traverseGraph (graphContext: GraphContext) {
-  const nodes = countVariables(graphContext.graph.nodes);
+  const nodes = objectValues(countVariables(graphContext.graph.nodes));
   return traverseInt({
     nouns: graphContext.nouns,
     verbs: graphContext.verbs,

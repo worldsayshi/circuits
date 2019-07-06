@@ -74,7 +74,8 @@ describe('createCore', () => {
 
     core.subscribe(() => {
       const graph2 = core.getState();
-      expect(graph2.nodes[1].value).toBeCloseTo(1, 2);
+      expect(Object.keys(graph2.nodes)).toContain("1");
+      expect(graph2.nodes["1"].value).toBeCloseTo(1, 2);
       done();
     });
 

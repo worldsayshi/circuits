@@ -9,6 +9,7 @@ import Var, {isVar} from "../types/var";
 import Node from '../types/node';
 import Component from "../types/component";
 import increaseAllComponentIndexes from "../util/increaseAllComponentIndexes";
+import mapValues from "../util/mapValues";
 // import {Core} from "./createCore";
 
 
@@ -83,18 +84,18 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
       }
       case 'ADD_NODE_2': {
         const { coordinates: { x, y } } = action;
-        return { ...graph, nodes: [
-            { noun: 'default', constant: true, value: 1, type: 'Var', x, y },
-            ...increaseAllComponentIndexes(graph.nodes),
-          ],
+        return { ...graph, nodes: {
+            ...graph.nodes,
+            [Object.keys(graph.nodes).length]: { noun: 'default', constant: true, value: 1, type: 'Var', x, y }
+          },
         };
       }
       case 'ADD_NODE': {
         const { coordinates: { x, y } } = action;
-        return { ...graph, nodes: [
-            { noun: 'default', constant: true, value: 1, type: 'Var', x, y },
-            ...increaseAllComponentIndexes(graph.nodes),
-          ],
+        return { ...graph, nodes: {
+            ...graph.nodes,
+            [Object.keys(graph.nodes).length]: { noun: 'default', constant: true, value: 1, type: 'Var', x, y },
+          },
         };
       }
       case 'ADD_COMPONENT': {
@@ -127,7 +128,7 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
 export function attachDefaultData({ nodes }) {
   // const components = nodes.filter(({ type }) => (type === 'Component')).map()
   return {
-    nodes: nodes.map((node) => {
+    nodes: mapValues(nodes, (node) => {
       if (node.type === 'Component') {
         return {
           ...node,

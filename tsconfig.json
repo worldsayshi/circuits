@@ -2,11 +2,12 @@
   "compilerOptions": {
     "outDir": "./dist",
     "allowJs": true,
-    "target": "es5",
+    "target": "es6",
     "lib": ["DOM", "ES7"],
     "downlevelIteration": true,
     "jsx": "react",
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "inlineSourceMap": true
   },
   "include": [
     "./src/**/*"

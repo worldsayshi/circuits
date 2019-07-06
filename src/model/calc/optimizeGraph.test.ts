@@ -25,11 +25,11 @@ describe('nounify', () => {
   });
 
   it('more stuff', () => {
-    const exprs = nounify(lookup([2], [
-        { noun: 'default', constant: true, value: 1 },
-        { noun: 'default', constant: true, value: 2 },
-        { noun: 'default', variableCount: 0 },
-    ]), getNounResolvers());
+    const exprs = nounify(lookup([2], {
+        0: { noun: 'default', constant: true, value: 1 },
+        1: { noun: 'default', constant: true, value: 2 },
+        2: { noun: 'default', variableCount: 0 },
+    }), getNounResolvers());
 
     expect(exprs.map(expr => math.eval(expr, {x:[4]}))).toEqual([4]);
   })
@@ -50,7 +50,7 @@ describe('graph optimization and evaluation', () => {
 
   // TODO Before this is possible I should rewrite Graph so that I don't need to alter
   // indices each time I change nodes
-  it.skip('should optimize graph with embedded custom component', () => {
+  it('should optimize graph with embedded custom component', () => {
     expect(optimizeGraph(testGraph3).graph.nodes[2].value).toBeCloseTo(1, 2 );
   });
 });

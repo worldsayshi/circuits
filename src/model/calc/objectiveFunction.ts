@@ -6,6 +6,10 @@ import countVariables from "../util/countVariables";
 import Component, {isComponent} from "../types/component";
 import Node from '../types/node';
 import {isVar} from "../types/var";
+import entries from "../util/entries";
+import objectEntries from "../util/objectEntries";
+import {isSocket} from "../types/socket";
+import objectValues from "../util/objectValues";
 
 
 export function objectiveFunction ({ graph, nouns, verbs }, x) {
@@ -15,10 +19,11 @@ export function objectiveFunction ({ graph, nouns, verbs }, x) {
   // B2. Also, add an example with non-disparate graph with more than one component
 
   
+  const expandedNodes = expandEmbeddedGraphs(graph.nodes);
+  const nodes = countVariables(expandedNodes);
 
-  const nodes = countVariables(/*expandEmbeddedGraphs*/(graph.nodes));
 
-  const components : Component[] = nodes.filter(({ type }) => type === 'Component') as Component[];
+  const components : Component[] = objectValues(nodes).filter(({ type }) => type === 'Component') as Component[];
 
   const expr = components.reduce((acc, component) => {
     const { left, right, verb } = component;
@@ -35,47 +40,77 @@ export function objectiveFunction ({ graph, nouns, verbs }, x) {
 }
 
 
-/*
 
 
-// TODO The way I need to handle indices in expandSingleEmbedded is RIDICULUS!
-// So I should rewrite the index system! Use indices as id:s instead!
-function expandSingleEmbedded(node: Node, lastUsedIndex: number, socketIndex: number) {
-  let nodesToAdd : Node[] = [];
 
+function expandSingleEmbedded(
+  nodes: {[key: string]: Node},
+  componentToExpand: Component,
+  componentId: string
+): {[key: string]: Node} {
+
+  if (!componentToExpand.embedded) {
+    throw new Error("Can't expand empty component");
+  }
+
+
+  for(let [id, embeddedNode] of objectEntries(componentToExpand.embedded.nodes)) {
+    let outerId = `${componentId}-${id}`;
+    if (isSocket(embeddedNode)) {
+      nodes[outerId] = ({ type: 'Var', noun: 'default', constant: false });
+    } else if (isComponent(embeddedNode)) {
+      // Fix the adjacencies as well
+      nodes[outerId] = ({
+        ...embeddedNode,
+        left: embeddedNode.left.map(adj => `${componentId}-${adj}`),
+        right: embeddedNode.right.map(adj => `${componentId}-${adj}`),
+      });
+    } else {
+      nodes[outerId] = embeddedNode;
+    }
+  }
+
+  return nodes;
+
+  /*nodeToExpand.embedded
   // 1. add one node for each side
-  let leftIndex = lastUsedIndex + 1;
-  nodesToAdd.push({ type: 'Var', noun: 'default', constant: false });
-  let rightIndex = lastUsedIndex + 2;
+  let leftIndex = `${componentId}-`;
+  nodes[leftIndex] = ({ type: 'Var', noun: 'default', constant: false });
+  let rightIndex = `${componentId}-`;
+  nodes[rightIndex] = ({ type: 'Var', noun: 'default', constant: false });
 
-  // 2. increment the pointers in the components of the embedded graph,
-  //    but pointers of the sockets should be set to indices of the "side nodes"
+  // 2a. find the internal indices of the sockets
+  let socketIds: string[] = [];
+  for (let [id, node] of objectEntries(nodes)) {
+    if(isSocket(node)) {
+      socketIds.push(id);
+    }
+  }
+
+  let increment =
+  nodes.map(n => {
+    if (n)
+  });
+  // 2b. increment the pointers in the components of the embedded graph,
+  //    but pointers to the sockets should be set to indices of the "side nodes"
 
 
   // 3. Append the expanded graph to the end of the list
   //
   nodesToAdd.push({ type: 'Var', noun: 'default', constant: false });
-  return nodesToAdd;
+  return [nextIndex, nodes];*/
 }
 
-function expandEmbeddedGraphs(nodes: Node[]): Node[] {
-  console.log('NODES', nodes);
-  let newNodes: Node[] = [];
-  let nodesToAppend: Node[] = [];
-  for(let [index, node] of nodes.entries()) {
+function expandEmbeddedGraphs(nodes: { [key: string]: Node } ): { [key: string]: Node } {
+  let newNodes: {[key: string]: Node} = {};
+  for(let [index, node] of objectEntries(nodes)) {
     if (isComponent(node) && node.embedded) {
-      nodesToAppend = nodesToAppend.concat(
-        expandSingleEmbedded(node, (nodes.length + nodesToAppend.length) - 1, index)
-      );
-
-      // todo decrease all component indices that > ... AHFUCKIT (too complicated this way)
+      newNodes = expandSingleEmbedded(newNodes, node, index)
     } else {
-      newNodes.push(node);
+      newNodes[index] = node;
     }
   }
-  newNodes = newNodes.concat(nodesToAppend);
-  return [];
+  return newNodes;
 }
 
 
- */

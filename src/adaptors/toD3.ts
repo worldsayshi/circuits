@@ -8,6 +8,7 @@
 
 import setNodeDefaults from "../model/util/setNodeDefaults";
 import countVariables from "../model/util/countVariables";
+import objectValues from "../model/util/objectValues";
 
 function entries (l) {
   return l.map((e, ix) => [ix, e]);
@@ -52,7 +53,7 @@ function createStructuralLattice(components: any, numberOfNodes: any) {
 
 
 export default function toD3 ({ nodes }) : { nodes: any[], links: any[] } {
-  const d3Nodes = countVariables(nodes);
+  const d3Nodes = objectValues(countVariables(nodes));
 
   const components = nodes.filter(({ type }) => type === 'Component');
   const nrOfVars = nodes.length-components.length;
