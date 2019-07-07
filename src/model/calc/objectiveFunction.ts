@@ -55,10 +55,13 @@ function expandSingleEmbedded(
     throw new Error("Can't expand empty component");
   }
 
+  let edgeNodeIds: string[] = [];
 
+  // Move the embedded nodes into the outer scope
   for(let [id, embeddedNode] of objectEntries(componentToExpand.embedded.nodes)) {
     let outerId = `${componentId}-${id}`;
     if (isSocket(embeddedNode)) {
+      edgeNodeIds.push(outerId);
       nodes[outerId] = ({ type: 'Var', noun: 'default', constant: false });
     } else if (isComponent(embeddedNode)) {
       // Fix the adjacencies as well
@@ -71,6 +74,16 @@ function expandSingleEmbedded(
       nodes[outerId] = embeddedNode;
     }
   }
+
+  if (edgeNodeIds.length !== 2) {
+    throw new Error("Sockets missing in embedded component");
+  }
+
+  // Add components that connect edge nodes to outer nodes
+  let leftEdgeComponent: Component = { type: 'Component', left: componentToExpand.left, right: [edgeNodeIds[0]], verb: 'sum' };
+  nodes[`${componentId}-left`] = leftEdgeComponent;
+  let rightEdgeComponent: Component = { type: 'Component', left: [edgeNodeIds[1]], right: componentToExpand.right, verb: 'sum' };
+  nodes[`${componentId}-right`] = rightEdgeComponent;
 
   return nodes;
 
