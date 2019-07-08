@@ -64,20 +64,27 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
 
         const fromNode = graph.nodes[fromId];
         const toNode =  graph.nodes[toId];
+        const fixId = sId => {
+          try {
+            return parseInt(sId);
+          } catch (e) {
+            console.log('Could not parse id', sId);
+          }
+        };
         // Add the node to the list of adjacencies of the component
         if (fromNode.type === 'Component') {
           if (toNode.type !== 'Component') {
             // Drawing from a component to a node
             const adjacencies = dp.get(graph, `nodes.${fromId}.${fromSubselection}`);
-            return dp.set(graph, `nodes.${fromId}.${fromSubselection}`,
-              adjacencies.includes(toId) ? adjacencies : [...adjacencies, toId]);
+            graph = dp.set(graph, `nodes.${fromId}.${fromSubselection}`,
+              adjacencies.includes(toId) ? adjacencies : [...adjacencies, fixId(toId)]);
           }
         } else if (toNode.type === 'Component') {
           if (fromNode.type === 'Var' || fromNode.type === 'Socket') {
             // Drawing from a node to a component
             const adjacencies = dp.get(graph, `nodes.${toId}.${toSubselection}`);
-            return dp.set(graph, `nodes.${toId}.${toSubselection}`,
-              adjacencies.includes(fromId) ? adjacencies : [...adjacencies, fromId]);
+            graph = dp.set(graph, `nodes.${toId}.${toSubselection}`,
+              adjacencies.includes(fromId) ? adjacencies : [...adjacencies, fixId(fromId)]);
           }
         }
         return graph;
