@@ -10,5 +10,6 @@ export default interface Component {
   left: any[];
   right: any[];
   verb: string;
+  name?: string;
   embedded?: Graph;
 }

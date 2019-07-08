@@ -108,12 +108,14 @@ function createGraphReducer({ nouns, verbs } : { nouns: NounResolvers, verbs: Ve
       }
       case 'ADD_CUSTOM_COMPONENT': {
         const { component } = action;
-        console.log('ADD_CUSTOM_COMPONENT')
-        return { ...graph, nodes: {
+        console.log('ADD_CUSTOM_COMPONENT', component);
+        let newGraph = { ...graph, nodes: {
             ...graph.nodes,
             [Object.keys(graph.nodes).length]: component,
           },
         };
+        console.log('newGraph', newGraph);
+        return newGraph;
       }
       case 'REPLACE_GRAPH': {
         return action.graph;

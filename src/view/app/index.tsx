@@ -14,6 +14,7 @@ import addNode from "../../model/calc/actions/addNode";
 import addComponent from "../../model/calc/actions/addComponent";
 import addCustomComponent from "../../model/calc/actions/addCustomComponent";
 import {getVerbData} from "../../model/components";
+import Component from "../../model/types/component";
 
 const graph2 = { nodes: [
     { noun: 'default', constant: true, value: 1, type: 'Var' },
@@ -132,17 +133,18 @@ class App extends React.Component<{}, {
             let coresStr = localStorage.getItem('cores') || "{}";
             let cores = coresStr ? JSON.parse(coresStr) : null;
             if (cores) {
+              let brush: Component = {
+                verb: 'embedded',
+                left: [], right: [],
+                type: 'Component',
+                embedded: cores[name],
+                //...getVerbData()['embedded'],
+              };
               core.dispatch({
                 type: 'SELECT_BRUSH',
                 brush: {
                   name,
-                  brush: {
-                    verb: 'embedded',
-                    left: [], right: [],
-                    type: 'Component',
-                    graph: cores[name],
-                    ...getVerbData()['embedded'],
-                  },
+                  ...brush,
                 },
               });
             }
