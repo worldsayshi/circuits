@@ -20,7 +20,6 @@ export function objectiveFunction ({ graph, nouns, verbs }, x) {
 
   
   const expandedNodes = expandEmbeddedGraphs(graph.nodes);
-  console.log('expandedNodes', expandedNodes);
   const nodes = countVariables(expandedNodes);
 
 
@@ -37,7 +36,6 @@ export function objectiveFunction ({ graph, nouns, verbs }, x) {
     const value = verbImpl(leftValues, rightValues, component);
     return `${acc} + abs(${value})`;
   }, '0');
-  console.log('expr', expr);
   return math.eval(expr, { x });
 }
 

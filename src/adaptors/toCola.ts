@@ -2,9 +2,12 @@ import entries from "../model/util/entries";
 import setNodeDefaults from "../model/util/setNodeDefaults";
 import countVariables from "../model/util/countVariables";
 import objectValues from "../model/util/objectValues";
+import {isComponent} from "../model/types/component";
+import Component from "../model/types/component";
+import Node from "../model/types/node";
 
 
-function createD3Links(components, numberOfVars) {
+function createD3Links(components: Component[], numberOfVars) {
   let links = [] as any[];
   for(const [index, component] of entries(components)) {
     for(const nodeId of [...component.left, ...component.right]) {
@@ -14,7 +17,7 @@ function createD3Links(components, numberOfVars) {
   return links;
 }
 
-function createD3Groups(components, numberOfVars) {
+function createD3Groups(components: Component[], numberOfVars) {
   let groups = [] as any[];
   let groupCount = 0;
   for(const [index, component] of entries(components)) {
@@ -26,14 +29,15 @@ function createD3Groups(components, numberOfVars) {
   return groups;
 }
 
-export default function toCola ({ nodes }) {
+export default function toCola ({ nodes }: { nodes: { [key: string]: Node } }) {
+  const nodesList = objectValues(nodes);
   const d3Nodes = [
     ...objectValues(countVariables(nodes)),
     // ...components.map(component => ({...component, type: 'Component' })),
   ];
 
-  const components = nodes.filter(({ type }) => type === 'Component');
-  const nrOfVars = nodes.length-components.length;
+  const components: Component[] = <Component[]>objectValues(nodes).filter((node) => isComponent(node));
+  const nrOfVars = nodesList.length-components.length;
 
   const d3Links = createD3Links(components, nrOfVars);
 

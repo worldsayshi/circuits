@@ -7,6 +7,7 @@ import {getNounResolvers} from "../nouns/index";
 import nounify from "../nouns/nounify";
 import * as math from 'mathjs';
 import {objectiveFunction} from "./objectiveFunction";
+import Var from "../types/var";
 // import objectiveFunction from "./objectiveFunction";
 
 describe('nounify', () => {
@@ -37,21 +38,21 @@ describe('nounify', () => {
 
 describe('graph optimization and evaluation', () => {
   it('should optimize simple graph', () => {
-    expect(optimizeGraph(testGraph).graph.nodes[2].value).toBeCloseTo(3, 2);
+    expect((<Var>optimizeGraph(testGraph).graph.nodes[2]).value).toBeCloseTo(3, 2);
   });
 
   it('should optimize graph with two disparate networks', () => {
-    expect(optimizeGraph(testGraph2).graph.nodes[2].value).toBeCloseTo(3, 2);
+    expect((<Var>optimizeGraph(testGraph2).graph.nodes[2]).value).toBeCloseTo(3, 2);
   });
 
   it('should optimize graph with two disparate networks', () => {
-    expect(optimizeGraph(testGraph2).graph.nodes[4].value).toBeCloseTo(100, 2);
+    expect((<Var>optimizeGraph(testGraph2).graph.nodes[4]).value).toBeCloseTo(100, 2);
   });
 
   // TODO Currently doesn't work because I've failed to maintain connections to external vars when expanding an embedded component. FIX!!
   it('should optimize graph with embedded custom component', () => {
     let optimizedGraph = optimizeGraph(testGraph3);
-    console.log('optimized graph', JSON.stringify(optimizedGraph, null, 2));
-    expect(optimizedGraph.graph.nodes[2].value).toBeCloseTo(1, 2 );
+    // console.log('optimized graph', JSON.stringify(optimizedGraph, null, 2));
+    expect((<Var>optimizedGraph.graph.nodes[2]).value).toBeCloseTo(1, 2);
   });
 });
