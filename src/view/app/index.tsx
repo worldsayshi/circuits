@@ -138,7 +138,7 @@ class App extends React.Component<{}, {
                 left: [], right: [],
                 type: 'Component',
                 embedded: cores[name],
-                //...getVerbData()['embedded'],
+                ...getVerbData()['embedded'],
               };
               core.dispatch({
                 type: 'SELECT_BRUSH',

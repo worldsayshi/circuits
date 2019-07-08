@@ -12,4 +12,5 @@ export default interface Component {
   verb: string;
   name?: string;
   embedded?: Graph;
+  img?: string;
 }
