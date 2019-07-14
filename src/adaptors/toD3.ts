@@ -56,10 +56,13 @@ function createStructuralLattice2(components: any, numberOfNodes: any) {
 const defaultHiddenLength = 90;
 
 function addStructuralLattice({ nodes, links }: { nodes: any[]; links: any[] }) {
-  // let newNodes = [...nodes];
+  // Add a hidden node for the whole graph
+  let superHiddenNodeIndex = nodes.length;
+  if(nodes.length > 0) {nodes.push({"type": "HiddenNode"});}
   for(let [nodeIndex, node] of entries(nodes)) {
     if (node.type === 'Component') {
-      // Add two hidden nodes
+
+      // Add two hidden nodes for each left and right group
 
       let leftHiddenNodeIndex = nodes.length;
       if(node.left.length > 0) {nodes.push({"type": "HiddenNode"});}
@@ -69,14 +72,14 @@ function addStructuralLattice({ nodes, links }: { nodes: any[]; links: any[] }) 
       }
 
       let rightHiddenNodeIndex = nodes.length;
-
       if(node.right.length > 0) {nodes.push({"type": "HiddenNode"});}
       for(let rightConnection of node.right) {
         links.push({ source: rightConnection, target: rightHiddenNodeIndex, "type": "HiddenLink", "length": defaultHiddenLength });
         links.push({ source: nodeIndex, target: rightHiddenNodeIndex, "type": "HiddenLink", "length": defaultHiddenLength });
       }
 
-      // And add links for each new hidden node
+      // Add link to the graph center point
+      links.push({ source: nodeIndex, target: superHiddenNodeIndex, "type": "HiddenLink", "length": defaultHiddenLength * 1.5 });
 
     }
   }
