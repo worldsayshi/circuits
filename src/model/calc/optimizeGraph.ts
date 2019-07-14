@@ -7,6 +7,7 @@ import objectValues from "../util/objectValues";
 import {isVar} from "../types/var";
 import Graph from "../types/graph";
 import objectEntries from "../util/objectEntries";
+import customOptimization from "./customOptimization";
 
 function getInitialVariableValues(nodes) {
   return objectValues(nodes)
@@ -50,10 +51,11 @@ export default function optimizeGraph (graphContext: GraphContext) {
 
   const initialValues = getInitialVariableValues(graphContext.graph.nodes);
 
-  const optimization = nelderMead((x) => objectiveFunction(graphContext, x), initialValues);
+  const optimization = customOptimization((x) => objectiveFunction(graphContext, x), initialValues);
 
   const values = optimization.x.map(v => Math.round(v * 100) / 100);
 
+  console.log('VALUES', values)
   const optimizedGraph = insertValues(graphContext.graph, values);
 
   return {

@@ -61,7 +61,7 @@ export default function toD3 ({ nodes } : { nodes: { [key: string]: Node } }) : 
 
   const d3Links = createD3Links(components, nrOfVars);
 
-  // const { structuralNodes, structuralLinks } = createStructuralLattice(components, nrOfVars);
+  const { structuralNodes, structuralLinks } = createStructuralLattice(components, nrOfVars);
 
   return {
     nodes: [

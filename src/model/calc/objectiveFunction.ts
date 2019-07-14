@@ -22,6 +22,7 @@ export function objectiveFunction ({ graph, nouns, verbs }, x) {
   const expandedNodes = expandEmbeddedGraphs(graph.nodes);
   const nodes = countVariables(expandedNodes);
 
+  // console.log('NODES', nodes);
 
   const components : Component[] = objectValues(nodes).filter(({ type }) => type === 'Component') as Component[];
 
@@ -36,7 +37,10 @@ export function objectiveFunction ({ graph, nouns, verbs }, x) {
     const value = verbImpl(leftValues, rightValues, component);
     return `${acc} + abs(${value})`;
   }, '0');
-  return math.eval(expr, { x });
+  // console.log('EXPR', expr);
+  let val = math.eval(expr, { x });
+  // console.log('VAL', val);
+  return val;
 }
 
 
