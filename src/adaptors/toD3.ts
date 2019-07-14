@@ -26,21 +26,22 @@ function createD3Links(components, numberOfVars) {
   return links;
 }
 
-
-function createStructuralLattice(components: any, numberOfNodes: any) {
-  let numberOfVars = numberOfNodes - components.length + 2;
+// TODO This implementation is confused. The componentId are not ids of the d3 graph! Redo this
+function createStructuralLattice2(components: any, numberOfNodes: any) {
+  let numberOfVars = numberOfNodes - components.length;
   const structuralNodes = [] as any[];
   const structuralLinks = [] as any[];
   for(const [index, component] of entries(components)) {
+
     let componentId = numberOfVars + index;
     structuralNodes.push({ type: 'HiddenNode' });
-    let leftNodeId = numberOfNodes+structuralNodes.length+1;
+    let leftNodeId = numberOfNodes+structuralNodes.length;
     for(const nodeId of component.left) {
       structuralLinks.push({ source: leftNodeId, target: nodeId, type: 'HiddenLink', length: 50 });
     }
 
     structuralNodes.push({ type: 'HiddenNode' });
-    let rightNodeId = numberOfNodes+structuralNodes.length+1;
+    let rightNodeId = numberOfNodes+structuralNodes.length;
     for(const nodeId of component.right) {
       structuralLinks.push({ source: rightNodeId, target: nodeId, type: 'HiddenLink', length: 50 });
     }
@@ -52,7 +53,36 @@ function createStructuralLattice(components: any, numberOfNodes: any) {
   return { structuralNodes, structuralLinks };
 }
 
+const defaultHiddenLength = 90;
 
+function addStructuralLattice({ nodes, links }: { nodes: any[]; links: any[] }) {
+  // let newNodes = [...nodes];
+  for(let [nodeIndex, node] of entries(nodes)) {
+    if (node.type === 'Component') {
+      // Add two hidden nodes
+
+      let leftHiddenNodeIndex = nodes.length;
+      if(node.left.length > 0) {nodes.push({"type": "HiddenNode"});}
+      for(let leftConnection of node.left) {
+        links.push({ source: leftConnection, target: leftHiddenNodeIndex, "type": "HiddenLink", "length": defaultHiddenLength });
+        links.push({ source: nodeIndex, target: leftHiddenNodeIndex, "type": "HiddenLink", "length": defaultHiddenLength });
+      }
+
+      let rightHiddenNodeIndex = nodes.length;
+
+      if(node.right.length > 0) {nodes.push({"type": "HiddenNode"});}
+      for(let rightConnection of node.right) {
+        links.push({ source: rightConnection, target: rightHiddenNodeIndex, "type": "HiddenLink", "length": defaultHiddenLength });
+        links.push({ source: nodeIndex, target: rightHiddenNodeIndex, "type": "HiddenLink", "length": defaultHiddenLength });
+      }
+
+      // And add links for each new hidden node
+
+    }
+  }
+
+  return { links, nodes };
+}
 
 export default function toD3 ({ nodes } : { nodes: { [key: string]: Node } }) : { nodes: D3Node[], links: D3Link<any>[] } {
   const d3Nodes = objectValues(countVariables(nodes));
@@ -62,16 +92,16 @@ export default function toD3 ({ nodes } : { nodes: { [key: string]: Node } }) : 
 
   const d3Links = createD3Links(components, nrOfVars);
 
-  const { structuralNodes, structuralLinks } = createStructuralLattice(components, nrOfVars);
+  //const { structuralNodes, structuralLinks } = createStructuralLattice(components, nrOfVars);
 
-  return {
+  return addStructuralLattice({
     nodes: [
       ...d3Nodes,
-      ...structuralNodes,
+      //...structuralNodes,
     ],
     links: [
       ...d3Links,
-      ...structuralLinks,
+      //...structuralLinks,
     ],
-  };
+  });
 }

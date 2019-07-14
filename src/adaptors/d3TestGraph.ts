@@ -1,7 +1,7 @@
 // This graph used to get the wrong layout
 
-const d3TestGraph = {
-  "nodes": [
+const d3TestGraphOld = {
+  nodes: [
     {"type": "Var", "noun": "default", "constant": true, "value": 1, "nodeId": "0"},
     {"type": "Var", "noun": "default", "constant": false, "value": 1, "nodeId": "1", "variableCount": 0},
     {"type": "Var", "noun": "default", "constant": false, "value": 1, "nodeId": "2", "variableCount": 1},
@@ -11,6 +11,7 @@ const d3TestGraph = {
     {"type": "Var", "noun": "default", "constant": false, "value": 1, "nodeId": "6", "variableCount": 5},
     {"type": "Var", "noun": "default", "constant": false, "value": 1, "nodeId": "7", "variableCount": 6},
     {"type": "Var", "noun": "default", "constant": false, "value": 1, "nodeId": "8", "variableCount": 7},
+
     {"type": "Component", "left": [], "right": [], "verb": "sum", "img": "img/thing.svg", "nodeId": "9"},
     {"type": "Component", "left": [0, 1], "right": [2, 3], "verb": "sum", "img": "img/thing.svg", "nodeId": "10"},
     {"type": "Component", "left": [4, 5, 6, 8], "right": [7], "verb": "sum", "img": "img/thing.svg", "nodeId": "11"},
@@ -20,8 +21,7 @@ const d3TestGraph = {
     {"type": "HiddenNode"},
     {"type": "HiddenNode"},
     {"type": "HiddenNode"},
-    {"type": "HiddenNode"}
-    ],
+    {"type": "HiddenNode"}],
 
   "links": [
     {"source": 0, "target": 10},
@@ -50,6 +50,11 @@ const d3TestGraph = {
     {"source": 15, "target": 10, "type": "HiddenLink", "length": 75},
     {"source": 16, "target": 10, "type": "HiddenLink", "length": 75}
     ]
+};
+
+const d3TestGraph = {
+  nodes: [],
+  links: [],
 };
 
 export default d3TestGraph;
