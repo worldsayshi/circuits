@@ -11,8 +11,7 @@ export default (f, init) => {
 
   for (i = 0; i < repeats; i++) {
     solution = nelderMead(
-      x => console.log('X',  x, 'f(x)',f(x))
-        || f(x),
+      x => f(x),
       init
       //, { maxIterations: init.length * 200 * 10 }
     );

@@ -10,6 +10,7 @@ import setNodeDefaults from "../model/util/setNodeDefaults";
 import countVariables from "../model/util/countVariables";
 import objectValues from "../model/util/objectValues";
 import Node from "../model/types/node";
+import {Node as D3Node, Link as D3Link} from 'webcola';
 
 function entries (l) {
   return l.map((e, ix) => [ix, e]);
@@ -53,7 +54,7 @@ function createStructuralLattice(components: any, numberOfNodes: any) {
 
 
 
-export default function toD3 ({ nodes } : { nodes: { [key: string]: Node } }) : { nodes: any[], links: any[] } {
+export default function toD3 ({ nodes } : { nodes: { [key: string]: Node } }) : { nodes: D3Node[], links: D3Link<any>[] } {
   const d3Nodes = objectValues(countVariables(nodes));
 
   const components = objectValues(nodes).filter(({ type }) => type === 'Component');
@@ -66,11 +67,11 @@ export default function toD3 ({ nodes } : { nodes: { [key: string]: Node } }) : 
   return {
     nodes: [
       ...d3Nodes,
-      // ...structuralNodes,
+      ...structuralNodes,
     ],
     links: [
       ...d3Links,
-      // ...structuralLinks,
+      ...structuralLinks,
     ],
   };
 }

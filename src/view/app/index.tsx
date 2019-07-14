@@ -96,7 +96,9 @@ class App extends React.Component<{}, {
 
   render() {
     const { core: { graphContext, interaction: { mode, brush }, }, cores } = this.state;
-    const { nodes, links }: { nodes: Node[]; links: any[] } = toD3(graphContext);
+    const { nodes, links }: { nodes: any[]; links: any[] } = toD3(graphContext);
+
+    console.log('toD3', JSON.stringify({ nodes, links }));
 
     return (
       <div>

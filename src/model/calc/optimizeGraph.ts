@@ -55,7 +55,6 @@ export default function optimizeGraph (graphContext: GraphContext) {
 
   const values = optimization.x.map(v => Math.round(v * 100) / 100);
 
-  console.log('VALUES', values)
   const optimizedGraph = insertValues(graphContext.graph, values);
 
   return {

@@ -46,7 +46,6 @@ describe('graph optimization and evaluation', () => {
     // [100, 100, 100, 100, 100]
 
     let solution = customOptimization(x => math.eval(expr, { x }), [50,50,50,50,50]);
-    console.log('solution.x', solution.x);
     expect(solution.x[0]).toBeCloseTo(1, 2);
     expect(solution.x[1]).toBeCloseTo(1, 2);
     expect(solution.x[2]).toBeCloseTo(1, 2);
@@ -77,9 +76,6 @@ describe('graph optimization and evaluation', () => {
   it.skip('should optimize graph with embedded custom component', () => {
     let optimizedGraph = optimizeGraph(testGraph3);
     // console.log('optimized graph', JSON.stringify(optimizedGraph, null, 2));
-    console.log('XXXXXXXXXXXXXX')
-    console.log('OPTIMIZED', optimizedGraph.graph.nodes);
-    console.log('YYYYYYYYYYY')
     expect((<Var>optimizedGraph.graph.nodes[2]).value).toBeCloseTo(1, 2);
   });
 });
